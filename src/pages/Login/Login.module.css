@@ -59,9 +59,17 @@
   .facebookBtn {
     background-color: #1877f2;
   }
+
+  .facebookBtn:hover {
+    background-color: #2e80eb;
+  }
   
   .googleBtn {
     background-color: #db4437;
+  }
+
+  .googleBtn:hover {
+    background-color: #c4544a;
   }
   
   /* Input Fields */

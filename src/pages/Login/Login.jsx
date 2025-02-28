@@ -1,6 +1,10 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Login.module.css';
+import Button from '../../components/Button/Button';
+import Input from '../../components/Input/Input';
 
 const Login = () => {
   const [formData, setFormData] = useState({ 
@@ -55,32 +59,37 @@ const Login = () => {
         <p>Don't have an account yet? <a href="/register">Create account</a></p>
 
         <div className={styles.socialButtons}>
-          <button className={styles.facebookBtn}>Facebook</button>
-          <button className={styles.googleBtn}>Google</button>
+          <Button className={styles.facebookBtn}>Facebook</Button>
+          <Button className={styles.googleBtn}>Google</Button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <input
+          {/* Using Input Component for Email */}
+
+          
+          <Input
             type="email"
             name="email"
-            placeholder="Email"
             value={formData.email}
             onChange={handleChange}
+            placeholder="Email"
             required
-            className={styles.inputField}
-          />
-          <input
+            className={`${styles.inputField} `}
+            />
+
+          {/* Using Input Component for Password */}
+          <Input
             type="password"
             name="password"
-            placeholder="Password"
             value={formData.password}
             onChange={handleChange}
+            placeholder="Password"
             required
-            className={styles.inputField}
           />
 
           <a href="/forgot-password" className={styles.forgotPassword}>Forgot your password?</a>
-          <button type="submit" className={styles.signInBtn}>SIGN IN</button>
+
+          <Button type="submit" className={styles.signInBtn}>SIGN IN</Button>
         </form>
 
         <a href="/" className={styles.returnToStore}>Return to Store</a>

@@ -1,0 +1,49 @@
+
+   .carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    height: 600px;  /* Set a fixed height */
+  }
+  
+  .imageWrapper {
+    width: 100%;
+    height: auto;
+    height: 100%;  /* Match the height of the carousel */
+  }
+  
+  .carouselImage {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+    display: block;
+  }
+  
+  .prevButton,
+  .nextButton {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 2;
+    border-radius: 50%;
+  }
+  
+  .prevButton {
+    left: 10px;
+  }
+  
+  .nextButton {
+    right: 10px;
+  }
+  
+  .prevButton:hover,
+  .nextButton:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+  }
+  
