@@ -1,86 +1,173 @@
-/* src/components/Navbar/Navbar.module.css */
-
 /* Navbar Container */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #2d6a4f;
-    color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    /* z-index: 1000; */
-    /* position: fixed;
-    top: 0;
-    width: 100%; */
-  }
-  
-  /* Logo */
-  .logo a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  /* Navigation Links */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  /* background-color: #2d6a4f; */
+  background-color: #2d6a4f;
+  color: #F8F9FA;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Underline Effect */
+.navItem > a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0.5px;
+  background-color: #b7e4c7;
+  bottom: 5px;
+  left: 0;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s ease-in-out;
+}
+
+/* Hover Effect */
+.navItem > a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Logo */
+.logo a {
+  color: #F8F9FA;
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Navigation Links */
+.navLinks {
+  display: flex;
+  gap: 1rem;
+  position: relative;
+}
+
+/* Nav Item Wrapper */
+.navItem {
+  position: relative;
+  display: inline-block;
+}
+
+/* Main Nav Links */
+.navItem > a {
+  color: #F8F9FA;
+  font-family: sans-serif;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-size: 14.5px;
+  padding: 10px;
+  transition: color 0.3s ease;
+  display: block;
+}
+
+.navItem > a:hover {
+  color: #b7e4c7;
+  /* text-decoration: underline; */
+}
+
+/* Dropdown Menu */
+.dropdownMenu {
+  font-family: sans-serif;
+  min-width: 10rem;
+  max-width: 26rem;
+  width: max-content;
+  z-index: 101;
+  padding: 1rem;
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: #ebe8e8;
+  border-radius: 1rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+}
+
+/* Show only hovered menu’s dropdown */
+.navItem:hover .dropdownMenu {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Dropdown Links */
+.dropdownMenu a {
+  color: #2D6A4F;
+  padding: 10px;
+  text-decoration: none;
+  display: block;
+  transition: 0.9s ease;
+  font-size: 13.5px;
+  transition-timing-function: ease;
+}
+
+.dropdownMenu a:hover {
+  color:  #24553F;
+}
+
+/* Hamburger Menu */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.bar {
+  width: 25px;
+  height: 3px;
+  background-color: white;
+  transition: all 0.3s ease;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
   .navLinks {
-    
-    display: flex;
-    gap: 1rem;
-  }
-  
-  .navLinks a {
-    color: white;
-    text-decoration: none;
-    font-size: 1rem;
-    transition: color 0.9s ease;
-  }
-  
-  .navLinks a:hover {
-    color: #b7e4c7;
-    transition: 0.9s;
-    text-decoration: underline;
-    /* transition: text-decoration 0.9s ease; */
-  }
-  
-  /* Hamburger Menu */
-  .hamburger {
     display: none;
     flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
+    background-color: #2d6a4f;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    text-align: center;
   }
-  
-  .bar {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    transition: all 0.3s ease;
+
+  .navLinks.active {
+    display: flex;
   }
-  
-  /* Mobile Styles */
-  @media (max-width: 768px) {
-    .navLinks {
-      display: none;
-      flex-direction: column;
-      background-color: #2d6a4f;
-      position: absolute;
-      top: 100%;
-      right: 0;
-      width: 100%;
-      text-align: center;
-    }
-  
-    .navLinks.active {
-      display: flex;
-    }
-  
-    .hamburger {
-      display: flex;
-    }
+
+  .navItem {
+    position: relative;
   }
-  
+
+  .dropdownMenu {
+    position: static;
+    background: #2d6a4f;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    display: none;
+  }
+
+  .navItem:hover .dropdownMenu {
+    display: block;
+  }
+
+  .dropdownMenu a {
+    color: white;
+    padding: 8px;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}

@@ -1,0 +1,45 @@
+/* Container for Home Page */
+.homeContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* padding: 2rem; */
+    width: 100%;
+  }
+  
+  /* Carousel Styling */
+  .carouselWrapper {
+    width: 100%;
+    /* max-width: 1200px; */
+    margin-bottom: 2rem;
+  }
+  
+  /* Product List Grid */
+  .productGrid {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+    width: 100%;
+    /* max-width: 1200px; */
+    margin: 2rem auto;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .productGrid {
+      gap: 2rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .homeContainer {
+      padding: 1rem;
+    }
+    
+    .productGrid {
+      gap: 1.5rem;
+    }
+  }
+  

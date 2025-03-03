@@ -3,7 +3,8 @@
     position: relative;
     width: 100%;
     overflow: hidden;
-    height: 600px;  /* Set a fixed height */
+    /* height: 600px;  */
+     /* Set a fixed height */
   }
   
   .imageWrapper {
