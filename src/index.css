@@ -3,20 +3,39 @@
   padding: 0;
 }
 
-/* :root {
-  --primary-color: #2D6A4F;    
+:root {
+  --primary-color: #2D6A4F;   
 
   --secondary-color: #B7E4C7;  
  
-  --background-color: #F8F9FA; 
+  --background-color: #FBFCF8; 
 
   --accent-color: #A67C52;    
   
   --text-color: #333333;       
 
-  --alert-color: #FFA726;      
+  --alert-color: #FFA726;    
+  
+  font-family: Arial, Helvetica, sans-serif;
  
-} */
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #2D572C; /* Dark Green for headings */
+}
+
+body {
+  color: #333333; /* Deep Gray for body text */
+}
+
+
+a {
+  color: #5A7D5A; /* Muted Green for links */
+}
+
+a:hover {
+  color: #2D572C; /* Dark Green on hover */
+}
 
 /* Apply Colors */
 body {
@@ -33,16 +52,16 @@ body {
 /* Buttons */
 button {
   background-color: var(--primary-color);
-  /* color: white; */
+  color: white;
   border: none;
   padding: 10px 20px;
   cursor: pointer;
   transition: 0.3s;
 }
 
-button:hover {
+/* button:hover {
   background-color: var(--secondary-color);
-}
+} */
 
 /* Sale Badges */
 .sale-badge {

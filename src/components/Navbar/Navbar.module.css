@@ -47,13 +47,17 @@
 }
 
 /* Nav Item Wrapper */
-.navItem {
+.navItem, .navIcon {
   position: relative;
   display: inline-block;
 }
 
+.navIcon > a:hover{
+  transform: scale(1.5);
+}
+
 /* Main Nav Links */
-.navItem > a {
+.navItem > a, .navIcon > a {
   color: #F8F9FA;
   font-family: sans-serif;
   text-transform: uppercase;
@@ -62,9 +66,11 @@
   padding: 10px;
   transition: color 0.3s ease;
   display: block;
+  transition: transform 0.3s ease-in-out;
 }
 
-.navItem > a:hover {
+
+.navItem > a:hover, .navIcon > a:hover {
   color: #b7e4c7;
   /* text-decoration: underline; */
 }

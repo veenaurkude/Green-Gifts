@@ -1,48 +1,7 @@
-// import React, { useState } from 'react';
-// import { Link } from 'react-router-dom';
-// import styles from './Navbar.module.css';
-
-// const Navbar = () => {
-//   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-//   const toggleMobileMenu = () => {
-//     setIsMobileMenuOpen(!isMobileMenuOpen);
-//   };
-
-//   return (
-//     <header className={styles.navbar}>
-//       <div className={styles.logo}>
-//         <Link to="/">Green Gifts</Link>
-//       </div>
-
-//       <nav className={`${styles.navLinks} ${isMobileMenuOpen ? styles.active : ''}`}>
-//         <Link to="/" onClick={toggleMobileMenu}>Home</Link>
-//         <Link to="/plants" onClick={toggleMobileMenu}>Plants</Link>
-//         <Link to="/seeds" onClick={toggleMobileMenu}>Seeds</Link>
-//         <Link to="/pots-planters" onClick={toggleMobileMenu}>Pots & Planters</Link>
-//         <Link to="/plant-care" onClick={toggleMobileMenu}>Plant Care</Link>
-//         <Link to="/gifting" onClick={toggleMobileMenu}>Gifting</Link>
-//         <Link to="/blog" onClick={toggleMobileMenu}>Blog</Link>
-//         <Link to="/offers" onClick={toggleMobileMenu}>Offers</Link>
-//         <Link to="/login" onClick={toggleMobileMenu}>Login</Link>
-//       </nav>
-
-//       <button className={styles.hamburger} onClick={toggleMobileMenu}>
-//         <span className={styles.bar}></span>
-//         <span className={styles.bar}></span>
-//         <span className={styles.bar}></span>
-//       </button>
-//     </header>
-//   );
-// };
-
-// export default Navbar;
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { BsCart } from "react-icons/bs";
 import { VscAccount } from "react-icons/vsc";
-
 import styles from "./Navbar.module.css";
 
 const Navbar = () => {
@@ -69,44 +28,59 @@ const Navbar = () => {
         }`}
       >
         {/** Home **/}
-        <div className={styles.navItem} onClick={() => toggleDropdown("home")}>
+        <nav className={styles.navItem} 
+        onMouseEnter={() => setOpenDropdown("home")}
+        onMouseLeave={() => setOpenDropdown(null)}
+        // onClick={() => toggleDropdown("home")}
+        >
           <Link to="/">Home</Link>
+
           {openDropdown === "home" && (
-            <div className={styles.dropdownMenu}>
+            <div className={styles.dropdownMenu} onClick={(e) => e.stopPropagation()}
+            >
               <Link to="/">Featured</Link>
               <Link to="/">New Arrivals</Link>
             </div>
           )}
-        </div>
+        </nav>
+
 
         {/** Plants **/}
-        <div
-          className={styles.navItem}
-          onClick={() => toggleDropdown("plants")}
+        <nav className={styles.navItem} 
+        onMouseEnter={() => setOpenDropdown("plants")}
+        onMouseLeave={() => setOpenDropdown(null)}
+        // onClick={() => toggleDropdown("plants")}
         >
           <Link to="/plants">Plants</Link>
-          {openDropdown === "plants" && (
-            <div className={styles.dropdownMenu}>
-              <Link to="/">Indoor Plants</Link>
-              <Link to="/">Outdoor Plants</Link>
-              <Link to="/">Flowering Plants</Link>
-              <Link to="/">Low Maintenance Plants</Link>
-              <Link to="/">Air Purifying Plants</Link>
-              <Link to="/">Low Light Plants</Link>
-              <Link to="/">Hanging Plants</Link>
-              <Link to="/">Medicinal & Aromatic Plants</Link>
-              <Link to="/">Fruit Plants</Link>
-              <Link to="/">Bundles</Link>
 
+          {openDropdown === "plants" && (
+            <div className={styles.dropdownMenu} onClick={(e) => e.stopPropagation()}
+            >
+              {/* Static Category Links */}
+              <Link to="/plants/audio">Indoor Plants</Link>
+              <Link to="/plants/gaming">Flowering Plants</Link>
+              <Link to="/plants/mobile">Low Maintenance Plants</Link>
+              <Link to="/plants/tv">Air Purifying Plants</Link>
+              <Link to="/plants/tv">Low Light Plants</Link>
+              <Link to="/plants/tv">Hanging Plants</Link>
+              <Link to="/plants/tv">Medicinal & Aromatic Plants</Link>
+              <Link to="/plants/tv">Pet-Friendly Plants</Link>
+              <Link to="/plants/tv">Fruit Plants</Link>
+              <Link to="/plants/tv">Bundles</Link>
             </div>
           )}
-        </div>
+        </nav>
 
         {/** Seeds **/}
-        <div className={styles.navItem} onClick={() => toggleDropdown("seeds")}>
+        <nav className={styles.navItem} 
+        onMouseEnter={() => setOpenDropdown("seeds")}
+        onMouseLeave={() => setOpenDropdown(null)}
+        // onClick={() => toggleDropdown("seeds")}
+        >
           <Link to="/seeds">Seeds</Link>
           {openDropdown === "seeds" && (
-            <div className={styles.dropdownMenu}>
+            <div className={styles.dropdownMenu} onClick={(e) => e.stopPropagation()}
+            >
               <Link to="/">Flower Seeds</Link>
               <Link to="/">Vegetable Seeds</Link>
               <Link to="/">Fruit Seeds</Link>
@@ -116,13 +90,18 @@ const Navbar = () => {
               <Link to="/">Flower Bulbs</Link>
             </div>
           )}
-        </div>
+        </nav>
 
         {/** Pots & Planters **/}
-        <div className={styles.navItem} onClick={() => toggleDropdown("pots")}>
+        <nav className={styles.navItem} 
+        onMouseEnter={() => setOpenDropdown("pots-planters")}
+        onMouseLeave={() => setOpenDropdown(null)}
+        // onClick={() => toggleDropdown("pots")}
+        >
           <Link to="/pots-planters">Pots & Planters</Link>
           {openDropdown === "pots-planters" && (
-            <div className={styles.dropdownMenu}>
+            <div className={styles.dropdownMenu} onClick={(e) => e.stopPropagation()}
+            >
               <Link to="/">Plastic Pots</Link>
               <Link to="/">Ceramic Pots</Link>
               <Link to="/">Metal Pots</Link>
@@ -133,61 +112,65 @@ const Navbar = () => {
               <Link to="/">Seedling Trays</Link>
             </div>
           )}
-        </div>
+        </nav>
 
         {/** Plant Care **/}
-        <div
+        <nav
           className={styles.navItem}
-          onClick={() => toggleDropdown("plant-care")}
+          onMouseEnter={() => setOpenDropdown("plant-care")}
+          onMouseLeave={() => setOpenDropdown(null)}
+          // onClick={() => toggleDropdown("plant-care")}
         >
           <Link to="/plant-care">Plant Care</Link>
           {openDropdown === "plant-care" && (
-            <div className={styles.dropdownMenu}>
+            <div className={styles.dropdownMenu} onClick={(e) => e.stopPropagation()}
+            >
               <Link to="/">Fertilizers</Link>
               <Link to="/">Gardening Tools</Link>
             </div>
           )}
-        </div>
+        </nav>
 
         {/** Gifting **/}
-        <div
+        <nav
           className={styles.navItem}
-          onClick={() => toggleDropdown("gifting")}
+          onMouseEnter={() => setOpenDropdown("gifting")}
+          onMouseLeave={() => setOpenDropdown(null)}
+          // onClick={() => toggleDropdown("gifting")}
         >
           <Link to="/gifting">Gifting</Link>
           {openDropdown === "gifting" && (
-            <div className={styles.dropdownMenu}>
+            <div className={styles.dropdownMenu} onClick={(e) => e.stopPropagation()}
+            >
               <Link to="/">Birthday Gifts</Link>
               <Link to="/">Anniversary Gifts</Link>
             </div>
           )}
-        </div>
+        </nav>
 
         {/** Blog **/}
-        <div className={styles.navItem} onClick={() => toggleDropdown("home")}>
+        <nav className={styles.navItem}
+        >
           <Link to="/blog">Blog</Link>
-        </div>
+        </nav>
 
         {/** Offers **/}
-        <div className={styles.navItem} onClick={() => toggleDropdown("home")}>
+        <nav className={styles.navItem}>
           <Link to="/offers">Offers</Link>
-        </div>
+        </nav>
 
         {/** Login **/}
-        <div className={styles.navItem} onClick={() => toggleDropdown("login")}>
+        <nav className={styles.navIcon}>
           <Link to="/login">
-          <VscAccount/>
+            <VscAccount />
           </Link>
-          
+        </nav>
+
+        <div className={styles.navIcon}>
+          <Link to="/cart">
+            <BsCart />
+          </Link>
         </div>
-
-        <div className={styles.navItem} onClick={() => toggleDropdown("login")}>
-        <Link to="/cart">
-        <BsCart/>
-        </Link>
-        </div>
-
-
       </nav>
 
       <button className={styles.hamburger} onClick={toggleMobileMenu}>

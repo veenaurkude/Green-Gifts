@@ -2,13 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Button = ({ type = 'button', onClick, className, children }) => {
+const Button = ({ type = 'button', onClick, className, label, children }) => {
   return (
     <button 
       type={type} 
       onClick={onClick} 
       className={`${className}`}
     >
+       {label}
       {children}
     </button>
   );
