@@ -1,7 +1,14 @@
-import React from 'react';
-import styles from './Footer.module.css';
-import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaTwitter, FaWhatsapp } from 'react-icons/fa';
-import { AiOutlineArrowRight } from 'react-icons/ai';
+import React from "react";
+import styles from "./Footer.module.css";
+import {
+  FaSquareFacebook,
+  FaSquareInstagram,
+  FaLinkedin,
+  FaSquareXTwitter,
+  FaSquareYoutube,
+} from "react-icons/fa6";
+
+import { AiOutlineArrowRight } from "react-icons/ai";
 
 const Footer = () => {
   return (
@@ -34,7 +41,7 @@ const Footer = () => {
         <div className={styles.column}>
           <h4>CUSTOMER CARE</h4>
           <ul>
-            <li>Take The Plant Quiz</li>
+            {/* <li>Take The Plant Quiz</li> */}
             <li>Track Order</li>
             <li>Shipping Policy</li>
             <li>Terms and Conditions</li>
@@ -56,9 +63,16 @@ const Footer = () => {
         <div className={styles.column}>
           <h4>GET IN TOUCH</h4>
           <ul>
-            <li>WhatsApp us at: <a href="tel:+91-9129912991">+91-9129912991</a></li>
-            <li>Call: <a href="tel:+91-9129912991">+91-9129912991</a></li>
-            <li>Email: <a href="mailto:support@greengifts.com">support@greengifts.com</a></li>
+            <li>
+              WhatsApp us at: <a href="tel:+91-9129912991">+91-9129912991</a>
+            </li>
+            <li>
+              Call: <a href="tel:+91-9129912991">+91-9129912991</a>
+            </li>
+            <li>
+              Email:{" "}
+              <a href="mailto:support@greengifts.com">support@greengifts.com</a>
+            </li>
           </ul>
         </div>
 
@@ -68,23 +82,33 @@ const Footer = () => {
             <input type="email" placeholder="Enter email address" />
             <button>
               <AiOutlineArrowRight />
-              </button>
+            </button>
           </div>
-          <p>For plant care tips, our featured plant of the week, exclusive offers and discounts</p>
+          {/* <h4>Green Gifts</h4> */}
+          <p>
+            For plant care tips, our featured plant of the week, exclusive
+            offers and discounts
+          </p>
 
           <h4>FOLLOW US</h4>
           <div className={styles.socialIcons}>
-            <FaFacebookF />
-            <FaTwitter />
-            
-            <FaInstagram />
-            
-            <FaLinkedinIn />
-            
-            <FaYoutube />
+            <a href="">
+              <FaSquareFacebook />
+            </a>
+            <a href="">
+              <FaSquareInstagram />
+            </a>
+            <a href="">
+              <FaLinkedin />
+            </a>
+            <a href="">
+              <FaSquareXTwitter />
+            </a>
+            <a href="">
+              <FaSquareYoutube />
+            </a>
           </div>
 
-          
           <div className={styles.appButtons}>
             {/* <img src="google-play.png" alt="Google Play" />
             <img src="app-store.png" alt="App Store" /> */}
@@ -93,7 +117,10 @@ const Footer = () => {
       </div>
 
       <div className={styles.bottomSection}>
-        <p>© 2025, Green Gifts. All rights reserved.</p>
+        <p>
+          © 2025,&nbsp;
+          <a href="/">Green Gifts.</a>&nbsp; All rights reserved.
+        </p>
         <div className={styles.paymentIcons}>
           {/* <img src="visa.png" alt="Visa" />
           <img src="mastercard.png" alt="MasterCard" />

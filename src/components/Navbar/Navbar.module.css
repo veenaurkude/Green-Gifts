@@ -177,3 +177,22 @@
     display: flex;
   }
 }
+
+
+.cartLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.cartBadge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #24553F;
+  color: white;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 4px 6px;
+  border-radius: 50%;
+}

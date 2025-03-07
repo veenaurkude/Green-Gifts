@@ -379,7 +379,8 @@ const Plants = () => {
         {currentProducts.length > 0 ? (
           currentProducts.map((plant, index) => (
             <Card
-              key={index}
+            key={plant.id || index} // Ensure a valid key
+            id={plant.id} // Ensure ID is passed
               image={plant.image || "default.jpg"}
               title={plant.title || "No Title"}
               discount={plant.discount}

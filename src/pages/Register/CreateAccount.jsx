@@ -72,33 +72,22 @@ const CreateAccount = () => {
 
         {successMsg && <p className={styles.successMsg}>{successMsg}</p>}
         
-        <div className={styles.socialButtons}>
+        {/* <div className={styles.socialButtons}>
           <Button className={styles.facebookBtn}>Facebook</Button>
           <Button className={styles.googleBtn}>Google</Button>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit}>
-          {/* Using Input Component for First Name */}
+          {/* Using Input Component for Name */}
           <Input
             type="text"
-            name="firstName"
-            value={formData.firstName}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
-            placeholder="First name"
-            className={`${styles.inputField} ${errors.firstName && styles.errorInput}`}
+            placeholder="Name"
+            className={`${styles.inputField} ${errors.name && styles.errorInput}`}
           />
-          {errors.firstName && <span className={styles.errorMsg}>{errors.firstName}</span>}
-
-          {/* Using Input Component for Last Name */}
-          <Input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            placeholder="Last name"
-            className={`${styles.inputField} ${errors.lastName && styles.errorInput}`}
-          />
-          {errors.lastName && <span className={styles.errorMsg}>{errors.lastName}</span>}
+          {errors.name && <span className={styles.errorMsg}>{errors.name}</span>}
 
           {/* Using Input Component for Email */}
           <Input
@@ -110,6 +99,17 @@ const CreateAccount = () => {
             className={`${styles.inputField} ${errors.email && styles.errorInput}`}
           />
           {errors.email && <span className={styles.errorMsg}>{errors.email}</span>}
+
+          {/* Using Input Component for Phone */}
+          <Input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            placeholder="Phone"
+            className={`${styles.inputField} ${errors.phone && styles.errorInput}`}
+          />
+          {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
 
           {/* Using Input Component for Password */}
           <Input

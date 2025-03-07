@@ -58,10 +58,10 @@ const Login = () => {
         <h2>Login</h2>
         <p>Don't have an account yet? <a href="/register">Create account</a></p>
 
-        <div className={styles.socialButtons}>
+        {/* <div className={styles.socialButtons}>
           <Button className={styles.facebookBtn}>Facebook</Button>
           <Button className={styles.googleBtn}>Google</Button>
-        </div>
+        </div> */}
 
         <form onSubmit={handleSubmit}>
           {/* Using Input Component for Email */}
