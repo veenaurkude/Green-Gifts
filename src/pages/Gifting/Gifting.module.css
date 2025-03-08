@@ -1,0 +1,305 @@
+/* Main Container */
+.container {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  /* Features Section */
+  .features {
+    display: flex;
+    justify-content: center;
+    gap: 50px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .featureCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+    border: 2px solid #008000;
+    border-radius: 10px;
+    width: 12rem;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  /* .featureCard:hover {
+    transform: scale(1.1);
+  } */
+  
+  .featureIcon {
+    font-size: 4rem;
+    color: #008000;
+    margin-bottom: 10px;
+  }
+  
+  .featureTitle {
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  /* Gifting Section */
+  .giftingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .giftList {
+    display: flex;
+    gap: 10rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .giftCard {
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .giftCard:hover {
+    transform: scale(1.1);
+  }
+  
+  .giftImage {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ddd;
+  }
+  
+  .giftTitle {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  .testimonialContainer {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    /* background: white; */
+    max-width: 70rem;
+    margin: auto;
+  }
+  
+/* ✅ Section Container */
+.sectionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    /* max-width: 1200px; */
+    margin: auto;
+    gap: 2rem;
+    padding: 3rem 0;
+    background: #eef8f1; /* Light green background */
+  }
+  
+  /* ✅ Image Section */
+  .imgSection {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .imgSection img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  
+  /* ✅ Text Section */
+  .textSection {
+    flex: 1;
+    text-align: left;
+  }
+  
+  .textSection h2 {
+    font-size: 2rem;
+    color: #1b5e20;
+    font-weight: bold;
+  }
+  
+  .textSection p {
+    font-size: 1rem;
+    color: #333;
+    margin: 10px 0 20px;
+    max-width: 90%;
+  }
+  
+  /* ✅ Button */
+  .button {
+    background-color: #1b5e20;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .button:hover {
+    background-color: #145a1f;
+  }
+  
+  
+/* Accordion Container Styling */
+.accordion_container {
+
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  /* Title Styling */
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2d6a4f;
+    margin-bottom: 1.5rem;
+  }
+  
+  /* Accordion Wrapper */
+  .accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .accordion_container {
+      padding: 1rem;
+    }
+  
+    .title {
+      font-size: 1.8rem;
+    }
+  }
+  
+  /* ✅ Responsive Design */
+  @media (max-width: 1024px) {
+    .sectionContainer {
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+  
+    .textSection {
+      text-align: center;
+    }
+  
+    .textSection p {
+      max-width: 100%;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .textSection h2 {
+      font-size: 1.8rem;
+    }
+  
+    .textSection p {
+      font-size: 0.9rem;
+    }
+  
+    .button {
+      font-size: 0.9rem;
+      padding: 10px 16px;
+    }
+  }
+  
+
+  /* ✅ Responsive Design */
+  @media (max-width: 768px) {
+    .testimonialContainer {
+      padding: 2rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .testimonialContainer {
+      padding: 1.5rem 0.5rem;
+    }
+  }
+  
+  
+  /* ============================= */
+  /*        RESPONSIVE DESIGN      */
+  /* ============================= */
+  
+  /* Tablets (768px and below) */
+  @media (max-width: 768px) {
+    .features {
+      gap: 30px;
+    }
+  
+    .featureCard {
+      width: 120px;
+      padding: 10px;
+    }
+  
+    .featureIcon {
+      font-size: 3rem;
+    }
+  
+    .featureTitle {
+      font-size: 0.9rem;
+    }
+  
+    .giftList {
+      gap: 20px;
+    }
+  
+    .giftImage {
+      width: 150px;
+      height: 150px;
+    }
+  
+    .giftTitle {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Mobile Devices (480px and below) */
+  @media (max-width: 480px) {
+    .features {
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+  
+    .featureCard {
+      width: 100px;
+      padding: 8px;
+    }
+  
+    .featureIcon {
+      font-size: 2rem;
+    }
+  
+    .featureTitle {
+      font-size: 0.8rem;
+    }
+  
+    .giftList {
+      flex-direction: column;
+      gap: 15px;
+    }
+  
+    .giftImage {
+      width: 130px;
+      height: 130px;
+    }
+  
+    .giftTitle {
+      font-size: 0.85rem;
+    }
+  }
+  

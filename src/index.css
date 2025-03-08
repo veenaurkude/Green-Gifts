@@ -1,4 +1,88 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
 :root {
+  --primary-color: #2d6a4f;
+
+  --secondary-color: #b7e4c7;
+
+  --background-color: #fbfcf8;
+
+  --accent-color: #a67c52;
+
+  --text-color: #333333;
+
+  --alert-color: #ffa726;
+
+  font-family: sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #2d572c; /* Dark Green for headings */
+}
+/* 🌟 Global Fix: Remove Horizontal Scroll */
+body {
+  color: #333333; /* Deep Gray for body text */
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+a {
+  color: #fbfcf8;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+a:hover {
+  color: #b7e4c7;
+}
+
+/* Apply Colors */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Navbar */
+.navbar {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Buttons */
+button {
+  background-color: #2D572C;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+/* button:hover {
+  background-color: var(--secondary-color);
+} */
+
+/* Sale Badges */
+.sale-badge {
+  background-color: var(--alert-color);
+  color: white;
+  padding: 5px 10px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+/* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -65,4 +149,4 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
-}
+} */
