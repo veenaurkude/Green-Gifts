@@ -11,7 +11,7 @@ import Testimonials from "../../components/Testimonials/Testimonials";
 
 const Home = () => {
   // const navigate = useNavigate(); // Hook for navigation
-  const [products, setProducts] = useState([]);
+  const [plant, setPlant] = useState([]);
 
   // Carousel Images
   const images = [
@@ -20,13 +20,16 @@ const Home = () => {
     "https://www.ugaoo.com/cdn/shop/collections/Indoor-Plants-Category-Banner_1.png?v=1739958875&width=2000",
   ];
 
+  // Get Products
+
   useEffect(() => {
     async function getAllProducts() {
       try {
-        const response = await axios.get(`${config.BASE_URL}/products`);
-        console.log("API Response:", response.data.products); // Debugging log
-        if (Array.isArray(response.data.products)) {
-          setProducts(response.data.products);
+        const response = await axios.get(`${config.BASE_URL}/api/AllProduct`);
+        console.log("API Response:", response.data); // ✅ Check what data is fetched
+        console.log(response.data.id)
+        if (Array.isArray(response.data)) {
+          setPlant(response.data);
         }
       } catch (error) {
         console.error("Error fetching plants:", error);
@@ -36,7 +39,7 @@ const Home = () => {
   }, []);
 
   // Display only the first 4 products
-  const displayedProducts = products.slice(0, 4);
+  const displayedProducts = plant.slice(0, 4);
 
   // Gifting Section Data
   const gifts = [
@@ -48,29 +51,18 @@ const Home = () => {
     {
       id: 2,
       image: "https://ww1.prweb.com/prfiles/2014/09/11/12164346/24848.jpg",
-      title: "XL Plants",
+      title: "Plants",
     },
     {
       id: 3,
       image:
         "https://bloomscape.com/wp-content/uploads/2019/04/bloomscape_product-monstera-slate.jpg",
-      title: "Vegetable Seeds",
+      title: "Pots",
     },
     {
       id: 4,
-      image: "https://natalielinda.com/wp-content/uploads/2019/06/pothos.jpg",
-      title: "Fertilizers",
-    },
-    {
-      id: 5,
       image: "https://ww1.prweb.com/prfiles/2014/09/11/12164346/24848.jpg",
       title: "Ceramic Pots",
-    },
-    {
-      id: 6,
-      image:
-        "https://bloomscape.com/wp-content/uploads/2019/04/bloomscape_product-monstera-slate.jpg",
-      title: "Tools",
     },
   ];
 
@@ -112,7 +104,8 @@ const Home = () => {
   // };
 
   return (
-    <div className={styles.homeContainer}>
+    <>
+    <section className={styles.homeContainer}>
       {/* Carousel */}
       <div className={styles.carouselWrapper}>
         <Carousel images={images} />
@@ -161,30 +154,43 @@ const Home = () => {
       {/* Product Grid */}
       <div className={styles.bestSellers}>
         <h2>Our Best Sellers</h2>
+        {/* <div className={styles.productGrid}>
+    {displayedProducts.map((product) => (
+      <Card
+        key={product.id} // ✅ Correct key usage
+        id={`product-${product.id}`} // ✅ Unique ID for better performance
+        image={product.imgUrls?.[0] || "default.jpg"} // ✅ Correct image path
+        title={product.name || "No Title"} // ✅ Corrected title
+        discount={product.discountedPrice || "N/A"} // ✅ Corrected discount
+        price={product.price || "N/A"} // ✅ Corrected price
+      />
+    ))}
+  </div> */}
+
         <div className={styles.productGrid}>
-          {displayedProducts.map((product, index) => (
-            <Card
-              key={product.id || index}
-              id={product.id}
-              image={product.image}
-              title={product.title}
-              discount={product.discount}
-              price={product.price}
-            />
-          ))}
+          {displayedProducts.map((plant) =>
+            plant.variants.map((variant) => (
+              <Card
+                key={variant.id} // ✅ Correct key usage
+                id={`variant-${variant.id}`} // Unique ID
+                image={variant.imageUrls?.[0] || "default.jpg"} // ✅ Corrected image path
+                title={plant.name || "No Title"} // ✅ Corrected title
+                discount={variant.discountedPrice || "N/A"} // ✅ Corrected discount
+                price={variant.price || "N/A"} // ✅ Corrected price
+              />
+            ))
+          )}
         </div>
 
         {/* View All Button */}
         <div className={styles.viewAllContainer}>
-          <Link
-            className={styles.viewAllButton}
-             to="/plants"
-          >
+          <Link className={styles.viewAllButton} to="/plants">
             View All
           </Link>
         </div>
       </div>
-{/* <Button>View</Button> */}
+
+      {/* <Button>View</Button> */}
 
       {/* WhyGreenGifts section */}
       <div className={styles.whySection}>
@@ -205,15 +211,24 @@ const Home = () => {
         </div>
       </div>
 
-{/* Testimonials */}
+      {/* Testimonials */}
       <Testimonials />
 
       {/* About Green Gifts */}
       <div className={styles.about}>
-              <h4>About Green Gifts</h4>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid exercitationem hic, iusto at, veniam et rem minus, iste doloremque dignissimos repellendus? Recusandae at odio amet? Odit unde quas maxime quae! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nisi, perferendis vero, veritatis magni eum quas eligendi odio officia neque nulla tempore corrupti quis, accusamus exercitationem esse itaque cupiditate quaerat in.</p>
-            </div>
-    </div>
+        <h4>About Green Gifts</h4>
+        <p>
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid
+          exercitationem hic, iusto at, veniam et rem minus, iste doloremque
+          dignissimos repellendus? Recusandae at odio amet? Odit unde quas
+          maxime quae! Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+          Nisi, perferendis vero, veritatis magni eum quas eligendi odio officia
+          neque nulla tempore corrupti quis, accusamus exercitationem esse
+          itaque cupiditate quaerat in.
+        </p>
+      </div>
+    </section>
+    </>
   );
 };
 

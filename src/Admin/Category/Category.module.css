@@ -1,0 +1,198 @@
+.categoryContainer {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    min-height: calc(100vh - 100px);
+  }
+  
+  /* Header */
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    color: #2e7d32; /* Dark green */
+    text-align: center;
+  }
+  
+  /* Add Form */
+  .addForm {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+  }
+  
+  .addInput {
+    padding: 8px;
+    font-size: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 300px;
+  }
+  
+  .addButton {
+    background-color: #4caf50; /* Bright green */
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .addButton:hover {
+    background-color: #388e3c;
+  }
+  
+  /* Table */
+  .tableWrapper {
+    overflow-x: auto; /* Horizontal scroll on small screens */
+  }
+  
+  .categoryTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .categoryTable th,
+  .categoryTable td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .categoryTable th {
+    background-color: #e8f5e9; /* Light green */
+    color: #2e7d32;
+    font-weight: 600;
+  }
+  
+  .categoryTable tr:hover {
+    background-color: #f5f6f8; /* Light gray hover */
+  }
+  
+  .editInput {
+    padding: 6px;
+    font-size: 0.9rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    width: 100%;
+  }
+  
+  .actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap; /* Wrap buttons on small screens */
+  }
+  
+  .editButton, .saveButton {
+    background-color: #388e3c; /* Medium green */
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .editButton:hover, .saveButton:hover {
+    background-color: #2e7d32;
+  }
+  
+  .deleteButton {
+    background-color: #d32f2f; /* Red */
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .deleteButton:hover {
+    background-color: #b71c1c;
+  }
+  
+  .cancelButton {
+    background-color: #666; /* Gray */
+    color: #fff;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancelButton:hover {
+    background-color: #555;
+  }
+  
+  /* Loading/Error/No Categories */
+  .loading, .error, .noCategories {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 20px;
+  }
+  
+  .loading {
+    color: #388e3c;
+  }
+  
+  .error, .noCategories {
+    color: #d32f2f;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .categoryContainer {
+      margin: 15px;
+      padding: 15px;
+    }
+  
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    .addForm {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .addInput {
+      max-width: 100%;
+    }
+  
+    .categoryTable th, .categoryTable td {
+      padding: 8px;
+    }
+  
+    .editInput {
+      font-size: 0.85rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 1.2rem;
+    }
+  
+    .addButton, .editButton, .saveButton, .deleteButton, .cancelButton {
+      padding: 5px 10px;
+      font-size: 0.8rem;
+    }
+  
+    .actions {
+      flex-direction: column;
+      gap: 5px;
+    }
+  }

@@ -1,9 +1,8 @@
-
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
 // import config from "../../config/apiconfig";
 // import Card from "../../components/Card/Card";
-// import styles from "./Plants.module.css"; 
+// import styles from "./Plants.module.css";
 // import Accordion from "../../components/Accordion/Accordion";
 
 // const Plants = () => {
@@ -101,7 +100,7 @@
 // import axios from "axios";
 // import config from "../../config/apiconfig";
 // import Card from "../../components/Card/Card";
-// import styles from "./Plants.module.css"; 
+// import styles from "./Plants.module.css";
 // import Accordion from "../../components/Accordion/Accordion";
 
 // const Plants = () => {
@@ -113,7 +112,7 @@
 //     async function fetchPlants() {
 //       try {
 //         const response = await axios.get(`${config.BASE_URL}/products`);
-//         console.log("API Response:", response.data.products); 
+//         console.log("API Response:", response.data.products);
 
 //         if (Array.isArray(response.data.products)) {
 //           setPlants(response.data.products);
@@ -165,7 +164,7 @@
 //       <div className={styles.plantsContainer}>
 //         <h1 className={styles.heading}>{category ? category.replace("-", " ") : "All Plants"}</h1>
 //         <p className={styles.description}>
-//           Discover a variety of plants at <span className={styles.brandName}>Ugaoo</span>. 
+//           Discover a variety of plants at <span className={styles.brandName}>Ugaoo</span>.
 //           Find the perfect plant for your home, office, or garden!
 //         </p>
 
@@ -196,16 +195,14 @@
 
 // export default Plants;
 
-
-
 // // ================
 
 // import React, { useEffect, useState } from "react";
 // import { useParams, useNavigate } from "react-router-dom";
 // import axios from "axios";
-// import Card from "../../components/Card/Card"; 
+// import Card from "../../components/Card/Card";
 // import styles from "./Plants.module.css";
-// import config from "../../config/apiconfig"; 
+// import config from "../../config/apiconfig";
 // import Accordion from "../../components/Accordion/Accordion";
 
 // const Plants = () => {
@@ -218,7 +215,7 @@
 //       try {
 //         const response = await axios.get(`${config.BASE_URL}/products`);
 //         console.log("API Response:", response.data); // Debugging log
-  
+
 //         // Check if response has data and is an array before setting state
 //         if (response.data && Array.isArray(response.data.products)) {
 //           setPlants(response.data.products);
@@ -298,59 +295,336 @@
 
 // export default Plants;
 
-
 // ===========
+
+// import React, { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import Card from "../../components/Card/Card";
+// import styles from "./Plants.module.css";
+// import config from "../../config/apiconfig";
+// import Accordion from "../../components/Accordion/Accordion";
+// import Pagination from "../../components/Pagination/Pagination";
+
+// const Plants = () => {
+//   const { category } = useParams();
+//   const [plant, setPlant] = useState([]);
+//   const navigate = useNavigate();
+
+//   // Pagination states
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const productsPerPage = 8; // Show 8 products per page
+
+//   useEffect(() => {
+//     async function fetchPlants() {
+//       try {
+//         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`);
+//         console.log("API Response:", response.data);
+
+//         if (response.data && Array.isArray(response.data)) {
+//           setPlant(response.data);
+//         } else {
+//           setPlant([]);
+//         }
+//       } catch (error) {
+//         console.error("Error fetching plants:", error);
+//         setPlant([]);
+//       }
+//     }
+//     fetchPlants();
+//   }, []);
+
+//   // Filter products based on selected category
+//   const filteredPlants = category
+//     ? plant.filter((plant) => plant.category.toLowerCase() === category.toLowerCase())
+//     : plant;
+
+//   // Pagination logic
+//   const indexOfLastProduct = currentPage * productsPerPage;
+//   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+//   const currentProducts = filteredPlants.slice(indexOfFirstProduct, indexOfLastProduct);
+
+//   // Pagination controls
+//   const totalPages = Math.ceil(filteredPlants.length / productsPerPage);
+//   const handleNext = () => {
+//     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+//   };
+//   const handlePrev = () => {
+//     if (currentPage > 1) setCurrentPage(currentPage - 1);
+//   };
+
+//   return (
+//     <>
+//       <div>Banner</div>
+//       <h1 className={styles.heading}>{category ? category.replace("-", " ") : "Plants"}</h1>
+
+//       {/* Dropdown for Categories */}
+//       <div className={styles.dropdown}>
+//         <select onChange={(e) => navigate(`/plants/${e.target.value}`)} value={category || ""}>
+//           <option value="">Plants</option>
+//           <option value="audio">Audio</option>
+//           <option value="gaming">Gaming</option>
+//           <option value="mobile">Mobile</option>
+//           <option value="tv">TV</option>
+//         </select>
+//       </div>
+
+//       {/* Product Grid */}
+//       <div className={styles.plantsGrid}>
+//         {currentProducts.length > 0 ? (
+//           currentProducts.map((plant, index) => (
+//             <Card
+//             key={index} // Using index as a unique key
+//             id={`product-${index}`} // Creating a unique id by combining text + index
+//             image={plant.imgUrls?.[0] || "default.jpg"} // Corrected image path
+//             title={plant.name || "No Title"} // Corrected title
+//             discount={plant.discountedPrice || "N/A"} // Corrected discount
+//             price={plant.price || "N/A"} // Corrected price
+//           />
+//             // <Card
+//             // key={plant.id || index} // Ensure a valid key
+//             // id={plant.id} // Ensure ID is passed
+//             //   image={plant.image || "default.jpg"}
+//             //   title={plant.title || "No Title"}
+//             //   discount={plant.discount}
+//             //   price={plant.price || "N/A"}
+//             // />
+//           ))
+//         ) : (
+//           <p>No products found for this category.</p>
+//         )}
+//       </div>
+
+//       {/* Pagination Component */}
+//       {totalPages > 1 && (
+//         <Pagination currentPage={currentPage} totalPages={totalPages} onNext={handleNext} onPrev={handlePrev} />
+//         // <Pagination/>
+//       )}
+
+//       {/* Accordion */}
+//       <div className={styles.accordion_container}>
+//         <h2 className={styles.title}>FAQ's</h2>
+//         <div className={styles.accordion}>
+//           <Accordion title="🌿 What are the best indoor plants?" content="Some of the best indoor plants are Snake Plant, Pothos, Peace Lily, and ZZ Plant." />
+//           <Accordion title="☀️ How much sunlight do plants need?" content="Most plants need at least 4-6 hours of indirect sunlight. Some plants, like succulents, need direct sunlight." />
+//           <Accordion title="💧 How often should I water my plants?" content="It depends on the plant type! Most indoor plants need watering once a week, while succulents need less." />
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Plants;
+
+// import React, { useEffect, useState } from "react";
+// import { useParams, useNavigate } from "react-router-dom";
+// import axios from "axios";
+// import Card from "../../components/Card/Card";
+// import styles from "./Plants.module.css";
+// import config from "../../config/apiconfig";
+// import Accordion from "../../components/Accordion/Accordion";
+// import Pagination from "../../components/Pagination/Pagination";
+
+// const Plants = () => {
+//   const { category } = useParams();
+//   const [plant, setPlant] = useState([]);
+//   const navigate = useNavigate();
+
+//   // Pagination states
+//   const [currentPage, setCurrentPage] = useState(1);
+//   const productsPerPage = 8;
+
+//   useEffect(() => {
+//     async function fetchPlants() {
+//       try {
+//         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`);
+//         console.log("API Response:", response.data);
+//         setPlant(response.data);
+//       } catch (error) {
+//         console.error("Error fetching plants:", error);
+//         setPlant([]);
+//       }
+//     }
+//     fetchPlants();
+//   }, []);
+
+//   // Filter products based on selected category
+//   const filteredPlants = category
+//     ? plant.filter(
+//         (plant) => plant.category.toLowerCase() === category.toLowerCase()
+//       )
+//     : plant;
+
+//   // Pagination logic
+//   const indexOfLastProduct = currentPage * productsPerPage;
+//   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+//   const currentProducts = filteredPlants.slice(
+//     indexOfFirstProduct,
+//     indexOfLastProduct
+//   );
+
+//   // Pagination controls
+//   const totalPages = Math.ceil(filteredPlants.length / productsPerPage);
+//   const handleNext = () => {
+//     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+//   };
+//   const handlePrev = () => {
+//     if (currentPage > 1) setCurrentPage(currentPage - 1);
+//   };
+
+//   function handlePassId(id) {
+//     alert(id);
+//     navigate(`/single_product/${id}`)
+    
+//   }
+//   return (
+//     <>
+//       <div>Banner</div>
+//       <h1 className={styles.heading}>
+//         {category ? category.replace("-", " ") : "Plants"}
+//       </h1>
+
+//       {/* Dropdown for Categories */}
+//       <div className={styles.dropdown}>
+//         <select
+//           // onChange={(e) => navigate(`/plants/${e.target.value}`)}
+//           value={category || ""}
+//         >
+//           <option value="">Plants</option>
+//           <option value="audio">Audio</option>
+//           <option value="gaming">Gaming</option>
+//           <option value="mobile">Mobile</option>
+//           <option value="tv">TV</option>
+//         </select>
+//       </div>
+
+//       {/* Product Grid */}
+//       {/* <div className={styles.plantsGrid}>
+//         {currentProducts.length > 0 ? (
+//           currentProducts.map((plant) =>
+//             plant.variants.map((variant) => (
+//               <Card
+//                 onClick={() => handlePassId(variant.id)} 
+//                 key={variant.id} // ✅ Correct key usage
+//                 id={`variant-${variant.id}`} // Unique ID
+//                 image={variant.imageUrls?.[0] || "default.jpg"} // ✅ Updated image path
+//                 title={plant.name || "No Title"} // ✅ Corrected title
+//                 discount={variant.discountedPrice || "N/A"} // ✅ Corrected discount
+//                 price={variant.price || "N/A"}
+
+//                 // ✅ Corrected price
+//               />
+//             ))
+//           )
+//         ) : (
+//           <p>No products found for this category.</p>
+//         )}
+//       </div> */}
+
+//       {plant.length > 0
+//         ? plant.map((plant, index) => {
+//             return (
+//               <>
+//                 <div onClick={()=>handlePassId(plant.id)}>
+//                   <p>{plant.category}</p>
+//                   <p>{plant.name}</p>
+//                   <p> {plant.description}</p>
+                  
+//                 </div>
+//               </>
+//             );
+//           })
+//         : "No Plant vaialble"}
+
+
+
+//       {/* Pagination Component */}
+//       {totalPages > 1 && (
+//         <Pagination
+//           currentPage={currentPage}
+//           totalPages={totalPages}
+//           onNext={handleNext}
+//           onPrev={handlePrev}
+//         />
+//       )}
+
+//       {/* Accordion */}
+//       <div className={styles.accordion_container}>
+//         <h2 className={styles.title}>FAQ's</h2>
+//         <div className={styles.accordion}>
+//           <Accordion
+//             title="🌿 What are the best indoor plants?"
+//             content="Some of the best indoor plants are Snake Plant, Pothos, Peace Lily, and ZZ Plant."
+//           />
+//           <Accordion
+//             title="☀️ How much sunlight do plants need?"
+//             content="Most plants need at least 4-6 hours of indirect sunlight. Some plants, like succulents, need direct sunlight."
+//           />
+//           <Accordion
+//             title="💧 How often should I water my plants?"
+//             content="It depends on the plant type! Most indoor plants need watering once a week, while succulents need less."
+//           />
+//         </div>
+//       </div>
+//     </>
+//   );
+// };
+
+// export default Plants;
 
 
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import Card from "../../components/Card/Card"; 
+import Card from "../../components/Card/Card";
 import styles from "./Plants.module.css";
-import config from "../../config/apiconfig"; 
+import config from "../../config/apiconfig";
 import Accordion from "../../components/Accordion/Accordion";
 import Pagination from "../../components/Pagination/Pagination";
 
 const Plants = () => {
   const { category } = useParams();
-  const [plants, setPlants] = useState([]);
+  const [plants, setPlants] = useState([]); // Renamed for clarity
   const navigate = useNavigate();
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 8; // Show 8 products per page
+  const productsPerPage = 8;
 
+  // Fetch plants from API
   useEffect(() => {
     async function fetchPlants() {
       try {
-        const response = await axios.get(`${config.BASE_URL}/products`);
+        const token = JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken;
+        const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
         console.log("API Response:", response.data);
-
-        if (response.data && Array.isArray(response.data.products)) {
-          setPlants(response.data.products);
-        } else {
-          setPlants([]);
-        }
+        setPlants(response.data);
       } catch (error) {
-        console.error("Error fetching plants:", error);
+        console.error("Error fetching plants:", error.response || error);
         setPlants([]);
       }
     }
     fetchPlants();
   }, []);
 
-  // Filter products based on selected category
+  // Filter plants by category
   const filteredPlants = category
     ? plants.filter((plant) => plant.category.toLowerCase() === category.toLowerCase())
     : plants;
 
-  // Pagination logic
+  // Get all variants for pagination
+  const allVariants = filteredPlants.flatMap((plant) => plant.variants);
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredPlants.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentVariants = allVariants.slice(indexOfFirstProduct, indexOfLastProduct);
 
   // Pagination controls
-  const totalPages = Math.ceil(filteredPlants.length / productsPerPage);
+  const totalPages = Math.ceil(allVariants.length / productsPerPage);
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
@@ -358,53 +632,82 @@ const Plants = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+  // Navigate to single product page
+  const handlePassId = (id) => {
+    // alert(id); // Uncomment for debugging
+    navigate(`/single_product/${id}`);
+  };
+
   return (
     <>
-      <div>Banner</div>
-      <h1 className={styles.heading}>{category ? category.replace("-", " ") : "Plants"}</h1>
+      <div className={styles.banner}>Banner</div>
+      <h1 className={styles.heading}>
+        {category ? category.replace("-", " ") : "All Plants"}
+      </h1>
 
       {/* Dropdown for Categories */}
       <div className={styles.dropdown}>
-        <select onChange={(e) => navigate(`/plants/${e.target.value}`)} value={category || ""}>
-          <option value="">Plants</option>
-          <option value="audio">Audio</option>
-          <option value="gaming">Gaming</option>
-          <option value="mobile">Mobile</option>
-          <option value="tv">TV</option>
+        <select
+          onChange={(e) => navigate(`/plants/${e.target.value}`)}
+          value={category || ""}
+        >
+          <option value="">All Plants</option>
+          <option value="glass-pots">Glass Pots</option>
+          {/* Add more categories based on your data */}
         </select>
       </div>
 
       {/* Product Grid */}
       <div className={styles.plantsGrid}>
-        {currentProducts.length > 0 ? (
-          currentProducts.map((plant, index) => (
-            <Card
-            key={plant.id || index} // Ensure a valid key
-            id={plant.id} // Ensure ID is passed
-              image={plant.image || "default.jpg"}
-              title={plant.title || "No Title"}
-              discount={plant.discount}
-              price={plant.price || "N/A"}
-            />
-          ))
+        {currentVariants.length > 0 ? (
+          currentVariants.map((variant) => {
+            const plant = plants.find((p) =>
+              p.variants.some((v) => v.id === variant.id)
+            );
+            return (
+              <Card
+                key={variant.id}
+                id={variant.id} // Pass variant ID
+                onClick={() => handlePassId(variant.id)}
+                image={variant.imageUrls?.[0] || "https://via.placeholder.com/150"}
+                title={plant?.name || "No Title"}
+                price={variant.price || "N/A"}
+                discount={variant.discountedPrice || null}
+                isTrending={variant.qty > 40} // Example: trending if stock > 40
+              />
+            );
+          })
         ) : (
-          <p>No products found for this category.</p>
+          <p className={styles.noProducts}>No products found for this category.</p>
         )}
       </div>
 
-      {/* Pagination Component */}
+      {/* Pagination */}
       {totalPages > 1 && (
-        <Pagination currentPage={currentPage} totalPages={totalPages} onNext={handleNext} onPrev={handlePrev} />
-        // <Pagination/>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onNext={handleNext}
+          onPrev={handlePrev}
+        />
       )}
 
-      {/* Accordion */}
-      <div className={styles.accordion_container}>
+      {/* FAQ Accordion */}
+      <div className={styles.accordionContainer}>
         <h2 className={styles.title}>FAQ's</h2>
         <div className={styles.accordion}>
-          <Accordion title="🌿 What are the best indoor plants?" content="Some of the best indoor plants are Snake Plant, Pothos, Peace Lily, and ZZ Plant." />
-          <Accordion title="☀️ How much sunlight do plants need?" content="Most plants need at least 4-6 hours of indirect sunlight. Some plants, like succulents, need direct sunlight." />
-          <Accordion title="💧 How often should I water my plants?" content="It depends on the plant type! Most indoor plants need watering once a week, while succulents need less." />
+          <Accordion
+            title="🌿 What are the best indoor plants?"
+            content="Some of the best indoor plants are Snake Plant, Pothos, Peace Lily, and ZZ Plant."
+          />
+          <Accordion
+            title="☀️ How much sunlight do plants need?"
+            content="Most plants need at least 4-6 hours of indirect sunlight. Some plants, like succulents, need direct sunlight."
+          />
+          <Accordion
+            title="💧 How often should I water my plants?"
+            content="It depends on the plant type! Most indoor plants need watering once a week, while succulents need less."
+          />
         </div>
       </div>
     </>

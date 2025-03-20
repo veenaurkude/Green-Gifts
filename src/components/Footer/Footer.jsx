@@ -13,7 +13,7 @@ import { AiOutlineArrowRight } from "react-icons/ai";
 const Footer = () => {
   return (
     <footer className={styles.footer}>
-      <div className={styles.topSection}>
+      {/* <div className={styles.topSection}>
         <div className={styles.cities}>
           <a href="#">Mumbai</a>
           <a href="#">Pune</a>
@@ -23,17 +23,15 @@ const Footer = () => {
           <a href="#">Chennai</a>
           <a href="#">Kolkata</a>
         </div>
-      </div>
+      </div> */}
 
       <div className={styles.mainSection}>
         <div className={styles.column}>
           <h4>ABOUT US</h4>
           <ul>
-            <li>Our Story</li>
             <li>Careers</li>
             <li>Contact Us</li>
             <li>Locate Stores</li>
-            <li>Own Grown</li>
             <li>Garden Services & Maintenance</li>
           </ul>
         </div>
@@ -44,10 +42,7 @@ const Footer = () => {
             {/* <li>Take The Plant Quiz</li> */}
             <li>Track Order</li>
             <li>Shipping Policy</li>
-            <li>Terms and Conditions</li>
-            <li>Privacy Policy</li>
             <li>FAQs</li>
-            <li>Terms of Service</li>
             <li>Refund policy</li>
           </ul>
         </div>
@@ -77,18 +72,7 @@ const Footer = () => {
         </div>
 
         <div className={styles.column}>
-          <h4>SIGN UP FOR OUR NEWSLETTER</h4>
-          <div className={styles.newsletter}>
-            <input type="email" placeholder="Enter email address" />
-            <button>
-              <AiOutlineArrowRight />
-            </button>
-          </div>
-          {/* <h4>Green Gifts</h4> */}
-          <p>
-            For plant care tips, our featured plant of the week, exclusive
-            offers and discounts
-          </p>
+        
 
           <h4>FOLLOW US</h4>
           <div className={styles.socialIcons}>
@@ -109,10 +93,7 @@ const Footer = () => {
             </a>
           </div>
 
-          <div className={styles.appButtons}>
-            {/* <img src="google-play.png" alt="Google Play" />
-            <img src="app-store.png" alt="App Store" /> */}
-          </div>
+        
         </div>
       </div>
 

@@ -240,54 +240,117 @@
 // export default ProductDetails;
 // ======================================
 
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/apiconfig";
 import styles from "./ProductDetails.module.css";
 import Button from "../../components/Button/Button";
-import { useCart } from "../../context/CartContext"; // Import Cart Context
 
 const ProductDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Get product ID from URL
+  console.log(id)
   const [product, setProduct] = useState(null);
-  const { addToCart } = useCart(); // Get addToCart function
 
-  useEffect(() => {
-    async function fetchProductDetails() {
-      try {
-        const response = await axios.get(`${config.BASE_URL}/products/${id}`);
-        setProduct(response.data.product || response.data);
-      } catch (error) {
-        console.error("Error fetching product details:", error);
-      }
-    }
 
-    if (id) fetchProductDetails();
-  }, [id]);
 
-  if (!product) return <p>Loading...</p>;
+  // useEffect(() => {
+  //   async function fetchProductDetails() {
+  //     try {
+  //      
+  //       const response = await axios.get(`${config.BASE_URL}/api/Product/${id}`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`, // Add token if your API requires it
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+  //       console.log("Fetched Product:", response.data);
+  //       setProduct(response.data); // Set the entire product object
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Error fetching product details:", error.response || error);
+  //       setError("Failed to load product details. Please try again.");
+  //       setLoading(false);
+  //     }
+  //   }
+
+  //   if (id) {
+  //     console.log("Product ID:", id);
+  //     fetchProductDetails();
+  //   }
+  // }, [id]);
+
+  // // Handle loading and error states
+  // if (loading) {
+  //   return <p>Loading...</p>;
+  // }
+
+  // if (error) {
+  //   return <p className={styles.error}>{error}</p>;
+  // }
+
+  // if (!product) {
+  //   return <p>No product found.</p>;
+  // }
+
+  // // Assuming the first variant is the "default" one to display initially
+  // const defaultVariant = product.variants[0] || {};
 
   return (
-    <div className={styles.productContainer}>
-      <div className={styles.productImg}>
-        <img
-          src={product.image || "https://via.placeholder.com/300"}
-          alt={product.title || "No Title"}
-          className={styles.productImage}
-        />
+    <>
+      <div className={styles.productContainer}>
+        <div className={styles.productImg}>
+          <img
+            src={defaultVariant.imageUrls?.[0] || "https://via.placeholder.com/300"}
+            alt={product.name || "No Title"}
+            className={styles.productImage}
+          />
+        </div>
+        <div className={styles.productDetails}>
+          <h2>{product.name || "No Title"}</h2>
+          <p>Category: {product.category || "Unknown"}</p>
+          <p>Price: ₹{defaultVariant.price !== undefined ? defaultVariant.price : "N/A"}</p>
+          <p>
+            {defaultVariant.discountedPrice
+              ? `Discounted Price: ₹${defaultVariant.discountedPrice}`
+              : "No Discount"}
+          </p>
+          <p>Color: {defaultVariant.color || "N/A"}</p>
+          <p>Size: {defaultVariant.size || "N/A"}</p>
+          <p>Stock: {defaultVariant.qty !== undefined ? defaultVariant.qty : "N/A"}</p>
+          <p>Pickup Location: {product.pickupLocation || "N/A"}</p>
+          <Button>Add to Cart</Button>
+        </div>
       </div>
-      <div className={styles.productDetails}>
-        <h2>{product.title}</h2>
-        <p>Brand: {product.brand || "Unknown"}</p>
-        <p>Price: ₹{product.price}</p>
-        <p>{product.discount ? `Discount: ${product.discount}%` : "No Discount"}</p>
-        <Button onClick={() => addToCart(product)}>Add to Cart</Button>
+      <div className={styles.productDescription}>
+        <h4>About the Product</h4>
+        <p>{product.description || "No Description Available"}</p>
       </div>
-    </div>
+
+      {/* Optional: Display all variants */}
+      {product.variants.length > 1 && (
+        <div className={styles.variantsSection}>
+          <h4>Available Variants</h4>
+          <ul className={styles.variantList}>
+            {product.variants.map((variant) => (
+              <li key={variant.id} className={styles.variantItem}>
+                <img
+                  src={variant.imageUrls?.[0] || "https://via.placeholder.com/100"}
+                  alt={variant.color}
+                  className={styles.variantImage}
+                />
+                <p>Color: {variant.color}</p>
+                <p>Price: ₹{variant.price}</p>
+                <p>Discounted: ₹{variant.discountedPrice || "N/A"}</p>
+                <p>Size: {variant.size}</p>
+                <p>Stock: {variant.qty}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </>
   );
 };
 
 export default ProductDetails;
-

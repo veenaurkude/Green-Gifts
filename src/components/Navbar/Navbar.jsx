@@ -10,7 +10,7 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
 
-  const { totalQuantity } = useCart(); // Get total cart items count
+  const { totalUniqueProducts } = useCart(); // Get total cart unique products count
 
 
   const toggleMobileMenu = () => {
@@ -33,24 +33,9 @@ const Navbar = () => {
         }`}
       >
         {/** Home **/}
-        {/* <nav
-          className={styles.navItem}
-          onMouseEnter={() => setOpenDropdown("home")}
-          onMouseLeave={() => setOpenDropdown(null)}
-        
-        >
+        <nav className={styles.navItem}>
           <Link to="/">Home</Link>
-
-          {openDropdown === "home" && (
-            <div
-              className={styles.dropdownMenu}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Link to="/">Featured</Link>
-              <Link to="/">New Arrivals</Link>
-            </div>
-          )}
-        </nav> */}
+        </nav>
 
         {/** Plants **/}
         <nav
@@ -81,29 +66,7 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/** Seeds **/}
-        <nav
-          className={styles.navItem}
-          onMouseEnter={() => setOpenDropdown("seeds")}
-          onMouseLeave={() => setOpenDropdown(null)}
-          // onClick={() => toggleDropdown("seeds")}
-        >
-          <Link to="/seeds">Seeds</Link>
-          {openDropdown === "seeds" && (
-            <div
-              className={styles.dropdownMenu}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Link to="/">Flower Seeds</Link>
-              <Link to="/">Vegetable Seeds</Link>
-              <Link to="/">Fruit Seeds</Link>
-              <Link to="/">Herb Seeds</Link>
-              <Link to="/">Microgreen Seeds </Link>
-              <Link to="/">Tree & Grass Seeds</Link>
-              <Link to="/">Flower Bulbs</Link>
-            </div>
-          )}
-        </nav>
+        
 
         {/** Pots & Planters **/}
         <nav
@@ -130,52 +93,11 @@ const Navbar = () => {
           )}
         </nav>
 
-        {/** Plant Care **/}
-        <nav
-          className={styles.navItem}
-          onMouseEnter={() => setOpenDropdown("plant-care")}
-          onMouseLeave={() => setOpenDropdown(null)}
-          // onClick={() => toggleDropdown("plant-care")}
-        >
-          <Link to="/plant-care">Plant Care</Link>
-          {openDropdown === "plant-care" && (
-            <div
-              className={styles.dropdownMenu}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Link to="/">Fertilizers</Link>
-              <Link to="/">Gardening Tools</Link>
-            </div>
-          )}
-        </nav>
-
-        {/** Gifting **/}
-        <nav
-          className={styles.navItem}
-          onMouseEnter={() => setOpenDropdown("gifting")}
-          onMouseLeave={() => setOpenDropdown(null)}
-          // onClick={() => toggleDropdown("gifting")}
-        >
-          <Link to="/gifting">Gifting</Link>
-          {openDropdown === "gifting" && (
-            <div
-              className={styles.dropdownMenu}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Link to="/">Birthday Gifts</Link>
-              <Link to="/">Anniversary Gifts</Link>
-            </div>
-          )}
-        </nav>
+        
 
         {/** Terrarium **/}
         <nav className={styles.navItem}>
           <Link to="/terrarium">Terrarium</Link>
-        </nav>
-
-        {/** Blog **/}
-        <nav className={styles.navItem}>
-          <Link to="/blog">Blog</Link>
         </nav>
 
         {/** Offers **/}
@@ -199,7 +121,7 @@ const Navbar = () => {
         <div className={styles.navIcon}>
         <Link to="/cart" className={styles.cartLink}>
             <BsCart />
-            {totalQuantity > 0 && <span className={styles.cartBadge}>{totalQuantity}</span>}
+            {totalUniqueProducts  > 0 && <span className={styles.cartBadge}>{totalUniqueProducts }</span>}
           </Link>
         </div>
       </nav>

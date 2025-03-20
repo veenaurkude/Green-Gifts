@@ -40,7 +40,6 @@
 
 // export default Cart;
 
-
 import React from "react";
 import styles from "./Cart.module.css";
 import { useCart } from "../../context/CartContext";
@@ -49,7 +48,10 @@ const Cart = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
 
   // Calculate total price
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <div className={styles.cartContainer}>
@@ -60,7 +62,11 @@ const Cart = () => {
         <div className={styles.cartList}>
           {cart.map((item) => (
             <div key={item.id} className={styles.cartItem}>
-              <img src={item.image} alt={item.title} className={styles.cartImage} />
+              <img
+                src={item.image}
+                alt={item.title}
+                className={styles.cartImage}
+              />
               <div className={styles.cartDetails}>
                 <h3>{item.title}</h3>
                 <p>Price: ₹{item.price}</p>
@@ -69,9 +75,14 @@ const Cart = () => {
                   <span>{item.quantity}</span>
                   <button onClick={() => updateQuantity(item.id, 1)}>+</button>
                 </div>
-                <p className={styles.price}>Total: ₹{item.price * item.quantity}</p>
+                <p className={styles.price}>
+                  Total: ₹{item.price * item.quantity}
+                </p>
               </div>
-              <button onClick={() => removeFromCart(item.id)} className={styles.deleteButton}>
+              <button
+                onClick={() => removeFromCart(item.id)}
+                className={styles.deleteButton}
+              >
                 Delete
               </button>
             </div>
