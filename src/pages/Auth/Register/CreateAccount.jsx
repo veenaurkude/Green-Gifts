@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CreateAccount.module.css';
 import Button from '../../../components/Button/Button';
-import Input from '../../../components/Input/Input';
+import {Input} from '../../../components/Input/Input';
 
 const CreateAccount = () => {
   const navigate = useNavigate();

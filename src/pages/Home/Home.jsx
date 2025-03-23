@@ -27,7 +27,8 @@ const Home = () => {
       try {
         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`);
         console.log("API Response:", response.data); // ✅ Check what data is fetched
-        console.log(response.data.id)
+        console.log(response.data)
+        console.log(response.data?.variants?.[0]?.id);
         if (Array.isArray(response.data)) {
           setPlant(response.data);
         }
@@ -172,6 +173,8 @@ const Home = () => {
             plant.variants.map((variant) => (
               <Card
                 key={variant.id} // ✅ Correct key usage
+
+                // {product.variants?.[0]?.id}
                 id={`variant-${variant.id}`} // Unique ID
                 image={variant.imageUrls?.[0] || "default.jpg"} // ✅ Corrected image path
                 title={plant.name || "No Title"} // ✅ Corrected title

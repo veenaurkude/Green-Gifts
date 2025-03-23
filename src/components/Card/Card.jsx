@@ -147,10 +147,10 @@ import { AiFillStar } from "react-icons/ai";
 import Button from "../Button/Button";
 
 const Card = ({ id, image, title, price, discount, isTrending, onClick }) => {
-  if (!id) {
-    console.error("Error: Missing product ID in Card component", { image, title, price, discount });
-    return null; // Prevent rendering if ID is missing
-  }
+  // if (!id) {
+  //   console.error("Error: Missing product ID in Card component", { image, title, price, discount });
+  //   return null; // Prevent rendering if ID is missing
+  // }
 
   return (
     <div className={styles.card} onClick={onClick}>

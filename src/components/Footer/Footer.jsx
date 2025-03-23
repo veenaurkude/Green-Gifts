@@ -77,19 +77,19 @@ const Footer = () => {
           <h4>FOLLOW US</h4>
           <div className={styles.socialIcons}>
             <a href="">
-              <FaSquareFacebook />
+              <FaSquareFacebook className={styles.socialIcon}/>
             </a>
             <a href="">
-              <FaSquareInstagram />
+              <FaSquareInstagram className={styles.socialIcon}/>
             </a>
             <a href="">
-              <FaLinkedin />
+              <FaLinkedin className={styles.socialIcon} />
             </a>
             <a href="">
-              <FaSquareXTwitter />
+              <FaSquareXTwitter className={styles.socialIcon} />
             </a>
             <a href="">
-              <FaSquareYoutube />
+              <FaSquareYoutube className={styles.socialIcon} />
             </a>
           </div>
 

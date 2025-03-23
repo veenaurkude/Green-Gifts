@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAdmin } from '../../context/AdminContext';
-import styles from '../Admin.module.css';
+import styles from './Admin.module.css';
 
 const ProductList = () => {
   const { products, deleteProduct } = useAdmin();

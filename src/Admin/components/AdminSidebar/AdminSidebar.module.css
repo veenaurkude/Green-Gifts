@@ -1,90 +1,193 @@
-
-  /* Sidebar */
-  .sidebar {
-    width: 250px; /* Fixed sidebar width */
-    background-color: #f1f8f4;
-    border-right: 1px solid #e0e0e0;
-    padding: 20px;
-    min-height: calc(100vh - 60px); /* Full height minus navbar */
-    position: fixed; /* Fixed sidebar */
-    top: 60px; /* Starts below navbar */
-    left: 0;
-    overflow-y: auto; /* Scroll if content overflows */
-    box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
-  }
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 20px;
+/* AdminSidebar.module.css */
+.sidebar {
+  width: 250px;
+  background-color: #f1f8f4; /* Light green background for Green Gifts */
+  border-right: 1px solid #e0e0e0;
+  padding: 20px;
+  min-height: calc(100vh - 60px); /* Full height minus navbar */
+  position: fixed;
+  top: 60px; /* Starts below navbar */
+  left: 0;
+  overflow-y: auto;
+  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease; /* Smooth slide-in/out animation */
+  z-index: 999;
 }
 
 .navLinks {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .navItem {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 15px;
-    color: #2d6a4f;
-    text-decoration: none;
-    font-weight: 500;
-    border-radius: 8px;
-    transition: background 0.3s ease, color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 15px;
+  color: #2d6a4f; /* Green theme */
+  text-decoration: none;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-.navItem:hover,
+.navItem:hover {
+  background-color: #d1e0d5; /* Light green hover effect */
+  color: #2d6a4f; /* Keep text color consistent on hover */
+}
+
 .navItem.active {
-    background-color: #2d6a4f;
-    color: #fff;
+  background-color: #2d6a4f;
+  color: #fff;
 }
 
 .icon {
-    font-size: 1.2rem;
+  font-size: 1.2rem;
+}
+
+/* Dropdown Styles */
+.dropdown {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownToggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 15px;
+  color: #2d6a4f; /* Green theme */
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dropdownToggle:hover {
+  background-color: #d1e0d5; /* Light green hover effect */
+  color: #2d6a4f; /* Keep text color consistent on hover */
+}
+
+.dropdownLabel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chevron {
+  font-size: 1rem;
+  color: #2d6a4f;
+  transition: transform 0.3s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20px; /* Indent the dropdown items */
+  margin-top: 5px;
+}
+
+.dropdownItem {
+  padding: 8px 15px;
+  color: #2d6a4f;
+  text-decoration: none;
+  font-weight: 400;
+  border-radius: 8px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dropdownItem:hover {
+  background-color: #d1e0d5; /* Light green hover effect */
+  color: #2d6a4f; /* Keep text color consistent on hover */
+}
+
+.dropdownItem.active {
+  background: linear-gradient(90deg, #48bb78, #2d6a4f); /* Green gradient for active state */
+  color: #fff;
+}
+
+/* Hamburger Menu */
+.hamburger {
+  display: none; /* Hidden by default on larger screens */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.hamburgerIcon {
+  font-size: 1.5rem;
+  color: #2d6a4f; /* Green theme */
 }
 
 /* Responsive Design */
+
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
-    .sidebar {
-        width: 200px;
-        padding: 15px;
-    }
+  .sidebar {
+    width: 200px;
+    transform: translateX(-100%); /* Hidden by default on smaller screens */
+  }
 
-    .logo {
-        font-size: 1.2rem;
-    }
+  .sidebarOpen {
+    transform: translateX(0); /* Slide in when open */
+  }
 
-    .navItem {
-        font-size: 0.9rem;
-        padding: 8px 12px;
-    }
+  .hamburger {
+    display: block; /* Show hamburger menu on smaller screens */
+  }
 
-    .icon {
-        font-size: 1rem;
-    }
+  .navItem,
+  .dropdownToggle,
+  .dropdownItem {
+    font-size: 0.9rem;
+    padding: 8px 12px;
+  }
+
+  .icon,
+  .chevron {
+    font-size: 1rem;
+  }
+
+  .dropdownMenu {
+    margin-left: 15px;
+  }
 }
 
+/* Mobile (480px and below) */
 @media (max-width: 480px) {
-    .sidebar {
-        width: 100%;
-        height: auto;
-        flex-direction: row;
-        gap: 10px;
-        justify-content: space-around;
-        padding: 10px;
-    }
+  .sidebar {
+    width: 180px;
+    padding: 15px;
+  }
 
-    .navLinks {
-        flex-direction: row;
-        width: 100%;
-    }
+  .navLinks {
+    gap: 10px;
+  }
 
-    .navItem {
-        flex: 1;
-        text-align: center;
-    }
+  .navItem,
+  .dropdownToggle,
+  .dropdownItem {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  .icon,
+  .chevron {
+    font-size: 0.9rem;
+  }
+
+  .dropdownMenu {
+    margin-left: 10px;
+  }
+
+  .hamburgerIcon {
+    font-size: 1.25rem;
+  }
 }

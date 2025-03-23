@@ -1,0 +1,243 @@
+/* Container for the entire page */
+.bannerContainer {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+  }
+  
+  /* Header styling */
+  .header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    color: #2e7d32; /* Dark green */
+  }
+  
+  /* Form for adding a new banner */
+  .addForm {
+    background-color: #f4f6f8; /* Light gray */
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .formGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+  }
+  
+  .addInput {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .imageInputWrapper {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .imagePreview {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .addButton {
+    background-color: #4caf50; /* Bright green */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .addButton:hover {
+    background-color: #388e3c; /* Darker green */
+  }
+  
+  /* Table wrapper for horizontal scrolling on small screens */
+  .tableWrapper {
+    overflow-x: auto;
+  }
+  
+  /* Table styling */
+  .bannerTable {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .bannerTable th,
+  .bannerTable td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .bannerTable th {
+    background-color: #e8f5e9; /* Light green */
+    color: #2e7d32;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+  
+  /* Actions column styling */
+  .actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .editInput {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    width: 100%;
+  }
+  
+  .editButton,
+  .saveButton {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .editButton:hover,
+  .saveButton:hover {
+    background-color: #388e3c;
+  }
+  
+  .deleteButton {
+    background-color: #d32f2f; /* Red */
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .deleteButton:hover {
+    background-color: #b71c1c; /* Darker red */
+  }
+  
+  .cancelButton {
+    background-color: #666;
+    color: #fff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancelButton:hover {
+    background-color: #555;
+  }
+  
+  /* Loading, error, and no banners messages */
+  .loading,
+  .error,
+  .noBanners {
+    text-align: center;
+    font-size: 1.2rem;
+    padding: 20px;
+  }
+  
+  .loading {
+    color: #388e3c;
+  }
+  
+  .error {
+    color: #d32f2f;
+  }
+  
+  .noBanners {
+    color: #666;
+  }
+  
+  /* Responsive styling */
+  @media (max-width: 768px) {
+    .title {
+      font-size: 1.5rem;
+    }
+  
+    .formGroup {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .addInput,
+    .imageInputWrapper {
+      width: 100%;
+    }
+  
+    .imagePreview {
+      width: 40px;
+      height: 40px;
+    }
+  
+    .bannerTable th,
+    .bannerTable td {
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+  
+    .actions {
+      flex-direction: column;
+      gap: 5px;
+    }
+  
+    .editButton,
+    .saveButton,
+    .deleteButton,
+    .cancelButton {
+      padding: 6px 10px;
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .title {
+      font-size: 1.2rem;
+    }
+  
+    .bannerTable th,
+    .bannerTable td {
+      font-size: 0.85rem;
+    }
+  
+    .editInput {
+      font-size: 0.85rem;
+    }
+  
+    .imagePreview {
+      width: 30px;
+      height: 30px;
+    }
+  }

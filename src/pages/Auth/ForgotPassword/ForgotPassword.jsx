@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Button from "../../../components/Button/Button";
-import Input from "../../../components/Input/Input";
+import {Input} from "../../../components/Input/Input";
 import axios from "axios";
 import styles from "./ForgotPassword.module.css";
 import config from "../../../config/apiconfig";

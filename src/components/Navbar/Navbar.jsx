@@ -56,12 +56,6 @@ const Navbar = () => {
               <Link to="/plants/gaming">Flowering Plants</Link>
               <Link to="/plants/mobile">Low Maintenance Plants</Link>
               <Link to="/plants/tv">Air Purifying Plants</Link>
-              <Link to="/plants/tv">Low Light Plants</Link>
-              <Link to="/plants/tv">Hanging Plants</Link>
-              <Link to="/plants/tv">Medicinal & Aromatic Plants</Link>
-              <Link to="/plants/tv">Pet-Friendly Plants</Link>
-              <Link to="/plants/tv">Fruit Plants</Link>
-              <Link to="/plants/tv">Bundles</Link>
             </div>
           )}
         </nav>
@@ -106,11 +100,30 @@ const Navbar = () => {
         </nav>
 
         {/** Login **/}
-        <nav className={styles.navIcon}>
+
+        <nav
+          className={styles.navIcon}
+          onMouseEnter={() => setOpenDropdown("login")}
+          onMouseLeave={() => setOpenDropdown(null)}
+          // onClick={() => toggleDropdown("pots")}
+        >
+          <Link to="/login"><VscAccount /></Link>
+          {openDropdown === "login" && (
+            <div
+              className={styles.dropdownMenu}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Link to="/profile">My Profile</Link>
+              
+            </div>
+          )}
+        </nav>
+
+        {/* <nav className={styles.navIcon}>
           <Link to="/login">
             <VscAccount />
           </Link>
-        </nav>
+        </nav> */}
 
         {/* <div className={styles.navIcon}>
           <Link to="/cart">
@@ -121,6 +134,7 @@ const Navbar = () => {
         <div className={styles.navIcon}>
         <Link to="/cart" className={styles.cartLink}>
             <BsCart />
+            
             {totalUniqueProducts  > 0 && <span className={styles.cartBadge}>{totalUniqueProducts }</span>}
           </Link>
         </div>

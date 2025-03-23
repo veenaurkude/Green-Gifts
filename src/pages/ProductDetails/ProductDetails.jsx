@@ -254,47 +254,47 @@ const ProductDetails = () => {
 
 
 
-  // useEffect(() => {
-  //   async function fetchProductDetails() {
-  //     try {
-  //      
-  //       const response = await axios.get(`${config.BASE_URL}/api/Product/${id}`, {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`, // Add token if your API requires it
-  //           "Content-Type": "application/json",
-  //         },
-  //       });
-  //       console.log("Fetched Product:", response.data);
-  //       setProduct(response.data); // Set the entire product object
-  //       setLoading(false);
-  //     } catch (error) {
-  //       console.error("Error fetching product details:", error.response || error);
-  //       setError("Failed to load product details. Please try again.");
-  //       setLoading(false);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchProductDetails() {
+      try {
+       
+        const response = await axios.get(`${config.BASE_URL}/api/Product/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token if your API requires it
+            "Content-Type": "application/json",
+          },
+        });
+        console.log("Fetched Product:", response.data);
+        setProduct(response.data); // Set the entire product object
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching product details:", error.response || error);
+        setError("Failed to load product details. Please try again.");
+        setLoading(false);
+      }
+    }
 
-  //   if (id) {
-  //     console.log("Product ID:", id);
-  //     fetchProductDetails();
-  //   }
-  // }, [id]);
+    if (id) {
+      console.log("Product ID:", id);
+      fetchProductDetails();
+    }
+  }, [id]);
 
-  // // Handle loading and error states
-  // if (loading) {
-  //   return <p>Loading...</p>;
-  // }
+  // Handle loading and error states
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
-  // if (error) {
-  //   return <p className={styles.error}>{error}</p>;
-  // }
+  if (error) {
+    return <p className={styles.error}>{error}</p>;
+  }
 
-  // if (!product) {
-  //   return <p>No product found.</p>;
-  // }
+  if (!product) {
+    return <p>No product found.</p>;
+  }
 
-  // // Assuming the first variant is the "default" one to display initially
-  // const defaultVariant = product.variants[0] || {};
+  // Assuming the first variant is the "default" one to display initially
+  const defaultVariant = product.variants[0] || {};
 
   return (
     <>

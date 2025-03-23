@@ -1,20 +1,3 @@
-// import React from 'react';
-// import { Link } from 'react-router-dom';
-// import styles from './Admin.module.css';
-
-// const AdminDashboard = () => {
-//   return (
-//     <div className={styles.dashboardContainer}>
-//       <h1>Admin Dashboard</h1>
-//       <div className={styles.buttons}>
-//         <h2>Hello Admin Dashboard</h2>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default AdminDashboard;
-
 
 import React from "react";
 import { Link } from "react-router-dom";
@@ -68,7 +51,7 @@ const AdminDashboard = () => {
           <Link to="/admin/add-product" className={styles.actionButton}>
             Add New Product
           </Link>
-          <Link to="/admin/category" className={styles.actionButton}>
+          <Link to="/admin/plant-category" className={styles.actionButton}>
             Manage Categories
           </Link>
           <Link to="/admin/orders" className={styles.actionButton}>

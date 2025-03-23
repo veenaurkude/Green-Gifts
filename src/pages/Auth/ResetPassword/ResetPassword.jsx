@@ -99,7 +99,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom"; // For URL query params
 import Button from "../../../components/Button/Button";
-import Input from "../../../components/Input/Input";
+import {Input} from "../../../components/Input/Input";
 import axios from "axios";
 import styles from "./ResetPassword.module.css";
 import config from "../../../config/apiconfig";

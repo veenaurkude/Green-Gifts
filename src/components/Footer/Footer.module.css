@@ -155,6 +155,10 @@
   color: #004d24;
 }
 
+.socialIcon{
+  font-size: 1.5rem;
+}
+
 /* Bottom Section */
 .bottomSection {
   text-align: center;

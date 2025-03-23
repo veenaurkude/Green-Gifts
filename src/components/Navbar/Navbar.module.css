@@ -78,8 +78,8 @@
 /* Dropdown Menu */
 .dropdownMenu {
   font-family: sans-serif;
-  min-width: 10rem;
-  max-width: 26rem;
+  /* min-width: min-content;
+  max-width: 20rem; */
   width: max-content;
   z-index: 101;
   padding: 1rem;
