@@ -1,3 +1,5 @@
+
+
 import axios from "axios";
 import { createContext, useContext, useEffect, useState } from "react";
 import config from "../config/apiconfig";
@@ -5,6 +7,21 @@ import config from "../config/apiconfig";
 const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+  
+  // ✅ Improved Token Handling
+  const rawTokenData = localStorage.getItem("ecommerce_login");
+  let tokenData;
+  try {
+    tokenData = rawTokenData && rawTokenData !== "undefined"
+      ? JSON.parse(rawTokenData)
+      : null;
+  } catch (error) {
+    console.error("Invalid token data in localStorage:", rawTokenData);
+    tokenData = null;
+  }
+  
+  const token = tokenData?.jwtToken || ""; // Ensure token is always defined
+
   const [cart, setCart] = useState([]);
 
   // **Fetch Cart Data from API**
@@ -12,53 +29,75 @@ export const CartProvider = ({ children }) => {
     try {
       const response = await axios.get(`${config.BASE_URL}/cart/view`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
-      setCart(response.data); // Assuming the response structure is correct
+      console.log("API Response Data:", response.data);
+
+      const cartData = Array.isArray(response.data.cartItems)
+        ? response.data.cartItems
+        : []; // Ensure data is always an array
+
+      setCart(cartData); // Update cart with proper data structure
     } catch (error) {
       console.error("Error fetching cart data:", error);
+      setCart([]); // Fallback to empty array if data fetch fails
     }
   };
 
   // **Add item to cart via API**
+  const addToCart = async (product, variantId) => {
+    if (!token) {
+      console.error("Token missing or expired. Please log in again.");
+      return;
+    }
 
-  const addToCart = async (product) => {
     try {
-      const response = await axios.post(`${config.BASE_URL}/cart/add/${product.id}?quantity=1`, null, 
+      const response = await axios.post(
+        `${config.BASE_URL}/cart/addToCart/${variantId}`,
         {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken}`,
+          productId: product.id,
+          variantId: variantId.id,
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-      // Refresh cart data after adding
-      fetchCart();
+      console.log("Item added successfully:", response.data);
+      fetchCart(); // Refresh cart after adding
     } catch (error) {
-      console.error("Error adding to cart:", error);
+      console.error("Error adding to cart:", error.response?.data || error);
     }
   };
 
   // **Update Quantity via API**
-
-  const updateQuantity = async (id, change) => {
-    const updatedItem = cart.find((item) => item.id === id);
+  const updateQuantity = async (variantId, change) => {
+    const updatedItem = cart.find((item) => item.variantId === variantId);
     if (!updatedItem) return;
 
     const newQuantity = updatedItem.quantity + change;
 
     if (newQuantity < 1) {
-      removeFromCart(id); // If quantity becomes zero, remove the item
+      removeFromCart(variantId);
     } else {
       try {
-        await axios.post(`${config.BASE_URL}/cart/add/${id}?quantity=${newQuantity}`, null, {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken}`,
-          },
-        });
+        await axios.post(
+          `${config.BASE_URL}/cart/add/${variantId}?quantity=${newQuantity}`,
+          null,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
-        // Refresh cart data after updating
-        fetchCart();
+        fetchCart(); // Refresh cart data after updating
       } catch (error) {
         console.error("Error updating quantity:", error);
       }
@@ -66,17 +105,17 @@ export const CartProvider = ({ children }) => {
   };
 
   // **Remove item from cart**
-
-  const removeFromCart = async (id) => {
+  const removeFromCart = async (variantId) => {
     try {
-      await axios.delete(`${config.BASE_URL}/cart/remove/${id}`, {
+      await axios.delete(`${config.BASE_URL}/cart/remove/${variantId}`, {
         headers: {
-          Authorization: `Bearer ${JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken}`,
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
         },
       });
 
-      // Refresh cart data after removing
-      fetchCart();
+      fetchCart(); // Refresh cart data after removing
+      console.log(`Item with variantId ${variantId} removed successfully.`);
     } catch (error) {
       console.error("Error removing item from cart:", error);
     }
@@ -84,7 +123,7 @@ export const CartProvider = ({ children }) => {
 
   // Fetch cart data on mount
   useEffect(() => {
-    fetchCart();
+    if (token) fetchCart(); // Only fetch if token exists
   }, []);
 
   return (
@@ -103,6 +142,150 @@ export const CartProvider = ({ children }) => {
 };
 
 export const useCart = () => useContext(CartContext);
+// import axios from "axios";
+// import { createContext, useContext, useEffect, useState } from "react";
+// import config from "../config/apiconfig";
+
+// const CartContext = createContext();
+
+// export const CartProvider = ({ children }) => {
+
+//   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
+//   const token = tokenData?.jwtToken;
+//   console.log(token);
+
+//   const [cart, setCart] = useState([]);
+
+//   // **Fetch Cart Data from API**
+
+// const fetchCart = async () => {
+//   try {
+//     const response = await axios.get(`${config.BASE_URL}/cart/view`, {
+//       headers: {
+//         Authorization: `Bearer ${token}`,
+//         "Content-Type": "application/json",
+//       },
+//     });
+//     console.log("API Response Data:", response.data);
+//     const cartData = Array.isArray(response.data.cartItems)
+//       ? response.data.cartItems
+//       : []; // Ensure data is always an array
+
+//     setCart(cartData); // Update cart with proper data structure
+   
+//   } catch (error) {
+//     console.error("Error fetching cart data:", error);
+//     setCart([]); // Fallback to empty array if data fetch fails
+//   }
+// };
+
+//   // **Add item to cart via API**
+//   const addToCart = async (product, variantId) => {
+//     const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
+//     const token = tokenData?.jwtToken;
+  
+//     if (!token) {
+//       console.error("Token missing or expired. Please log in again.");
+//       return;
+//     }
+  
+//     try {
+//       const response = await axios.post(
+//         `${config.BASE_URL}/cart/addToCart/${variantId}`,
+//         {
+//           productId: product.id,  // Common product ID
+//           variantId: variantId.id,  // Specific variant ID
+//           // quantity: 1             // Default quantity
+//         },
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+  
+//       console.log("Item added successfully:", response.data);
+//       fetchCart(); // Refresh cart after adding
+//     } catch (error) {
+//       console.error("Error adding to cart:", error.response?.data || error);
+//     }
+//   };
+  
+  
+
+//   // **Update Quantity via API**
+
+//   const updateQuantity = async (variantId, change) => {
+//     const updatedItem = cart.find((item) => item.variantId === variantId);
+//     if (!updatedItem) return;
+
+//     const newQuantity = updatedItem.quantity + change;
+
+//     if (newQuantity < 1) {
+//       removeFromCart(variantId); // If quantity becomes zero, remove the item
+//     } else {
+//       try {
+//         await axios.post(
+//           `${config.BASE_URL}/cart/add/${variantId}?quantity=${newQuantity}`,
+//           null,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`,
+//               "Content-Type": "application/json",
+//             },
+//           }
+//         );
+
+//         // Refresh cart data after updating
+//         fetchCart();
+//       } catch (error) {
+//         console.error("Error updating quantity:", error);
+//       }
+//     }
+//   };
+
+//   // **Remove item from cart**
+
+//   const removeFromCart = async (variantId) => {
+//     try {
+//       await axios.delete(`${config.BASE_URL}/cart/remove/${variantId}`, {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//           "Content-Type": "application/json",
+//         },
+//       });
+  
+//       // Refresh cart data after removing
+//       fetchCart();
+//       console.log(`Item with variantId ${variantId} removed successfully.`);
+//     } catch (error) {
+//       console.error("Error removing item from cart:", error);
+//     }
+//   };
+  
+
+//   // Fetch cart data on mount
+//   useEffect(() => {
+//     fetchCart();
+//   }, []);
+
+//   return (
+//     <CartContext.Provider
+//       value={{
+//         cart,
+//         addToCart,
+//         updateQuantity,
+//         removeFromCart,
+//         totalUniqueProducts: cart.length,
+//       }}
+//     >
+//       {children}
+//     </CartContext.Provider>
+//   );
+// };
+
+// export const useCart = () => useContext(CartContext);
 
 // ========================
 

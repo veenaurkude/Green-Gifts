@@ -591,6 +591,7 @@ const Plants = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
+  // Fetch all products
   useEffect(() => {
     async function fetchPlants() {
       try {
@@ -636,7 +637,7 @@ const Plants = () => {
 
   function handlePassId(id) {
     // alert(id); // Uncomment for debugging
-    navigate(`/single-product/${id}`);
+    navigate(`/product/${id}`);
   }
 
   return (

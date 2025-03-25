@@ -1,356 +1,426 @@
-// import React, { useState } from "react";
-// import styles from "./ProductDetails.module.css";
-
-// const ProductDetails = ({ product, onClose }) => {
-//   const [quantity, setQuantity] = useState(1);
-
-//   const increaseQuantity = () => setQuantity(quantity + 1);
-//   const decreaseQuantity = () => {
-//     if (quantity > 1) setQuantity(quantity - 1);
-//   };
-
-//   return (
-//     <div className={styles.overlay}>
-//       <div className={styles.modal}>
-//         <button className={styles.closeBtn} onClick={onClose}>X</button>
-//         <img src={product.image} alt={product.name} className={styles.image} />
-//         <h2 className={styles.brand}>{product.brand}</h2>
-//         <p className={styles.name}>{product.name}</p>
-//         <p className={styles.price}>
-//           <span className={styles.discounted}>₹{product.discountedPrice}</span>
-//           <span className={styles.original}>₹{product.originalPrice}</span>
-//           <span className={styles.discount}>{product.discount}% OFF</span>
-//         </p>
-//         <div className={styles.quantityContainer}>
-//           <button onClick={decreaseQuantity}>-</button>
-//           <span>{quantity}</span>
-//           <button onClick={increaseQuantity}>+</button>
-//         </div>
-//         <button className={styles.addToCart}>Add to Cart</button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;
-
-// import React, { useState } from "react";
-// import styles from "./ProductDetails.module.css";
-
-// const ProductDetails = ({ product, onClose }) => {
-//   if (!product) {
-//     return <p>Loading product details...</p>;
-//   }
-
-//   const { img, brand, price, discount } = product;
-//   const [quantity, setQuantity] = useState(1);
-
-//   const handleIncrease = () => setQuantity(quantity + 1);
-//   const handleDecrease = () => {
-//     if (quantity > 1) setQuantity(quantity - 1);
-//   };
-
-//   return (
-//     <div className={styles.productDetails}>
-//       <button onClick={onClose}>✖</button>
-//       <img src={img} alt={brand} className={styles.productImage} />
-//       <div className={styles.productInfo}>
-//         <h2 className={styles.productBrand}>{brand}</h2>
-//         <p className={styles.productDiscount}>₹{discount}</p>
-//         <p className={styles.productPrice}>₹{price}</p>
-
-//         <div className={styles.counter}>
-//           <button onClick={handleDecrease}>-</button>
-//           <span>{quantity}</span>
-//           <button onClick={handleIncrease}>+</button>
-//         </div>
-
-//         <button className={styles.addToCartBtn}>Add to Cart</button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;
-
-// // ==============
 // import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
+// import { useParams, useNavigate, Link } from "react-router-dom"; // Add useNavigate
 // import axios from "axios";
 // import config from "../../config/apiconfig";
-// import styles from "./ProductDetails.module.css";
+// import styles from "./SingleProductDetail.module.css";
 
-// const ProductDetails = () => {
-//   const { id } = useParams(); // Get product ID from URL
-//   const [product, setProduct] = useState(null);
-
-//   useEffect(() => {
-//     async function fetchProduct() {
-//       try {
-//         const response = await axios.get(`${config.BASE_URL}/products/${id}`);
-//         setProduct(response.data.product);
-//       } catch (error) {
-//         console.error("Error fetching product details:", error);
-//       }
-//     }
-//     fetchProduct();
-//   }, [id]);
-
-//   if (!product) return <p>Loading...</p>;
-
-//   return (
-//     <div className={styles.productDetails}>
-//       <img src={product.image} alt={product.title} className={styles.productImage} />
-//       <h2>{product.title}</h2>
-//       <p>₹{product.price}</p>
-//       <p>{product.description}</p>
-//     </div>
-//   );
-// };
-
-// export default ProductDetails;
-
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import axios from "axios";
-// import config from "../../config/apiconfig";
-// import styles from "./ProductDetails.module.css";
-
-// const ProductDetails = () => {
+// function SingleProductDetail() {
 //   const { id } = useParams();
 //   const [product, setProduct] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const navigate = useNavigate(); // Add navigate
 
 //   useEffect(() => {
-//     async function fetchProductDetails() {
+//     async function getProductById() {
 //       try {
-//         const response = await axios.get(`${config.BASE_URL}/products/${id}`);
-//         console.log("Fetched Product:", response.data); // Debugging
+//         const token = JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken;
+//         const response = await axios.get(`${config.BASE_URL}/api/Product/${id}`, {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "application/json",
+//           },
+//         });
+//         console.log("Single Product Response:", response.data);
 //         setProduct(response.data);
+//         setLoading(false);
 //       } catch (error) {
-//         console.error("Error fetching product details:", error);
+//         console.error("Error fetching product:", error.response || error);
+//         setError("Failed to load product details.");
+//         setLoading(false);
 //       }
 //     }
-
-//     if (id) {
-//       fetchProductDetails();
-//     }
+//     if (id) getProductById();
 //   }, [id]);
 
-//   if (!product) {
-//     return <p>Loading...</p>; // Show loading if data is still fetching
-//   }
+//   if (loading) return <p className={styles.loading}>Loading...</p>;
+//   if (error) return <p className={styles.error}>{error}</p>;
+//   if (!product) return <p className={styles.error}>No product found.</p>;
+
+//   const defaultVariant = product.variants?.[0] || {};
 
 //   return (
-//     <>
-//       {" "}
+//     <div className={styles.container}>
+//       {/* Breadcrumbs */}
+//       <nav className={styles.breadcrumbs}>
+//         <Link to="/" className={styles.breadcrumbLink}>Home</Link>
+//         <span className={styles.breadcrumbSeparator}>›</span>
+//         <Link to="/plants" className={styles.breadcrumbLink}>Plants</Link>
+//         <span className={styles.breadcrumbSeparator}>›</span>
+//         <span className={styles.breadcrumbActive}>
+//           {product.name || "Product Details"}
+//         </span>
+//       </nav>
+//       <h1 className={styles.title}>{product.name || "Product Details"}</h1>
+
+//       {/* <button
+//         onClick={() => navigate("/plants")} // Simple back navigation
+//         className={styles.backButton}
+//       >
+//         Back to Plants
+//       </button> */}
 //       <div className={styles.productContainer}>
-//         <div className={styles.productImg}>
+//         <div className={styles.imageWrapper}>
 //           <img
-//             src={product.image}
-//             alt={product.title}
+//             src={defaultVariant.imageUrls?.[0] || "https://via.placeholder.com/300"}
+//             alt={product.name}
 //             className={styles.productImage}
 //           />
 //         </div>
-//         <div className={styles.productDetails}>
-//           <h2>{product.title}</h2>
-//           <p>Brand: {product.brand}</p>
-//           <p>Price: ₹{product.price}</p>
-//           <p>Discount: {product.discount}%</p>
-//           <button className={styles.addToCart}>Add to Cart</button>
+//         <div className={styles.details}>
+
+//           <p><strong>Category:</strong> {product.category || "N/A"}</p>
+//           <p><strong>Description:</strong> {product.description || "No description"}</p>
+//           <p><strong>Price:</strong> ₹{defaultVariant.price || "N/A"}</p>
+//           {defaultVariant.discountedPrice && (
+//             <p><strong>Discounted Price:</strong> ₹{defaultVariant.discountedPrice}</p>
+//           )}
+//           <p><strong>Color:</strong> {defaultVariant.color || "N/A"}</p>
+//           <p><strong>Stock:</strong> {defaultVariant.qty || "N/A"}</p>
 //         </div>
 //       </div>
-//       <div className={styles.productDescription}>
-//         <h4>About the Product</h4>
-//         <p>{product.description}</p>
-//       </div>
-//     </>
+//     </div>
 //   );
-// };
+// }
 
-// export default ProductDetails;
-// ================================
+// export default SingleProductDetail;
+
+// =============================
 
 // import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
+// import { useParams, useNavigate, Link } from "react-router-dom";
 // import axios from "axios";
 // import config from "../../config/apiconfig";
-// import styles from "./ProductDetails.module.css";
-// import Button from "../../components/Button/Button";
+// import styles from "./SingleProductDetail.module.css";
 
-
-// const ProductDetails = () => {
+// function SingleProductDetail() {
+//   const tokenData = JSON.parse(
+//     localStorage.getItem("ecommerce_login")
+//   )?.jwtToken;
 //   const { id } = useParams();
 //   const [product, setProduct] = useState(null);
+//   const [selectedVariant, setSelectedVariant] = useState(null);
+//   const [selectedImage, setSelectedImage] = useState(null);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
+//   const navigate = useNavigate();
 
 //   useEffect(() => {
-//     async function fetchProductDetails() {
+//     async function getProductById() {
 //       try {
-//         const response = await axios.get(`${config.BASE_URL}/products/${id}`);
-//         console.log("Fetched Product:", response.data);
-
-//         // Check if API wraps the product inside another object
-//         const productData = response.data.product || response.data;
-//         setProduct({ ...productData });
+//         const response = await axios.get(
+//           `${config.BASE_URL}/api/Product/${id}`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${tokenData}`,
+//               "Content-Type": "application/json",
+//             },
+//           }
+//         );
+//         console.log("Single Product Response:", response.data);
+//         setProduct(response.data);
+//         setSelectedVariant(response.data.variants?.[0] || {});
+//         // setSelectedImage(response.data.imageUrls?.[0] || "https://via.placeholder.com/300");
+//         setLoading(false);
 //       } catch (error) {
-//         console.error("Error fetching product details:", error);
+//         console.error("Error fetching product:", error.response || error);
+//         setError("Failed to load product details.");
+//         setLoading(false);
 //       }
 //     }
-
-//     if (id) {
-//       console.log("Product ID:", id);
-//       fetchProductDetails();
-//     }
+//     if (id) getProductById();
 //   }, [id]);
 
-//   useEffect(() => {
-//     console.log("Updated product state:", product);
-//   }, [product]);
+//   const handleVariantChange = (variant) => {
+//     setSelectedVariant(variant);
+//   };
 
-//   if (!product) {
-//     return <p>Loading...</p>;
-//   }
+//   const handleImageChange = (image) => {
+//     setSelectedImage(image);
+//   };
+
+//   const handleAddToCart = () => {
+//     // Placeholder for adding to cart functionality
+//     alert(
+//       `Added ${product.name} (${selectedVariant.color}, ${selectedVariant.size}) to cart!`
+//     );
+//     // In a real app, you'd add the product to a cart context or local storage
+//   };
+
+//   if (loading) return <p className={styles.loading}>Loading...</p>;
+//   if (error) return <p className={styles.error}>{error}</p>;
+//   if (!product) return <p className={styles.error}>No product found.</p>;
 
 //   return (
-//     <>
-//       <div className={styles.productContainer}>
-//         <div className={styles.productImg}>
-//           <img
-//             src={product.image || "https://via.placeholder.com/300"}
-//             alt={product.title || "No Title"}
-//             className={styles.productImage}
-//           />
-//         </div>
-//         <div className={styles.productDetails}>
-//           <h2>{product.title || "No Title"}</h2>
-//           <p>Brand: {product.brand || "Unknown"}</p>
-//           <p>Price: ₹{product.price !== undefined ? product.price : "N/A"}</p>
-//           <p>{product.discount ? `Discount: ${product.discount}%` : "No Discount"}</p>
-//           {/* <button className={styles.addToCart}>Add to Cart</button> */}
-//           <Button>Add to Cart</Button>
-//         </div>
-//       </div>
-//       <div className={styles.productDescription}>
-//         <h4>About the Product</h4>
-//         <p>{product.description || "No Description Available"}</p>
-//       </div>
-//     </>
-//   );
-// };
+//     <div className={styles.container}>
+//       {/* Breadcrumbs */}
+//       <nav className={styles.breadcrumbs}>
+//         <Link to="/" className={styles.breadcrumbLink}>
+//           Home
+//         </Link>
+//         <span className={styles.breadcrumbSeparator}>›</span>
+//         <Link to="/plants" className={styles.breadcrumbLink}>
+//           Products
+//         </Link>
+//         <span className={styles.breadcrumbSeparator}>›</span>
+//         <span className={styles.breadcrumbActive}>
+//           {product.name || "Product Details"}
+//         </span>
+//       </nav>
 
-// export default ProductDetails;
-// ======================================
+//       {/* Back Button */}
+//       <button onClick={() => navigate("/plants")} className={styles.backButton}>
+//         Back to Products
+//       </button>
+
+//       {/* Product Details */}
+//       <div className={styles.productContainer}>
+//         {product.variants.length > 0
+//           ? product.variants.map((item, index) => (
+//               <div key={index}>
+//                 {item.imageUrls && item.imageUrls.length > 0 ? (
+//                   item.imageUrls.map((url, imgIndex) => (
+//                     <img
+//                       key={imgIndex}
+//                       src={url}
+//                       alt={`Product Image ${imgIndex + 1}`}
+//                       className="w-32 h-32 object-cover rounded-md"
+//                     />
+//                   ))
+//                 ) : (
+//                   <p>No images available</p>
+//                 )}
+//               </div>
+//             ))
+//           : "No images Found"}
+
+//         {/* Details Section */}
+//         <div className={styles.detailsSection}>
+//           <h1 className={styles.title}>{product.name || "Product Details"}</h1>
+//           <p className={styles.category}>
+//             <strong>Category:</strong> {product.category || "N/A"}
+//           </p>
+//           <p className={styles.description}>
+//             <strong>Description:</strong>{" "}
+//             {product.description || "No description available."}
+//           </p>
+//           <p className={styles.price}>
+//             <strong>Price:</strong> ₹{selectedVariant.price || "N/A"}
+//             {selectedVariant.discountedPrice && (
+//               <span className={styles.discountedPrice}>
+//                 (Discounted: ₹{selectedVariant.discountedPrice})
+//               </span>
+//             )}
+//           </p>
+//           <p className={styles.stock}>
+//             <strong>Stock:</strong> {selectedVariant.qty || "N/A"}
+//           </p>
+//           <p className={styles.pickup}>
+//             <strong>Pickup Location:</strong> {product.pickupLocation || "N/A"}
+//           </p>
+
+//           {/* Variant Selection */}
+//           {product.variants?.length > 0 && (
+//             <div className={styles.variants}>
+//               <h3 className={styles.variantTitle}>Select Variant:</h3>
+//               <div className={styles.variantOptions}>
+//                 {product.variants.map((variant, index) => (
+//                   <button
+//                     key={index}
+//                     className={`${styles.variantButton} ${
+//                       selectedVariant === variant
+//                         ? styles.variantButtonActive
+//                         : ""
+//                     }`}
+//                     onClick={() => handleVariantChange(variant)}
+//                   >
+//                     {variant.color} ({variant.size})
+//                   </button>
+//                 ))}
+//               </div>
+//             </div>
+//           )}
+
+//           {/* Add to Cart Button */}
+//           <button className={styles.addToCart} onClick={handleAddToCart}>
+//             Add to Cart
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// export default SingleProductDetail;
+
+// ==================
+
+
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/apiconfig";
 import styles from "./ProductDetails.module.css";
-import Button from "../../components/Button/Button";
+import { useCart } from "../../context/CartContext";  // Import the Cart Context
+
+
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Get product ID from URL
-  console.log(id)
+
+
+  const { addToCart } = useCart(); // Get the addToCart function
+
+
+  const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken;
+  const { id } = useParams();
   const [product, setProduct] = useState(null);
-
-
+  const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchProductDetails() {
+    async function getProductById() {
       try {
-       
         const response = await axios.get(`${config.BASE_URL}/api/Product/${id}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Add token if your API requires it
+            Authorization: `Bearer ${tokenData}`,
             "Content-Type": "application/json",
           },
         });
-        console.log("Fetched Product:", response.data);
-        setProduct(response.data); // Set the entire product object
+        console.log("Single Product Response:", response.data);
+        setProduct(response.data);
+        const initialVariant = response.data.variants?.[0] || {};
+        setSelectedVariant(initialVariant);
+        setSelectedImage(initialVariant.imageUrls?.[0] || null);
         setLoading(false);
       } catch (error) {
-        console.error("Error fetching product details:", error.response || error);
-        setError("Failed to load product details. Please try again.");
+        console.error("Error fetching product:", error.response || error);
+        setError("Failed to load product details.");
         setLoading(false);
       }
     }
-
-    if (id) {
-      console.log("Product ID:", id);
-      fetchProductDetails();
-    }
+    if (id) getProductById();
   }, [id]);
 
-  // Handle loading and error states
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  const handleVariantChange = (variant) => {
+    setSelectedVariant(variant);
+    setSelectedImage(variant.imageUrls?.[0] || null);
+  };
 
-  if (error) {
-    return <p className={styles.error}>{error}</p>;
-  }
+  const handleImageChange = (image) => {
+    setSelectedImage(image);
+  };
 
-  if (!product) {
-    return <p>No product found.</p>;
-  }
+  // const handleAddToCart = () => {
+  //   alert(`Added ${product.name} (${selectedVariant.color}, ${selectedVariant.size}) to cart!`);
+  // };
 
-  // Assuming the first variant is the "default" one to display initially
-  const defaultVariant = product.variants[0] || {};
+
+  const handleAddToCart = async () => {
+    if (!product || !selectedVariant) {
+      alert("Please select a valid product or variant.");
+      return;
+    }
+  
+    try {
+      await addToCart(product, selectedVariant.id);  // Pass both product and variantId
+      alert(`${product.name} (${selectedVariant.color}, ${selectedVariant.size}) added to cart!`);
+    } catch (error) {
+      console.error("Failed to add product to cart:", error);
+      alert("Failed to add product to cart.");
+    }
+  };
+  
+
+  if (loading) return <p className={styles.loading}>Loading...</p>;
+  if (error) return <p className={styles.error}>{error}</p>;
+  if (!product) return <p className={styles.error}>No product found.</p>;
 
   return (
-    <>
-      <div className={styles.productContainer}>
-        <div className={styles.productImg}>
-          <img
-            src={defaultVariant.imageUrls?.[0] || "https://via.placeholder.com/300"}
-            alt={product.name || "No Title"}
-            className={styles.productImage}
-          />
-        </div>
-        <div className={styles.productDetails}>
-          <h2>{product.name || "No Title"}</h2>
-          <p>Category: {product.category || "Unknown"}</p>
-          <p>Price: ₹{defaultVariant.price !== undefined ? defaultVariant.price : "N/A"}</p>
-          <p>
-            {defaultVariant.discountedPrice
-              ? `Discounted Price: ₹${defaultVariant.discountedPrice}`
-              : "No Discount"}
-          </p>
-          <p>Color: {defaultVariant.color || "N/A"}</p>
-          <p>Size: {defaultVariant.size || "N/A"}</p>
-          <p>Stock: {defaultVariant.qty !== undefined ? defaultVariant.qty : "N/A"}</p>
-          <p>Pickup Location: {product.pickupLocation || "N/A"}</p>
-          <Button>Add to Cart</Button>
-        </div>
-      </div>
-      <div className={styles.productDescription}>
-        <h4>About the Product</h4>
-        <p>{product.description || "No Description Available"}</p>
-      </div>
+    <div className={styles.container}>
+      <nav className={styles.breadcrumbs}>
+        <Link to="/" className={styles.breadcrumbLink}>Home</Link>
+        <span className={styles.breadcrumbSeparator}>›</span>
+        <Link to="/plants" className={styles.breadcrumbLink}>Products</Link>
+        <span className={styles.breadcrumbSeparator}>›</span>
+        <span className={styles.breadcrumbActive}>{product.name || "Product Details"}</span>
+      </nav>
 
-      {/* Optional: Display all variants */}
-      {product.variants.length > 1 && (
-        <div className={styles.variantsSection}>
-          <h4>Available Variants</h4>
-          <ul className={styles.variantList}>
-            {product.variants.map((variant) => (
-              <li key={variant.id} className={styles.variantItem}>
-                <img
-                  src={variant.imageUrls?.[0] || "https://via.placeholder.com/100"}
-                  alt={variant.color}
-                  className={styles.variantImage}
-                />
-                <p>Color: {variant.color}</p>
-                <p>Price: ₹{variant.price}</p>
-                <p>Discounted: ₹{variant.discountedPrice || "N/A"}</p>
-                <p>Size: {variant.size}</p>
-                <p>Stock: {variant.qty}</p>
-              </li>
-            ))}
-          </ul>
+      <button onClick={() => navigate("/plants")} className={styles.backButton}>Back to Products</button>
+
+      <div className={styles.productContainer}>
+        {/* Main Product Image */}
+        <div className={styles.mainImageContainer}>
+          {selectedImage ? (
+            <img
+              src={selectedImage}
+              alt="Selected Product"
+              className="w-64 h-64 object-cover rounded-md"
+            />
+          ) : (
+            <p>No images available</p>
+          )}
         </div>
-      )}
-    </>
+
+        {/* Thumbnail Images */}
+        {/* <div className={styles.thumbnailContainer}>
+          {selectedVariant?.imageUrls?.map((url, imgIndex) => (
+            <img
+              key={imgIndex}
+              src={url}
+              alt={`Thumbnail ${imgIndex + 1}`}
+              className={`w-20 h-20 object-cover rounded-md cursor-pointer ${
+                selectedImage === url ? styles.activeThumbnail : ""
+              }`}
+              onClick={() => handleImageChange(url)}
+            />
+          ))}
+        </div> */}
+
+        {/* Details Section */}
+        <div className={styles.detailsSection}>
+          <h1 className={styles.title}>{product.name || "Product Details"}</h1>
+          <p className={styles.category}><strong>Category:</strong> {product.category || "N/A"}</p>
+          <p className={styles.description}><strong>Description:</strong> {product.description || "No description available."}</p>
+          <p className={styles.price}><strong>Price:</strong> ₹{selectedVariant.price || "N/A"}</p>
+          <p className={styles.stock}><strong>Stock:</strong> {selectedVariant.qty || "N/A"}</p>
+          <p className={styles.pickup}><strong>Pickup Location:</strong> {product.pickupLocation || "N/A"}</p>
+
+          {/* Variant Selection */}
+          {product.variants?.length > 0 && (
+            <div className={styles.variants}>
+              <h3 className={styles.variantTitle}>Select Variant:</h3>
+              <div className={styles.variantOptions}>
+                {product.variants.map((variant, index) => (
+                  <button
+                    key={index}
+                    className={`${styles.variantButton} ${
+                      selectedVariant === variant
+                        ? styles.variantButtonActive
+                        : ""
+                    }`}
+                    onClick={() => handleVariantChange(variant)}
+                  >
+                    {variant.color} ({variant.size})
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Add to Cart Button */}
+          <button className={styles.addToCart} 
+          onClick={() => addToCart(product, product.variants[0]?.id)}
+          >
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
   );
-};
+}
 
 export default ProductDetails;

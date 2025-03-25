@@ -1,0 +1,101 @@
+.container {
+    display: flex;
+    height: 100vh;
+    background-color: #f7f7f7;
+}
+
+.sidebar {
+    width: 280px;
+    background-color: #194d33;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    background-color: #fff;
+    color: #194d33;
+    font-weight: bold;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.userInfo h3 {
+    margin: 0;
+}
+
+.navLinks a {
+    color: #fff;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.navLinks a:hover {
+    text-decoration: underline;
+}
+
+.logout {
+    margin-top: auto;
+    color: #f44336;
+}
+
+.mainContent {
+    flex: 1;
+    padding: 30px;
+}
+
+.profileCard {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.editIcon {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+}
+
+.formGroup {
+    margin-bottom: 15px;
+}
+
+.formGroup label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dcdcdc;
+    border-radius: 6px;
+    background-color: #f0f4f8;
+}
+
+.birthdate {
+    display: flex;
+    gap: 10px;
+}
+
+.genderOptions {
+    display: flex;
+    gap: 15px;
+}

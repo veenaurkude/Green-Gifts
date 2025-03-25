@@ -5,39 +5,44 @@ import { useCart } from "../../context/CartContext";
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
 
-  const totalPrice = cart.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  // Handle empty or undefined cart safely
+  const totalPrice = Array.isArray(cart)
+    ? cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
+    : 0;
 
   return (
     <div className={styles.cartContainer}>
       <h2>Your Cart</h2>
-      {cart.length === 0 ? (
+
+      {/* Show loading or empty message if cart is not an array */}
+      {!Array.isArray(cart) ? (
+        <p>Loading cart data...</p>
+      ) : cart.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
         <div className={styles.cartList}>
           {cart.map((item) => (
-            <div key={item.id} className={styles.cartItem}>
+            <div key={item.variantId} className={styles.cartItem}>
               <img
-                src={item.image}
+                src={item.imageUrls}
                 alt={item.title}
                 className={styles.cartImage}
               />
               <div className={styles.cartDetails}>
-                <h3>{item.title}</h3>
+                <h3>{item.productName}</h3>
+                <p>Color: {item.color}</p>
                 <p>Price: ₹{item.price}</p>
                 <div className={styles.quantityControls}>
-                  <button onClick={() => updateQuantity(item.id, -1)}>-</button>
-                  <span>{item.quantity}</span>
-                  <button onClick={() => updateQuantity(item.id, 1)}>+</button>
+                <button onClick={() => updateQuantity(item.variantId, 1)}>+</button>
+<span>{item.quantity}</span>
+<button onClick={() => updateQuantity(item.variantId, -1)}>-</button>
                 </div>
                 <p className={styles.price}>
                   Total: ₹{item.price * item.quantity}
                 </p>
               </div>
               <button
-                onClick={() => removeFromCart(item.id)}
+                onClick={() => removeFromCart(item.variantId)}
                 className={styles.deleteButton}
               >
                 Delete
@@ -46,14 +51,13 @@ const Cart = () => {
           ))}
         </div>
       )}
+
       <h3 className={styles.totalPrice}>Grand Total: ₹{totalPrice}</h3>
     </div>
   );
 };
 
 export default Cart;
-
-
 
 // import React from "react";
 // import styles from "./Cart.module.css";
@@ -62,7 +66,6 @@ export default Cart;
 // const Cart = () => {
 //   const { cart, updateQuantity, removeFromCart } = useCart();
 
-//   // Calculate total price
 //   const totalPrice = cart.reduce(
 //     (acc, item) => acc + item.price * item.quantity,
 //     0

@@ -11,34 +11,41 @@ import Login from "./pages/Auth/Login/Login";
 import ForgotPassword from "./pages/Auth/ForgotPassword/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword/ResetPassword";
 import CreateAccount from "./pages/Auth/Register/CreateAccount";
+import AccountPage from "./pages/Auth/AccountPage/AccountPage";
 import Plants from "./pages/Plants/Plants";
 import PotsPlanters from "./pages/PotsPlanters/PotsPlanters";
+import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Offers from "./pages/Offers/Offers";
 import Terrarium from "./pages/Terrarium/Terrarium";
-import ProductDetails from "./pages/ProductDetails/ProductDetails";
-import SingleProductDetail from "./pages/ProductDetails/SingleProductDetail";
 import Cart from "./pages/Cart/Cart";
 
 // Admin Panel Import files
 import AdminLayout from "./layouts/AdminLayout";
 import AdminDashboard from "./admin/AdminDashboard";
-import AddProduct from "./admin/Product/AddProduct";
-import ProductList from "./admin/Product/ProductList";
-
-import Order from "./admin/Order/Order";
-import PrivateRoute from "./utils/PrivateRoute";
 import PlantCategory from "./admin/Category/PlantCategory";
 import PotCategory from "./admin/Category/PotCategory";
+import AddProduct from "./admin/Product/AddProduct";
+import ProductList from "./admin/Product/ProductList";
 import OfferBanner from "./admin/Banner/OfferBanner";
+import Order from "./admin/Order/Order";
 
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+// ✅ Improved Token Handling
+const rawTokenData = localStorage.getItem("ecommerce_login");
+let tokenData;
+try {
+  tokenData = rawTokenData && rawTokenData !== "undefined"
+    ? JSON.parse(rawTokenData)
+    : null;
+} catch (error) {
+  console.error("Invalid token data in localStorage:", rawTokenData);
+  tokenData = null;
+}
 
-  useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken;
-    setIsAuthenticated(!!token); // True if token exists, false otherwise
-  }, []);
+const token = tokenData?.jwtToken || ""; // Ensure token is always defined
+console.log("Token in HomeBanner:", token); // For debugging
 
   return (
     <>
@@ -67,18 +74,16 @@ const App = () => {
                 <Route path="/register" element={<CreateAccount />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/account" element={<AccountPage/>} />
+
                 {/* Plants and their collections Routes */}
                 <Route path="/plants" element={<Plants />} />
                 <Route path="/plants/:category" element={<Plants />} />
-                {/* <Route path="/product/:id" element={<ProductDetails />} /> */}
-                <Route
-                  path="/single-product/:id"
-                  element={<SingleProductDetail />}
-                />
+                <Route path="/product/:id" element={<ProductDetails />} />
                 <Route path="/pots-planters" element={<PotsPlanters />} />
                 <Route path="/terrarium" element={<Terrarium />} />
                 <Route path="/offers" element={<Offers />} />
-                <Route path="/product-details" element={<ProductDetails />} />
+                <Route path="/product-details" element={<ProductDetails/>} />
                 <Route path="/cart" element={<Cart />} />
               </Route>
 

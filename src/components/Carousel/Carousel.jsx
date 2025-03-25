@@ -1,10 +1,21 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './Carousel.module.css';
 
-const Carousel = ({ images }) => {
+const Carousel = ({ images, autoSlide = true, autoSlideInterval = 3000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  // Auto slide logic
+  useEffect(() => {
+    if (!autoSlide) return;
+
+    const slideInterval = setInterval(() => {
+      goToNext();
+    }, autoSlideInterval);
+
+    return () => clearInterval(slideInterval); // Cleanup interval on unmount
+  }, [currentIndex, autoSlide, autoSlideInterval]);
+
+  // Navigation functions
   const goToPrevious = () => {
     const isFirstSlide = currentIndex === 0;
     const newIndex = isFirstSlide ? images.length - 1 : currentIndex - 1;
@@ -17,6 +28,10 @@ const Carousel = ({ images }) => {
     setCurrentIndex(newIndex);
   };
 
+  const goToSlide = (index) => {
+    setCurrentIndex(index);
+  };
+
   return (
     <div className={styles.carousel}>
       <div className={styles.imageWrapper}>
@@ -26,12 +41,26 @@ const Carousel = ({ images }) => {
           className={styles.carouselImage}
         />
       </div>
-      <button onClick={goToPrevious} className={styles.prevButton}>
+
+      {/* Navigation Buttons */}
+      <button onClick={goToPrevious} className={styles.prevButton} aria-label="Previous Slide">
         &#9664;
       </button>
-      <button onClick={goToNext} className={styles.nextButton}>
+      <button onClick={goToNext} className={styles.nextButton} aria-label="Next Slide">
         &#9654;
       </button>
+
+      {/* Dots for Navigation */}
+      <div className={styles.dotsContainer}>
+        {images.map((_, index) => (
+          <div
+            key={index}
+            className={`${styles.dot} ${currentIndex === index ? styles.activeDot : ''}`}
+            onClick={() => goToSlide(index)}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

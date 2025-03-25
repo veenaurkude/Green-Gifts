@@ -184,7 +184,15 @@ const Card = ({ id, image, title, price, discount, isTrending, onClick }) => {
             <AiFillStar key={i} className={styles.starIcon} />
           ))}
         </div>
-        <Link to={`/single_product/${id}`}>
+        {/* <Link to={`/single_product/${id}`}>
+
+      
+          <Button>View Product</Button>
+        </Link> */}
+
+        <Link to={`/product/${id}`}>
+
+      
           <Button>View Product</Button>
         </Link>
       </div>
