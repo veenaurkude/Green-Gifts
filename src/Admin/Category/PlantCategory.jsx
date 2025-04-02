@@ -6,6 +6,8 @@ import config from "../../config/apiconfig";
 import styles from "./Category.module.css";
 import Button from "../../components/Button/Button";
 import {Input} from "../../components/Input/Input";
+import { FaEdit, FaTrash } from "react-icons/fa";
+
 
 const PlantCategory = () => {
   const navigate = useNavigate();
@@ -146,7 +148,7 @@ const PlantCategory = () => {
           placeholder="Enter category name"
           className={styles.addInput}
         />
-        <Button type="submit" className={styles.addButton}>Add Category</Button>
+        <Button type="submit" className={styles.addButton}>Add Plant Category</Button>
       </form>
 
       {/* Category Table */}
@@ -204,13 +206,14 @@ const PlantCategory = () => {
                           }}
                           className={styles.editButton}
                         >
-                          Edit
+                          <FaEdit />
                         </Button>
                         <Button
                           onClick={() => handleDeleteCategory(cat.categoryId || cat.id)}
                           className={styles.deleteButton}
                         >
-                          Delete
+                          <FaTrash />
+                          {/* <MdDelete/> */}
                         </Button>
                       </>
                     )}

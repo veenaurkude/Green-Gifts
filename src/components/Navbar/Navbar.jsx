@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BsCart } from "react-icons/bs";
 import { VscAccount } from "react-icons/vsc";
 import styles from "./Navbar.module.css";
@@ -12,6 +12,15 @@ const Navbar = () => {
 
   const { totalUniqueProducts } = useCart(); // Get total cart unique products count
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleInputChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    onSearch(query); // Pass the query to the parent component
+  };
+
+  const navigate = useNavigate();
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -60,8 +69,6 @@ const Navbar = () => {
           )}
         </nav>
 
-        
-
         {/** Pots & Planters **/}
         <nav
           className={styles.navItem}
@@ -87,8 +94,6 @@ const Navbar = () => {
           )}
         </nav>
 
-        
-
         {/** Terrarium **/}
         <nav className={styles.navItem}>
           <Link to="/terrarium">Terrarium</Link>
@@ -99,6 +104,20 @@ const Navbar = () => {
           <Link to="/offers">Offers</Link>
         </nav>
 
+        {/* Search Bar */}
+        <div className={styles.searchContainer}>
+          <nav className={styles.navLinks}>
+            {/* Other navigation links */}
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={handleInputChange}
+              className={styles.searchInput}
+            />
+          </nav>
+        </div>
+
         {/** Login **/}
 
         <nav
@@ -107,14 +126,15 @@ const Navbar = () => {
           onMouseLeave={() => setOpenDropdown(null)}
           // onClick={() => toggleDropdown("pots")}
         >
-          <Link to="/login"><VscAccount /></Link>
+          <Link to="/login">
+            <VscAccount />
+          </Link>
           {openDropdown === "login" && (
             <div
               className={styles.dropdownMenu}
               onClick={(e) => e.stopPropagation()}
             >
               <Link to="/profile">My Profile</Link>
-              
             </div>
           )}
         </nav>
@@ -132,10 +152,12 @@ const Navbar = () => {
         </div> */}
 
         <div className={styles.navIcon}>
-        <Link to="/cart" className={styles.cartLink}>
+          <Link to="/cart" className={styles.cartLink}>
             <BsCart />
-            
-            {totalUniqueProducts  > 0 && <span className={styles.cartBadge}>{totalUniqueProducts }</span>}
+
+            {totalUniqueProducts > 0 && (
+              <span className={styles.cartBadge}>{totalUniqueProducts}</span>
+            )}
           </Link>
         </div>
       </nav>

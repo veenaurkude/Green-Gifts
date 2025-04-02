@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { CartProvider } from "./context/CartContext";
 import { AdminProvider } from "./context/AdminContext";
 
@@ -29,35 +31,47 @@ import ProductList from "./admin/Product/ProductList";
 import OfferBanner from "./admin/Banner/OfferBanner";
 import Order from "./admin/Order/Order";
 
-
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-// ✅ Improved Token Handling
-const rawTokenData = localStorage.getItem("ecommerce_login");
-let tokenData;
-try {
-  tokenData = rawTokenData && rawTokenData !== "undefined"
-    ? JSON.parse(rawTokenData)
-    : null;
-} catch (error) {
-  console.error("Invalid token data in localStorage:", rawTokenData);
-  tokenData = null;
-}
+  // ✅ Improved Token Handling
+  const rawTokenData = localStorage.getItem("ecommerce_login");
+  let tokenData;
+  try {
+    tokenData =
+      rawTokenData && rawTokenData !== "undefined"
+        ? JSON.parse(rawTokenData)
+        : null;
+  } catch (error) {
+    console.error("Invalid token data in localStorage:", rawTokenData);
+    tokenData = null;
+  }
 
-const token = tokenData?.jwtToken || ""; // Ensure token is always defined
-console.log("Token in HomeBanner:", token); // For debugging
+  const token = tokenData?.jwtToken || ""; // Ensure token is always defined
+  console.log("Token in HomeBanner:", token); // For debugging
 
   return (
     <>
       <CartProvider>
         <AdminProvider>
           <Router>
+            <ToastContainer
+              position="top-right" // Position of the toast
+              autoClose={5000} // Auto-close after 5 seconds (5000ms)
+              hideProgressBar={false} // Show progress bar
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light" // You can change this to "dark" or "colored"
+            />
             <Routes>
               {/* Main Layout Route */}
 
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
-                
+
                 {/* Redirect here if not authenticated */}
                 {/* <Route path="/" element={<Login />} />{" "}
                 <Route
@@ -74,7 +88,7 @@ console.log("Token in HomeBanner:", token); // For debugging
                 <Route path="/register" element={<CreateAccount />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password" element={<ResetPassword />} />
-                <Route path="/account" element={<AccountPage/>} />
+                <Route path="/account" element={<AccountPage />} />
 
                 {/* Plants and their collections Routes */}
                 <Route path="/plants" element={<Plants />} />
@@ -83,18 +97,21 @@ console.log("Token in HomeBanner:", token); // For debugging
                 <Route path="/pots-planters" element={<PotsPlanters />} />
                 <Route path="/terrarium" element={<Terrarium />} />
                 <Route path="/offers" element={<Offers />} />
-                <Route path="/product-details" element={<ProductDetails/>} />
+                <Route path="/product-details" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
               </Route>
 
               {/* Admin Layout Route (Admin Side) */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
-                <Route path="/admin/plant-category" element={<PlantCategory/>} />
-                <Route path="/admin/pot-category" element={<PotCategory/>} />
-                <Route path="/admin/add-product" element={<AddProduct/>} />
+                <Route
+                  path="/admin/plant-category"
+                  element={<PlantCategory />}
+                />
+                <Route path="/admin/pot-category" element={<PotCategory />} />
+                <Route path="/admin/add-product" element={<AddProduct />} />
                 <Route path="/admin/product-list" element={<ProductList />} />
-                <Route path="/admin/offer-banner" element={<OfferBanner/>} />
+                <Route path="/admin/offer-banner" element={<OfferBanner />} />
                 <Route path="/admin/orders" element={<Order />} />
               </Route>
             </Routes>

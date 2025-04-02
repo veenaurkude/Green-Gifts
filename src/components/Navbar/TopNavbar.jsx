@@ -7,10 +7,10 @@ const TopNavbar = () => {
     <div className={styles.topNavbar}>
       <div className={styles.title}>
         <span>
-          Free Delivery Above ₹499 | <Link to="/shop">Shop Now</Link>
+          Free Delivery Above ₹499 | <Link to="/plants">Shop Now</Link>
         </span>
         <span>
-          Buy Organic Fertilizers | <Link to="/fertilizers">Shop Now</Link>
+          Buy Organic Fertilizers | <Link to="/plants">Shop Now</Link>
         </span>
         <span>
           Buy Our XL Plants | <Link to="/plants">Shop Now</Link>
