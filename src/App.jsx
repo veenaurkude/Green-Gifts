@@ -20,6 +20,8 @@ import ProductDetails from "./pages/ProductDetails/ProductDetails";
 import Offers from "./pages/Offers/Offers";
 import Terrarium from "./pages/Terrarium/Terrarium";
 import Cart from "./pages/Cart/Cart";
+import Checkout from "./pages/Checkout/Checkout";
+
 
 // Admin Panel Import files
 import AdminLayout from "./layouts/AdminLayout";
@@ -30,6 +32,8 @@ import AddProduct from "./admin/Product/AddProduct";
 import ProductList from "./admin/Product/ProductList";
 import OfferBanner from "./admin/Banner/OfferBanner";
 import Order from "./admin/Order/Order";
+import ProtectedRoute from "./utils/ProtectedRoute";
+import Contact from "./pages/Contact/Contact";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -72,17 +76,6 @@ const App = () => {
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Home />} />
 
-                {/* Redirect here if not authenticated */}
-                {/* <Route path="/" element={<Login />} />{" "}
-                <Route
-                  element={
-                    <PrivateRoute
-                      isAuthenticated={isAuthenticated}
-                      redirectPath="/"
-                    />
-                  }
-                /> */}
-
                 {/* Auth Route */}
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<CreateAccount />} />
@@ -99,6 +92,20 @@ const App = () => {
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/product-details" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
+
+                <Route path="/contact-us" element={<Contact/>} />
+
+
+
+                {/* Protected Route */}
+                <Route
+                  path="/checkout"
+                  element={
+                    <ProtectedRoute>
+                      <Checkout />
+                    </ProtectedRoute>
+                  }
+                />
               </Route>
 
               {/* Admin Layout Route (Admin Side) */}

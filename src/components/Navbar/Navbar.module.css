@@ -134,6 +134,17 @@
   transition: all 0.3s ease;
 }
 
+.searchInput{
+  width: 100%;
+  /* padding: 10px; */
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  box-sizing: border-box;
+  /* font-size: 1rem; */
+  transition: border 0.3s ease;
+  
+}
+
 /* Mobile Styles */
 @media (max-width: 768px) {
   .navLinks {

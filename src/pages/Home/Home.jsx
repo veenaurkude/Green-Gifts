@@ -77,9 +77,6 @@
 //     getAllBanners();
 //   }, [tokenData]);
 
-
-
-
 //   const handlePassId = (id) => {
 //     if (!id) {
 //       console.error("Invalid variant ID:", id); // Debugging log
@@ -227,8 +224,6 @@
 //     ))}
 //   </div>
 
-          
-
 //           {/* View All Button */}
 //           <div className={styles.viewAllContainer}>
 //             <Link className={styles.viewAllButton} to="/plants">
@@ -293,7 +288,13 @@ import { FaBox, FaSyncAlt, FaSeedling } from "react-icons/fa";
 import styles from "./Home.module.css";
 import Button from "../../components/Button/Button";
 import Testimonials from "../../components/Testimonials/Testimonials";
-import HomeBanner from "../../components/HomeBanner/HomeBanner";
+import bestseller from "../../assets/images/img/bestseller.png";
+import plant from "../../assets/images/img/plant.png";
+import pots from "../../assets/images/img/pots.png";
+import whiteceramic from "../../assets/images/img/whiteceramic.png";
+import pot from "../../assets/images/img/pot.jpg";
+import indoorPlants from "../../assets/images/img/indoorPlants.jpg";
+import parentPlant from "../../assets/images/img/parentPlant.jpg";
 
 const Home = () => {
   // Improved Token Handling
@@ -327,11 +328,12 @@ const Home = () => {
         if (Array.isArray(response.data) && response.data.length > 0) {
           const bannerUrls = response.data
             .map((banner) => {
-              if (!banner.url) {
-                console.warn("Banner missing URL:", banner);
+              if (!banner.image) {
+                // Use banner.image
+                console.warn("Banner missing image:", banner);
                 return null;
               }
-              return banner.url;
+              return banner.image; // Return banner.image
             })
             .filter(Boolean);
           setBanners(bannerUrls.length > 0 ? bannerUrls : []);
@@ -347,41 +349,35 @@ const Home = () => {
         setBanners([]);
       }
     }
+
     getAllBanners();
   }, []);
 
   // Fetch Products
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchPlants() {
       try {
-        if (!token) {
-          console.warn("No token found, skipping product fetch.");
-          // Optionally navigate to login: navigate("/login");
-          return;
-        }
+        // Conditionally set headers based on token availability
+        const headers = token
+          ? {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            }
+          : { "Content-Type": "application/json" };
 
         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          headers,
         });
-        console.log("Products API Response:", response.data);
-        setPlants(response.data || []);
+        console.log("API Response:", response.data);
+        setPlants(response.data);
       } catch (error) {
-        console.error(
-          "Error fetching products:",
-          error.response?.data || error.message
-        );
-        if (error.response?.status === 401) {
-          localStorage.removeItem("ecommerce_login");
-          navigate("/login");
-        }
+        console.error("Error fetching plants:", error);
+        // Optionally, you can handle error if needed
         setPlants([]);
       }
     }
-    fetchProducts();
-  }, [token, navigate]);
+    fetchPlants();
+  }, [token]);
 
   // Display only the first 4 products
   const displayedProducts = plants.slice(0, 4);
@@ -390,23 +386,22 @@ const Home = () => {
   const gifts = [
     {
       id: 1,
-      image: "https://natalielinda.com/wp-content/uploads/2019/06/pothos.jpg",
+      image: bestseller,
       title: "Bestsellers",
     },
     {
       id: 2,
-      image: "https://ww1.prweb.com/prfiles/2014/09/11/12164346/24848.jpg",
+      image: plant,
       title: "Plants",
     },
     {
       id: 3,
-      image:
-        "https://bloomscape.com/wp-content/uploads/2019/04/bloomscape_product-monstera-slate.jpg",
+      image: pots,
       title: "Pots",
     },
     {
       id: 4,
-      image: "https://ww1.prweb.com/prfiles/2014/09/11/12164346/24848.jpg",
+      image: whiteceramic,
       title: "Ceramic Pots",
     },
   ];
@@ -414,31 +409,19 @@ const Home = () => {
   const categories = [
     {
       id: 1,
-      title: "Plants",
-      image:
-        "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1674703862-.jpg?crop=1xw:1.00xh;center,top&resize=980:*",
+      title: "Plants Collections",
+      image: indoorPlants,
       link: "/plants",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet molestie nunc.",
     },
     {
       id: 2,
-      title: "Seeds",
-      image:
-        "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1674703862-.jpg?crop=1xw:1.00xh;center,top&resize=980:*",
-      link: "/seeds",
-    },
-    {
-      id: 3,
-      title: "Pots & Planters",
-      image:
-        "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1674703862-.jpg?crop=1xw:1.00xh;center,top&resize=980:*",
+      title: "Pots & Planters Collections",
+      image: pot,
       link: "/pots-planters",
-    },
-    {
-      id: 4,
-      title: "Plant Care",
-      image:
-        "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1674703862-.jpg?crop=1xw:1.00xh;center,top&resize=980:*",
-      link: "/plant-care",
+      description:
+        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet molestie nunc.",
     },
   ];
 
@@ -475,21 +458,29 @@ const Home = () => {
         </div>
 
         {/* Our Best Picks */}
-        <section className={styles.bestPicksContainer}>
-          <h2 className={styles.bestPicksTitle}>Our Best Picks</h2>
-          <div className={styles.bestPicksGrid}>
+        <section className={styles.bestSellers}>
+          <h2>Our Best Picks</h2>
+          <div className={styles.bestSellersGrid}>
             {categories.map((category) => (
               <Link
                 to={category.link}
                 key={category.id}
-                className={styles.bestPickCard}
+                className={styles.bestSellerCard}
               >
                 <img
                   src={category.image}
                   alt={category.title}
-                  className={styles.bestPickImage}
+                  className={styles.bestSellerImage}
                 />
-                <div className={styles.bestPickTitle}>{category.title}</div>
+                <div className={styles.bestSellerContent}>
+                  <h3 className={styles.bestSellerTitle}>{category.title}</h3>
+                  <p class={styles.bestSellerDescription}>
+                    {category.description}
+                  </p>
+                  {/* <Link to={category.link} className={styles.viewAllButton}>
+                    View All
+                  </Link> */}
+                </div>
               </Link>
             ))}
           </div>
@@ -497,7 +488,7 @@ const Home = () => {
 
         {/* Product Grid */}
         <div className={styles.bestSellers}>
-          <h2>Our Best Sellers</h2>
+          <h2>Best Sellers</h2>
           <div className={styles.productGrid}>
             {displayedProducts.length > 0 ? (
               displayedProducts.map((plant) => {
@@ -511,6 +502,7 @@ const Home = () => {
                       "https://via.placeholder.com/150"
                     }
                     title={plant.name || "No Title"}
+                    category={plant.category}
                     price={firstVariant.price || "N/A"}
                     discount={firstVariant.discountedPrice || null}
                   />
@@ -550,6 +542,30 @@ const Home = () => {
 
         {/* Testimonials */}
         <Testimonials />
+
+        {/* Plant Parent Rewards Club Section */}
+        <section className={styles.rewardsClub}>
+          <div className={styles.rewardsClubContainer}>
+            <div className={styles.rewardsClubText}>
+              <h2>Featured Pots & Planters</h2>
+              <p>
+                Every plant purchase is a gift that keeps on giving. Earn coins
+                and redeem them for exclusive discounts.
+              </p>
+              <div className={styles.rewardsClubButtons}>
+                <Link to="/pots-planters" className={styles.rewardsButton}>
+                  View More
+                </Link>
+                <Link to="/contact-us" className={styles.rewardsButton}>
+                  Contact Us
+                </Link>
+              </div>
+            </div>
+            <div className={styles.rewardsClubImage}>
+              <img src={parentPlant} alt="Plant Parent Rewards Club" />
+            </div>
+          </div>
+        </section>
 
         {/* About Green Gifts */}
         <div className={styles.about}>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BsCart } from "react-icons/bs";
 import { VscAccount } from "react-icons/vsc";
 import styles from "./Navbar.module.css";
-
+// import { Input } from "../Input/Input";
 import { useCart } from "../../context/CartContext";
 
 const Navbar = () => {

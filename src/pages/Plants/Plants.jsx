@@ -6,6 +6,7 @@ import styles from "./Plants.module.css";
 import config from "../../config/apiconfig";
 import Accordion from "../../components/Accordion/Accordion";
 import Pagination from "../../components/Pagination/Pagination";
+import banner1 from "../../assets/images/banner/banner1.jpg";
 
 const Plants = () => {
   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
@@ -13,36 +14,63 @@ const Plants = () => {
   const { category } = useParams();
   const navigate = useNavigate(); // Add this
   const [plants, setPlants] = useState([]);
+  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
+  // Fetch Plant Products
   useEffect(() => {
     async function fetchPlants() {
       try {
-        if (!token) {
-          navigate("/login");
-          return;
-        }
+        // Conditionally set headers based on token availability
+        const headers = token
+          ? {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            }
+          : { "Content-Type": "application/json" };
 
         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          headers,
         });
         console.log("API Response:", response.data);
         setPlants(response.data);
       } catch (error) {
         console.error("Error fetching plants:", error);
-        if (error.response?.status === 401) {
-          localStorage.removeItem("ecommerce_login");
-          navigate("/login");
-        }
+        // Optionally, you can handle error if needed
         setPlants([]);
       }
     }
     fetchPlants();
-  }, [token, navigate]);
+  }, [token]);
+
+  // useEffect(() => {
+  //   async function fetchPlants() {
+  //     try {
+  //       if (!token) {
+  //         navigate("/login");
+  //         return;
+  //       }
+
+  //       const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+  //       console.log("API Response:", response.data);
+  //       setPlants(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching plants:", error);
+  //       if (error.response?.status === 401) {
+  //         localStorage.removeItem("ecommerce_login");
+  //         navigate("/login");
+  //       }
+  //       setPlants([]);
+  //     }
+  //   }
+  //   fetchPlants();
+  // }, [token, navigate]);
 
   const filteredPlants = category
     ? plants.filter(
@@ -57,7 +85,7 @@ const Plants = () => {
     indexOfFirstProduct,
     indexOfLastProduct
   );
-
+  // Pagination controls
   const totalPages = Math.ceil(allVariants.length / productsPerPage);
   const handleNext = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
@@ -68,7 +96,12 @@ const Plants = () => {
 
   return (
     <>
-      <div className={styles.banner}>Banner</div>
+      {/* Banner */}
+      <div className={styles.plantsBanner}>
+        <img className={styles.plantsBannerImg} src={banner1} alt="Plant Banner" />
+      </div>
+
+      {/* Breadcrumbs */}
       <div className={styles.breadcrumb}>
         <a href="/">Home</a> / <span>Plants</span>
       </div>
@@ -76,6 +109,7 @@ const Plants = () => {
         {category ? category.replace("-", " ") : "All Plants"}
       </h1>
 
+      {/* Products */}
       <div className={styles.plantsGrid}>
         {currentVariants.length > 0 ? (
           currentVariants.map((variant, index) => {
@@ -89,6 +123,7 @@ const Plants = () => {
                 key={variant.id || index}
                 id={parentPlant?.id} // Pass parent product ID
                 title={parentPlant?.name || "Unnamed Plant"}
+                category={parentPlant?.category}
                 image={
                   variant.imageUrls?.[0] || "https://via.placeholder.com/150"
                 }
@@ -104,6 +139,7 @@ const Plants = () => {
         )}
       </div>
 
+      {/* Pagination */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
@@ -113,6 +149,7 @@ const Plants = () => {
         />
       )}
 
+      {/* Accordian */}
       <div className={styles.accordion_container}>
         <h2 className={styles.title}>FAQ's</h2>
         <div className={styles.accordion}>
@@ -136,283 +173,7 @@ const Plants = () => {
 
 export default Plants;
 
-
-// import React, { useEffect, useState } from "react";
-// import { useParams } from "react-router-dom";
-// import axios from "axios";
-// import Card from "../../components/Card/Card";
-// import styles from "./Plants.module.css";
-// import config from "../../config/apiconfig";
-// import Accordion from "../../components/Accordion/Accordion";
-// import Pagination from "../../components/Pagination/Pagination";
-
-// const Plants = () => {
-//   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
-//   const token = tokenData?.jwtToken;
-//   const { category } = useParams();
-//   const [plants, setPlants] = useState([]);
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const productsPerPage = 8;
-
-//   useEffect(() => {
-//     async function fetchPlants() {
-//       try {
-//         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//           },
-//         });
-//         console.log("API Response:", response.data);
-//         setPlants(response.data);
-//       } catch (error) {
-//         console.error("Error fetching plants:", error);
-//         setPlants([]);
-//       }
-//     }
-//     fetchPlants();
-//   }, [token]);
-
-//   const filteredPlants = category
-//     ? plants.filter(
-//         (plant) => plant.category.toLowerCase() === category.toLowerCase()
-//       )
-//     : plants;
-
-//   const allVariants = filteredPlants.flatMap((plant) => plant.variants || []);
-//   const indexOfLastProduct = currentPage * productsPerPage;
-//   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-//   const currentVariants = allVariants.slice(
-//     indexOfFirstProduct,
-//     indexOfLastProduct
-//   );
-
-//   const totalPages = Math.ceil(allVariants.length / productsPerPage);
-//   const handleNext = () => {
-//     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-//   };
-//   const handlePrev = () => {
-//     if (currentPage > 1) setCurrentPage(currentPage - 1);
-//   };
-
-//   return (
-//     <>
-//       <div className={styles.banner}>Banner</div>
-//       <div className={styles.breadcrumb}>
-//         <a href="/">Home</a> / <span>Plants</span>
-//       </div>
-//       <h1 className={styles.heading}>
-//         {category ? category.replace("-", " ") : "All Plants"}
-//       </h1>
-
-//       <div className={styles.plantsGrid}>
-//         {currentVariants.length > 0 ? (
-//           currentVariants.map((variant, index) => {
-//             const parentPlant = plants.find((p) =>
-//               p.variants.some((v) => v.id === variant.id)
-//             );
-//             console.log("Variant ID:", variant.id); // Debug the ID
-//             return (
-//               <Card
-//                 key={variant.id || index}
-//                 id={variant.id} // Ensure this is valid
-//                 title={parentPlant?.name || "Unnamed Plant"}
-//                 image={
-//                   variant.imageUrls?.[0] || "https://via.placeholder.com/150"
-//                 }
-//                 price={variant.price || "N/A"}
-//                 discount={variant.discountedPrice || null}
-//               />
-//             );
-//           })
-//         ) : (
-//           <p className={styles.noProducts}>
-//             No products found for this category.
-//           </p>
-//         )}
-//       </div>
-
-//       {totalPages > 1 && (
-//         <Pagination
-//           currentPage={currentPage}
-//           totalPages={totalPages}
-//           onNext={handleNext}
-//           onPrev={handlePrev}
-//         />
-//       )}
-
-//       <div className={styles.accordion_container}>
-//         <h2 className={styles.title}>FAQ's</h2>
-//         <div className={styles.accordion}>
-//           <Accordion
-//             title="🌿 What are the best indoor plants?"
-//             content="Some of the best indoor plants are Snake Plant, Pothos, Peace Lily, and ZZ Plant."
-//           />
-//           <Accordion
-//             title="☀️ How much sunlight do plants need?"
-//             content="Most plants need at least 4-6 hours of indirect sunlight. Some plants, like succulents, need direct sunlight."
-//           />
-//           <Accordion
-//             title="💧 How often should I water my plants?"
-//             content="It depends on the plant type! Most indoor plants need watering once a week, while succulents need less."
-//           />
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Plants;
-
-
-
-// import React, { useEffect, useState } from "react";
-// import { useParams, useNavigate, Link } from "react-router-dom";
-// import axios from "axios";
-// import Card from "../../components/Card/Card";
-// import styles from "./Plants.module.css";
-// import config from "../../config/apiconfig";
-// import Accordion from "../../components/Accordion/Accordion";
-// import Pagination from "../../components/Pagination/Pagination";
-
-// const Plants = () => {
-//   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
-//   const token = tokenData?.jwtToken;
-//   console.log(token);
-//   const { category } = useParams();
-//   const [plants, setPlants] = useState([]); // Renamed for clarity
-//   const navigate = useNavigate();
-
-//   // Pagination states
-//   const [currentPage, setCurrentPage] = useState(1);
-//   const productsPerPage = 8;
-
-//   // Fetch all products
-//   useEffect(() => {
-//     async function fetchPlants() {
-//       try {
-//         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//             "Content-Type": "application/json",
-//           },
-//         });
-//         console.log("API Response:", response.data);
-//         setPlants(response.data);
-//       } catch (error) {
-//         console.error("Error fetching plants:", error);
-//         setPlants([]);
-//       }
-//     }
-//     fetchPlants();
-//   }, []);
-
-//   // Filter products based on selected category
-//   const filteredPlants = category
-//     ? plants.filter(
-//         (plant) => plant.category.toLowerCase() === category.toLowerCase()
-//       )
-//     : plants;
-
-//   // Pagination logic for variants
-//   const allVariants = filteredPlants.flatMap((plant) => plant.variants || []);
-//   const indexOfLastProduct = currentPage * productsPerPage;
-//   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-//   const currentVariants = allVariants.slice(
-//     indexOfFirstProduct,
-//     indexOfLastProduct
-//   );
-
-//   // Pagination controls
-//   const totalPages = Math.ceil(allVariants.length / productsPerPage);
-//   const handleNext = () => {
-//     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
-//   };
-//   const handlePrev = () => {
-//     if (currentPage > 1) setCurrentPage(currentPage - 1);
-//   };
-
-//   function handlePassId(id) {
-//     alert(id); // Uncomment for debugging
-//     navigate(`/product/${id}`);
-//   }
-
-//   return (
-//     <>
-//       <div className={styles.banner}>Banner</div>
-
-//       {/* Breadcrumb Navigation (Optional) */}
-//       <div className={styles.breadcrumb}>
-//         <a href="/">Home</a> / <span>Plants</span>
-//       </div>
-
-//       <h1 className={styles.heading}>
-//         {category ? category.replace("-", " ") : "All Plants"}
-//       </h1>
-
-//       {/* Product Grid */}
-//       <div className={styles.plantsGrid}>
-//         {currentVariants.length > 0 ? (
-//           currentVariants.map((variant, index) => {
-//             const parentPlant = plants.find((p) =>
-//               p.variants.some((v) => v.id === variant.id)
-//             );
-//             return (
-//               <Card
-//                 key={variant.id || index}
-//                 id={variant.id} // <-- Pass the ID explicitly
-//                 onClick={() => handlePassId(variant.id)}
-//                 title={parentPlant?.name || "Unnamed Plant"}
-//                 image={
-//                   variant.imageUrls?.[0] || "https://via.placeholder.com/150"
-//                 }
-//                 price={variant.price || "N/A"}
-//                 discount={variant.discountedPrice || null} // If your Card supports it
-//               />
-//             );
-//           })
-//         ) : (
-//           <p className={styles.noProducts}>
-//             No products found for this category.
-//           </p>
-//         )}
-//       </div>
-
-//       {/* Pagination Component */}
-//       {totalPages > 1 && (
-//         <Pagination
-//           currentPage={currentPage}
-//           totalPages={totalPages}
-//           onNext={handleNext}
-//           onPrev={handlePrev}
-//         />
-//       )}
-
-//       {/* Accordion */}
-//       <div className={styles.accordion_container}>
-//         <h2 className={styles.title}>FAQ's</h2>
-//         <div className={styles.accordion}>
-//           <Accordion
-//             title="🌿 What are the best indoor plants?"
-//             content="Some of the best indoor plants are Snake Plant, Pothos, Peace Lily, and ZZ Plant."
-//           />
-//           <Accordion
-//             title="☀️ How much sunlight do plants need?"
-//             content="Most plants need at least 4-6 hours of indirect sunlight. Some plants, like succulents, need direct sunlight."
-//           />
-//           <Accordion
-//             title="💧 How often should I water my plants?"
-//             content="It depends on the plant type! Most indoor plants need watering once a week, while succulents need less."
-//           />
-//         </div>
-//       </div>
-//     </>
-//   );
-// };
-
-// export default Plants;
-
-// -------------------------
+// ------------------------------------------------------------------
 
 // import React, { useEffect, useState } from "react";
 // import { useParams, useNavigate } from "react-router-dom";

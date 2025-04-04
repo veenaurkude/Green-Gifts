@@ -1,26 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./Testimonials.module.css";
 import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
+
+import test1 from "../../assets/images/test/test1.jpg";
+import test2 from "../../assets/images/test/test2.jpg";
+import test3 from "../../assets/images/test/test3.jpg";
 
 const testimonials = [
   {
     id: 1,
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    name: "Rahul Sharma",
+    image: test1,
+    name: "Ankit",
     review:
       "The plant was mature, tall as promised with a healthy growth... it was well hydrated and full of nodes. The packaging was great! I'll be happy to buy it again.",
   },
   {
     id: 2,
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    name: "Aishwarya Roy",
+    image: test2,
+    name: "Veena",
     review:
       "I loved the quality of the plant, and the packaging was excellent. Delivered on time and in great condition! Highly recommend.",
   },
   {
     id: 3,
-    image: "https://randomuser.me/api/portraits/men/29.jpg",
-    name: "Amit Verma",
+    image: test3,
+    name: "Faizan",
     review:
       "This was my first time ordering a plant online, and I was amazed by the quality. The leaves were fresh, and the soil was well-packed.",
   },
@@ -39,15 +43,20 @@ const Testimonials = () => {
     );
   };
 
+  // Automatic sliding effect
+  useEffect(() => {
+    const interval = setInterval(nextTestimonial, 5000); // Slide every 5 seconds
+
+    return () => clearInterval(interval); // Clear interval when component unmounts
+  }, []);
+
   return (
     <div className={styles.testimonialContainer}>
-      <h2 className={styles.title}>From Happy Plant Parents</h2>
+      <h2 className={styles.title}>Our Happy Plant Parents</h2>
 
       {/* Profile Images + Arrows */}
       <div className={styles.imageWrapper}>
-        <button onClick={prevTestimonial} className={styles.arrow}>
-          <FaArrowLeft />
-        </button>
+        <FaArrowLeft onClick={prevTestimonial} className={styles.arrow} />
 
         <img
           src={testimonials[index].image}
@@ -55,9 +64,7 @@ const Testimonials = () => {
           className={styles.profileImage}
         />
 
-        <button onClick={nextTestimonial} className={styles.arrow}>
-          <FaArrowRight />
-        </button>
+        <FaArrowRight onClick={nextTestimonial} className={styles.arrow} />
       </div>
 
       {/* Star Ratings */}

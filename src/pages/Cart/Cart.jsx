@@ -1,66 +1,59 @@
-import React, { useState } from "react";
-import styles from "./Cart.module.css";
+import React, { useState, useCallback } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
-import { toast } from "react-toastify"; // Import toast for notifications
-import { MdDeleteOutline } from "react-icons/md";
-import Button from "../../components/Button/Button";
+import { toast } from "react-toastify";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import styles from "./Cart.module.css";
 
 const Cart = () => {
   const { cart, updateQuantity, removeFromCart } = useCart();
+  const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
-  const [discount, setDiscount] = useState(0); // State for discount
-  const deliveryFee = 14.00; // Fixed delivery fee as per screenshot
+  const [discount, setDiscount] = useState(0);
+  const deliveryFee = 14.0;
 
-  // Handle empty or undefined cart safely
-  const totalPrice = Array.isArray(cart)
-    ? cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
-    : 0;
+  const totalPrice = cart.reduce(
+    (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+    0
+  );
   const subtotal = totalPrice + deliveryFee - discount;
 
-  const handleUpdateQuantity = (variantId, change) => {
-    const item = cart.find((item) => item.variantId === variantId);
-    if (!item) return;
-
-    const newQuantity = item.quantity + change;
-    if (newQuantity < 1) {
-      handleRemoveFromCart(variantId); // Remove item if quantity becomes 0
-    } else {
+  const handleUpdateQuantity = useCallback(
+    (variantId, change) => {
       updateQuantity(variantId, change);
-    }
-  };
+    },
+    [updateQuantity]
+  );
 
-  const handleRemoveFromCart = (variantId) => {
-    removeFromCart(variantId);
-    toast.success("Item removed from cart!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-  };
+  const handleRemoveFromCart = useCallback(
+    (variantId) => {
+      removeFromCart(variantId);
+      toast.success("Item removed from cart!", { position: "top-right", autoClose: 3000 });
+    },
+    [removeFromCart]
+  );
 
   const handleApplyCoupon = () => {
-    // Simulate coupon application (you can replace this with an API call)
-    if (couponCode.toLowerCase() === "save10") {
-      setDiscount(10); // Example: $10 discount
-      toast.success("Coupon applied successfully! $10 discount added.", {
+    if (couponCode.trim().toLowerCase() === "save10") {
+      setDiscount(10);
+      toast.success("Coupon applied successfully! ₹10 discount added.", {
         position: "top-right",
         autoClose: 3000,
       });
     } else {
       setDiscount(0);
-      toast.error("Invalid coupon code.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Invalid coupon code.", { position: "top-right", autoClose: 3000 });
     }
   };
 
   const handleCheckout = () => {
-    // Add logic to navigate to checkout page or process the order
-    toast.info("Proceeding to checkout...", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    // Example: navigate("/checkout");
+    const tokenData = JSON.parse(localStorage.getItem("ecommerce_login") || "{}");
+    if (!tokenData?.jwtToken) {
+      toast.error("Please log in to proceed to checkout.", { position: "top-right", autoClose: 3000 });
+      navigate("/login");
+    } else {
+      navigate("/checkout");
+    }
   };
 
   return (
@@ -77,7 +70,7 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody>
-              {!Array.isArray(cart) || cart.length === 0 ? (
+              {cart.length === 0 ? (
                 <tr>
                   <td colSpan="4" className={styles.emptyCart}>
                     Your cart is empty.
@@ -88,40 +81,28 @@ const Cart = () => {
                   <tr key={item.variantId} className={styles.cartItem}>
                     <td className={styles.productInfo}>
                       <img
-                        src={item.imageUrls}
-                        alt={item.productName}
+                        src={item.imageUrls?.[0] || "/placeholder.jpg"}
+                        alt={item.productName || "Product Image"}
                         className={styles.cartImage}
                       />
                       <div className={styles.productDetails}>
-                        <span className={styles.productName}>{item.productName}</span>
-                        <span className={styles.productDescription}>
-                          Color: {item.color}
-                        </span>
+                        <span className={styles.productName}>{item.productName || "Unnamed Product"}</span>
+                        <span className={styles.productDescription}>Color: {item.color || "N/A"}</span>
                       </div>
                     </td>
-                    <td>₹{item.price.toFixed(2)}</td>
+                    <td>₹{(item.price || 0).toFixed(2)}</td>
                     <td>
                       <div className={styles.quantityControls}>
-                        <button
-                          onClick={() => handleUpdateQuantity(item.variantId, -1)}
-                        >
-                          -
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button
-                          onClick={() => handleUpdateQuantity(item.variantId, 1)}
-                        >
-                          +
-                        </button>
+                        <button onClick={() => handleUpdateQuantity(item.variantId, -1)}>-</button>
+                        <span>{item.quantity || 1}</span>
+                        <button onClick={() => handleUpdateQuantity(item.variantId, 1)}>+</button>
                       </div>
                     </td>
                     <td>
-                      <Button
+                      <RiDeleteBin6Line
                         onClick={() => handleRemoveFromCart(item.variantId)}
                         className={styles.removeButton}
-                      >
-                        <MdDeleteOutline/>
-                      </Button>
+                      />
                     </td>
                   </tr>
                 ))
@@ -129,53 +110,24 @@ const Cart = () => {
             </tbody>
           </table>
         </div>
-
         <div className={styles.cartSummary}>
-          <div className={styles.couponSection}>
-            <h3>Apply Coupon</h3>
-            <p>Using a promo code?</p>
-            <div className={styles.couponInputWrapper}>
-              <input
-                type="text"
-                placeholder="Coupon code"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                className={styles.couponInput}
-              />
-              <button
-                onClick={handleApplyCoupon}
-                className={styles.applyButton}
-              >
-                Apply
-              </button>
-            </div>
+          <h3>Summary</h3>
+          <p>Total Price: ₹{totalPrice.toFixed(2)}</p>
+          <p>Delivery Fee: ₹{deliveryFee.toFixed(2)}</p>
+          <div>
+            <input
+              type="text"
+              placeholder="Enter coupon code"
+              value={couponCode}
+              onChange={(e) => setCouponCode(e.target.value)}
+            />
+            <button onClick={handleApplyCoupon}>Apply Coupon</button>
           </div>
-
-          <div className={styles.summarySection}>
-            <h3>Total</h3>
-            <div className={styles.summaryRow}>
-              <span>Total</span>
-              <span>₹{totalPrice.toFixed(2)}</span>
-            </div>
-            <div className={styles.summaryRow}>
-              <span>Delivery</span>
-              <span>₹{deliveryFee.toFixed(2)}</span>
-            </div>
-            <div className={styles.summaryRow}>
-              <span>Discount</span>
-              <span>-₹{discount.toFixed(2)}</span>
-            </div>
-            <div className={styles.summaryRow}>
-              <span className={styles.subtotalLabel}>Subtotal</span>
-              <span className={styles.subtotal}>₹{subtotal.toFixed(2)}</span>
-            </div>
-            <button
-              onClick={handleCheckout}
-              className={styles.checkoutButton}
-            >
-              Checkout
-            </button>
-          </div>
+          <p>Discount: ₹{discount.toFixed(2)}</p>
+          <p>Subtotal: ₹{subtotal.toFixed(2)}</p>
+          <button onClick={handleCheckout} className={styles.checkoutButton}>
+            Proceed to Checkout
+          </button>
         </div>
       </div>
     </div>
@@ -183,6 +135,367 @@ const Cart = () => {
 };
 
 export default Cart;
+
+
+
+// import React, { useState, useCallback } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import styles from "./Cart.module.css";
+// import { useCart } from "../../context/CartContext";
+// import { toast } from "react-toastify";
+// import { RiDeleteBin6Line } from "react-icons/ri";
+
+// const Cart = () => {
+//   const { cart = [], updateQuantity, removeFromCart } = useCart(); // ✅ Default to an empty array
+//   const navigate = useNavigate();
+//   const [couponCode, setCouponCode] = useState("");
+//   const [discount, setDiscount] = useState(0);
+//   const deliveryFee = 14.0;
+
+//   // ✅ Calculate total price safely
+//   const totalPrice = cart.reduce(
+//     (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+//     0
+//   );
+//   const subtotal = totalPrice + deliveryFee - discount;
+
+//   // ✅ Quantity Update Handler
+//   const handleUpdateQuantity = useCallback(
+//     (variantId, change) => {
+//       const item = cart.find((item) => item.variantId === variantId);
+//       if (!item) return;
+
+//       const newQuantity = (item.quantity || 0) + change;
+//       if (newQuantity < 1) {
+//         handleRemoveFromCart(variantId);
+//       } else {
+//         updateQuantity(variantId, change);
+//       }
+//     },
+//     [cart, updateQuantity]
+//   );
+
+//   // ✅ Remove Item from Cart
+//   const handleRemoveFromCart = useCallback(
+//     (variantId) => {
+//       removeFromCart(variantId);
+//       toast.success("Item removed from cart!", { position: "top-right", autoClose: 3000 });
+//     },
+//     [removeFromCart]
+//   );
+
+//   // ✅ Apply Coupon Handler
+//   const handleApplyCoupon = () => {
+//     if (couponCode.trim().toLowerCase() === "save10") {
+//       setDiscount(10);
+//       toast.success("Coupon applied successfully! ₹10 discount added.", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//     } else {
+//       setDiscount(0);
+//       toast.error("Invalid coupon code.", { position: "top-right", autoClose: 3000 });
+//     }
+//   };
+
+//   // ✅ Checkout Handler
+//   const handleCheckout = () => {
+//     const tokenData = JSON.parse(localStorage.getItem("ecommerce_login") || "{}");
+//     if (!tokenData?.jwtToken) {
+//       toast.error("Please log in to proceed to checkout.", { position: "top-right", autoClose: 3000 });
+//       navigate("/login");
+//     } else {
+//       navigate("/checkout");
+//     }
+//   };
+
+//   return (
+//     <div className={styles.cartContainer}>
+//       <div className={styles.cartWrapper}>
+//         <div className={styles.cartItems}>
+//           <table className={styles.cartTable}>
+//             <thead>
+//               <tr>
+//                 <th>Product</th>
+//                 <th>Price</th>
+//                 <th>Quantity</th>
+//                 <th>Remove</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {cart.length === 0 ? (
+//                 <tr>
+//                   <td colSpan="4" className={styles.emptyCart}>
+//                     Your cart is empty.
+//                   </td>
+//                 </tr>
+//               ) : (
+//                 cart.map((item) => (
+//                   <tr key={item.variantId} className={styles.cartItem}>
+//                     <td className={styles.productInfo}>
+//                       <img
+//                         src={item.imageUrls?.[0] || "/placeholder.jpg"} // ✅ Fallback for missing images
+//                         alt={item.productName || "Product Image"}
+//                         className={styles.cartImage}
+//                       />
+//                       <div className={styles.productDetails}>
+//                         <span className={styles.productName}>{item.productName || "Unnamed Product"}</span>
+//                         <span className={styles.productDescription}>Color: {item.color || "N/A"}</span>
+//                       </div>
+//                     </td>
+//                     <td>₹{(item.price || 0).toFixed(2)}</td>
+//                     <td>
+//                       <div className={styles.quantityControls}>
+//                         <button onClick={() => handleUpdateQuantity(item.variantId, -1)}>-</button>
+//                         <span>{item.quantity || 1}</span>
+//                         <button onClick={() => handleUpdateQuantity(item.variantId, 1)}>+</button>
+//                       </div>
+//                     </td>
+//                     <td>
+//                       <RiDeleteBin6Line
+//                         onClick={() => handleRemoveFromCart(item.variantId)}
+//                         className={styles.removeButton}
+//                       />
+//                     </td>
+//                   </tr>
+//                 ))
+//               )}
+//             </tbody>
+//           </table>
+//         </div>
+
+//         <div className={styles.cartSummary}>
+//           {/* Coupon Section */}
+//           <div className={styles.couponSection}>
+//             <h3>Apply Coupon</h3>
+//             <p>Using a promo code?</p>
+//             <div className={styles.couponInputWrapper}>
+//               <input
+//                 type="text"
+//                 placeholder="Coupon code"
+//                 value={couponCode}
+//                 onChange={(e) => setCouponCode(e.target.value)}
+//                 className={styles.couponInput}
+//               />
+//               <button onClick={handleApplyCoupon} className={styles.applyButton}>
+//                 Apply
+//               </button>
+//             </div>
+//           </div>
+
+//           {/* Summary Section */}
+//           <div className={styles.summarySection}>
+//             <h3>Total</h3>
+//             <div className={styles.summaryRow}>
+//               <span>Total</span>
+//               <span>₹{totalPrice.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span>Delivery</span>
+//               <span>₹{deliveryFee.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span>Discount</span>
+//               <span>-₹{discount.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span className={styles.subtotalLabel}>Subtotal</span>
+//               <span className={styles.subtotal}>₹{subtotal.toFixed(2)}</span>
+//             </div>
+
+//             <button className={styles.checkoutButton} onClick={handleCheckout}>
+//               Checkout
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Cart;
+
+
+// import React, { useState } from "react";
+// import { Link, useNavigate } from "react-router-dom"; // ✅ Ensure useNavigate is imported
+// import styles from "./Cart.module.css";
+// import { useCart } from "../../context/CartContext";
+// import { toast } from "react-toastify";
+// import { RiDeleteBin6Line } from "react-icons/ri";
+
+// const Cart = () => {
+//   const { cart, updateQuantity, removeFromCart } = useCart();
+//   const navigate = useNavigate(); // ✅ Initialize navigate
+//   const [couponCode, setCouponCode] = useState("");
+//   const [discount, setDiscount] = useState(0);
+//   const deliveryFee = 14.0;
+
+//   // ✅ Ensure cart is an array before using reduce
+//   const totalPrice = Array.isArray(cart)
+//     ? cart.reduce((acc, item) => acc + item.price * item.quantity, 0)
+//     : 0;
+//   const subtotal = totalPrice + deliveryFee - discount;
+
+//   const handleUpdateQuantity = (variantId, change) => {
+//     const item = cart.find((item) => item.variantId === variantId);
+//     if (!item) return;
+
+//     const newQuantity = item.quantity + change;
+//     if (newQuantity < 1) {
+//       handleRemoveFromCart(variantId);
+//     } else {
+//       updateQuantity(variantId, change);
+//     }
+//   };
+
+//   const handleRemoveFromCart = (variantId) => {
+//     removeFromCart(variantId);
+//     toast.success("Item removed from cart!", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//   };
+
+//   const handleApplyCoupon = () => {
+//     if (couponCode.toLowerCase() === "save10") {
+//       setDiscount(10);
+//       toast.success("Coupon applied successfully! ₹10 discount added.", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//     } else {
+//       setDiscount(0);
+//       toast.error("Invalid coupon code.", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//     }
+//   };
+
+//   const handleCheckout = () => {
+//     const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
+//     const token = tokenData?.jwtToken;
+
+//     if (!token) {
+//       toast.error("Please log in to proceed to checkout.", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//       navigate("/login"); // ✅ Use navigate correctly
+//     } else {
+//       navigate("/checkout");
+//     }
+//   };
+
+//   return (
+//     <div className={styles.cartContainer}>
+//       <div className={styles.cartWrapper}>
+//         <div className={styles.cartItems}>
+//           <table className={styles.cartTable}>
+//             <thead>
+//               <tr>
+//                 <th>Product</th>
+//                 <th>Price</th>
+//                 <th>Quantity</th>
+//                 <th>Remove</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {cart.length === 0 ? (
+//                 <tr>
+//                   <td colSpan="4" className={styles.emptyCart}>
+//                     Your cart is empty.
+//                   </td>
+//                 </tr>
+//               ) : (
+//                 cart.map((item) => (
+//                   <tr key={item.variantId} className={styles.cartItem}>
+//                     <td className={styles.productInfo}>
+//                       <img
+//                         src={item.imageUrls?.[0] || "/placeholder.jpg"} // ✅ Ensure an image is always displayed
+//                         alt={item.productName}
+//                         className={styles.cartImage}
+//                       />
+//                       <div className={styles.productDetails}>
+//                         <span className={styles.productName}>{item.productName}</span>
+//                         <span className={styles.productDescription}>
+//                           Color: {item.color}
+//                         </span>
+//                       </div>
+//                     </td>
+//                     <td>₹{item.price.toFixed(2)}</td>
+//                     <td>
+//                       <div className={styles.quantityControls}>
+//                         <button onClick={() => handleUpdateQuantity(item.variantId, -1)}>
+//                           -
+//                         </button>
+//                         <span>{item.quantity}</span>
+//                         <button onClick={() => handleUpdateQuantity(item.variantId, 1)}>
+//                           +
+//                         </button>
+//                       </div>
+//                     </td>
+//                     <td>
+//                       <RiDeleteBin6Line
+//                         onClick={() => handleRemoveFromCart(item.variantId)}
+//                         className={styles.removeButton}
+//                       />
+//                     </td>
+//                   </tr>
+//                 ))
+//               )}
+//             </tbody>
+//           </table>
+//         </div>
+
+//         <div className={styles.cartSummary}>
+//           <div className={styles.couponSection}>
+//             <h3>Apply Coupon</h3>
+//             <p>Using a promo code?</p>
+//             <div className={styles.couponInputWrapper}>
+//               <input
+//                 type="text"
+//                 placeholder="Coupon code"
+//                 value={couponCode}
+//                 onChange={(e) => setCouponCode(e.target.value)}
+//                 className={styles.couponInput}
+//               />
+//               <button onClick={handleApplyCoupon} className={styles.applyButton}>
+//                 Apply
+//               </button>
+//             </div>
+//           </div>
+
+//           <div className={styles.summarySection}>
+//             <h3>Total</h3>
+//             <div className={styles.summaryRow}>
+//               <span>Total</span>
+//               <span>₹{totalPrice.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span>Delivery</span>
+//               <span>₹{deliveryFee.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span>Discount</span>
+//               <span>-₹{discount.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span className={styles.subtotalLabel}>Subtotal</span>
+//               <span className={styles.subtotal}>₹{subtotal.toFixed(2)}</span>
+//             </div>
+
+//             <button className={styles.checkoutButton} onClick={handleCheckout}>
+//               Checkout
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Cart;
 
 // import React from "react";
 // import styles from "./Cart.module.css";

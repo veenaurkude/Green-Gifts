@@ -639,41 +639,36 @@ const ProductDetails = () => {
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
 
+  // Get Product Details-ByID
+
   useEffect(() => {
     async function getProductById() {
       try {
         const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
         const token = tokenData?.jwtToken;
-        if (!token) {
-          navigate("/login");
-          return;
-        }
-
+  
+        const headers = token
+          ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+          : { "Content-Type": "application/json" };
+  
         const response = await axios.get(`${config.BASE_URL}/api/Product/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
+          headers,
         });
-
+  
         setProduct(response.data);
         const initialVariant = response.data.variants?.[0] || {};
         setSelectedVariant(initialVariant);
         setSelectedImage(initialVariant.imageUrls?.[0] || null);
         setLoading(false);
       } catch (error) {
-        if (error.response?.status === 401) {
-          localStorage.removeItem("ecommerce_login");
-          navigate("/login");
-        } else {
-          setError(`Failed to load product details: ${error.message}`);
-        }
+        setError(`Failed to load product details: ${error.message}`);
         setLoading(false);
       }
     }
-
+  
     if (id) getProductById();
-  }, [id, navigate]);
+  }, [id]);
+  
 
   const handleVariantChange = (variant) => {
     setSelectedVariant(variant);
@@ -690,30 +685,67 @@ const ProductDetails = () => {
 
   const handleAddToCart = async () => {
     if (!product || !selectedVariant) {
-      toast.error("Please select a valid product or variant.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+      toast.error("Please select a valid product or variant.");
       return;
     }
-
-    try {
-      await addToCart(product, selectedVariant.id, quantity);
-      toast.success(
-        `${product.name} added to cart!`,
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
-    } catch (error) {
-      console.error("Failed to add product to cart:", error);
-      toast.error("Failed to add product to cart.", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+  
+    const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
+    const token = tokenData?.jwtToken;
+  
+    const cartItem = {
+      id: product.id,
+      variantId: selectedVariant.id,
+      name: product.name,
+      price: selectedVariant.price,
+      image: selectedVariant.imageUrls?.[0] || "",
+      quantity,
+    };
+  
+    if (token) {
+      // User is logged in → Add item via API (Optional)
+      try {
+        await addToCart(product, selectedVariant.id, quantity);
+        toast.success(`${product.name} added to cart!`);
+      } catch (error) {
+        console.error("Failed to add product to cart:", error);
+        toast.error("Failed to add product to cart.");
+      }
+    } else {
+      // Guest user → Store cart in localStorage
+      const existingCart = JSON.parse(localStorage.getItem("guest_cart")) || [];
+      const updatedCart = [...existingCart, cartItem];
+      localStorage.setItem("guest_cart", JSON.stringify(updatedCart));
+      toast.success("Added to cart!");
     }
   };
+  
+
+  // const handleAddToCart = async () => {
+  //   if (!product || !selectedVariant) {
+  //     toast.error("Please select a valid product or variant.", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //     return;
+  //   }
+
+  //   try {
+  //     await addToCart(product, selectedVariant.id, quantity);
+  //     toast.success(
+  //       `${product.name} added to cart!`,
+  //       {
+  //         position: "top-right",
+  //         autoClose: 3000,
+  //       }
+  //     );
+  //   } catch (error) {
+  //     console.error("Failed to add product to cart:", error);
+  //     toast.error("Failed to add product to cart.", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //   }
+  // };
 
   
 

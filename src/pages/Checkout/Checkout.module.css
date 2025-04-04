@@ -1,0 +1,58 @@
+.checkoutContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* min-height: 100vh;  */
+    background-color: #f4f4f4;
+    padding: 2rem;
+  }
+  
+  .checkoutForm {
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 500px; /* Prevents excessive width */
+  }
+  
+  .inputField {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+  }
+  
+  .inputField:focus {
+    border-color: #2d6a4f;
+    outline: none;
+    box-shadow: 0 0 5px rgba(45, 106, 79, 0.3);
+  }
+  
+  .submitButton {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #2d6a4f;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+  }
+  
+  .submitButton:hover {
+    background-color: #48bb78;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 600px) {
+    .checkoutForm {
+      padding: 1.5rem;
+      width: 90%;
+    }
+  }
+  
