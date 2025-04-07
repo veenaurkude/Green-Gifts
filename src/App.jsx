@@ -21,6 +21,8 @@ import Offers from "./pages/Offers/Offers";
 import Terrarium from "./pages/Terrarium/Terrarium";
 import Cart from "./pages/Cart/Cart";
 import Checkout from "./pages/Checkout/Checkout";
+import Payment from "./pages/Payment/Payment";
+import OrderConfirm from "./pages/OrderConfirm/OrderConfirm";
 
 
 // Admin Panel Import files
@@ -106,7 +108,22 @@ const App = () => {
                     </ProtectedRoute>
                   }
                 />
+                <Route
+                  path="/payment-gateway"
+                  element={
+                    <ProtectedRoute>
+                      <Payment />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/order-confirm" element={
+                  <ProtectedRoute>
+                    <OrderConfirm />
+                  </ProtectedRoute>
+                }
+                />
               </Route>
+
 
               {/* Admin Layout Route (Admin Side) */}
               <Route path="/admin" element={<AdminLayout />}>

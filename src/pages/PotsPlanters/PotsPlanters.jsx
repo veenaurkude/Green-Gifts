@@ -108,6 +108,8 @@ const PotsPlanters = () => {
                 }
                 price={variant.price || "N/A"}
                 discount={variant.discountedPrice || null} // If your Card supports it
+                product={parentPlant} // ✅ Pass full product object
+                selectedVariant={variant} // ✅ Pass selected variant
               />
             );
           })

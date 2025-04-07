@@ -98,7 +98,11 @@ const Plants = () => {
     <>
       {/* Banner */}
       <div className={styles.plantsBanner}>
-        <img className={styles.plantsBannerImg} src={banner1} alt="Plant Banner" />
+        <img
+          className={styles.plantsBannerImg}
+          src={banner1}
+          alt="Plant Banner"
+        />
       </div>
 
       {/* Breadcrumbs */}
@@ -129,6 +133,8 @@ const Plants = () => {
                 }
                 price={variant.price || "N/A"}
                 discount={variant.discountedPrice || null}
+                product={parentPlant} // ✅ Pass full product object
+                selectedVariant={variant} // ✅ Pass selected variant
               />
             );
           })

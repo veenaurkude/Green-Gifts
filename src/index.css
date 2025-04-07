@@ -19,6 +19,12 @@
   font-family: sans-serif;
 }
 
+/* Updated Main Layout CSS (inline or in global.css) */
+main {
+  padding-top: 6rem; /* Offset for both topNavbar (32px) and navbar (64px) */
+  flex-grow: 1;
+}
+
 h1,
 h2,
 h3,

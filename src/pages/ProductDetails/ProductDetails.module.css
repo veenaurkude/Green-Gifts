@@ -84,7 +84,7 @@
 }
 
 .price {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #2d6a4f; /* Green theme */
   display: flex;
@@ -93,13 +93,17 @@
 }
 
 .stock {
-  font-size: 1rem;
-  color: #48bb78; /* Green for in stock */
+  font-size: 0.9rem;
+  color: #2d6a4f; /* Green for in stock */
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
+.priceSection{
+  display: flex;
+  gap: 1rem;
+}
 .stock svg {
   font-size: 1.2rem;
 }

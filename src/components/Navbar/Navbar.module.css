@@ -1,14 +1,88 @@
+/* Top Navbar */
+.topNavbar {
+  background-color: #b7e4c7; /* Light Green */
+  color: #2d6a4f; /* Dark Green */
+  text-align: center;
+  padding: 5px 0;
+  font-size: 14px;
+  font-weight: 500;
+  position: fixed; /* Changed to fixed */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900; /* Below main navbar but above content */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+/* Title Section */
+.title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* Ensures wrapping on smaller screens */
+  gap: 8rem; /* Large gap for desktops */
+  /* padding: 5px 2rem; */
+  max-width: 100%;
+  transition: gap 0.3s ease, padding 0.3s ease; /* Smooth responsive changes */
+}
+
+/* Reduce gap and padding for smaller screens */
+@media (max-width: 1024px) {
+  .title {
+    gap: 3rem;
+    padding: 5px 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .title {
+    gap: 1.5rem;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    flex-direction: column; /* Stack items vertically */
+    gap: 8px;
+    padding: 5px;
+  }
+}
+
+/* Links Styling */
+.topNavbar a {
+  color: #2d6a4f; /* Matching green */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease, text-decoration 0.3s ease; /* Smooth hover transition */
+}
+
+.topNavbar a:hover {
+  color: #40916c; /* Darker green on hover */
+  text-decoration: underline;
+}
+
 /* Navbar Container */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  /* background-color: #2d6a4f; */
   background-color: #2d6a4f;
   color: #F8F9FA;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  position: relative;
+  position: fixed; /* Changed to fixed */
+  top: 0; /* Overridden by .topNavbar, so adjust below */
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Above topNavbar and content */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+/* Adjust navbar position to sit below topNavbar */
+.navbar {
+  top: 32px; /* Height of .topNavbar (8px padding top + 8px padding bottom + content height) */
 }
 
 /* Underline Effect */
@@ -37,6 +111,11 @@
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.logo a:hover {
+  color: #b7e4c7;
 }
 
 /* Navigation Links */
@@ -47,41 +126,40 @@
 }
 
 /* Nav Item Wrapper */
-.navItem, .navIcon {
+.navItem,
+.navIcon {
   position: relative;
   display: inline-block;
 }
 
-.navIcon > a:hover{
+.navIcon > a:hover {
   transform: scale(1.5);
+  transition: transform 0.3s ease-in-out;
 }
 
 /* Main Nav Links */
-.navItem > a, .navIcon > a {
+.navItem > a,
+.navIcon > a {
   color: #F8F9FA;
   font-family: sans-serif;
   text-transform: uppercase;
   text-decoration: none;
   font-size: 14.5px;
   padding: 10px;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease-in-out;
   display: block;
-  transition: transform 0.3s ease-in-out;
 }
 
-
-.navItem > a:hover, .navIcon > a:hover {
+.navItem > a:hover,
+.navIcon > a:hover {
   color: #b7e4c7;
-  /* text-decoration: underline; */
 }
 
 /* Dropdown Menu */
 .dropdownMenu {
   font-family: sans-serif;
-  /* min-width: min-content;
-  max-width: 20rem; */
   width: max-content;
-  z-index: 101;
+  z-index: 1010; /* Above navbar */
   padding: 1rem;
   display: none;
   position: absolute;
@@ -92,7 +170,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
 }
 
 /* Show only hovered menu’s dropdown */
@@ -100,6 +178,7 @@
   display: block;
   opacity: 1;
   visibility: visible;
+  transition: opacity 0.3s ease-in-out;
 }
 
 /* Dropdown Links */
@@ -108,13 +187,12 @@
   padding: 10px;
   text-decoration: none;
   display: block;
-  transition: 0.9s ease;
+  transition: color 0.3s ease;
   font-size: 13.5px;
-  transition-timing-function: ease;
 }
 
 .dropdownMenu a:hover {
-  color:  #24553F;
+  color: #24553F;
 }
 
 /* Hamburger Menu */
@@ -125,6 +203,7 @@
   background: none;
   border: none;
   cursor: pointer;
+  padding: 0.5rem;
 }
 
 .bar {
@@ -134,28 +213,40 @@
   transition: all 0.3s ease;
 }
 
-.searchInput{
+/* Search Input */
+.searchInput {
   width: 100%;
-  /* padding: 10px; */
+  padding: 0.5rem 1rem;
   border: 1px solid #ccc;
   border-radius: 20px;
   box-sizing: border-box;
-  /* font-size: 1rem; */
-  transition: border 0.3s ease;
-  
+  font-size: 1rem;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchInput:focus {
+  border-color: #b7e4c7;
+  box-shadow: 0 0 5px rgba(45, 106, 79, 0.3);
+  outline: none;
 }
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .navbar {
+    padding: 1rem 1rem; /* Reduced padding for mobile */
+  }
+
   .navLinks {
     display: none;
     flex-direction: column;
     background-color: #2d6a4f;
     position: absolute;
-    top: 100%;
+    top: 100%; /* Align with navbar bottom */
     right: 0;
     width: 100%;
     text-align: center;
+    padding: 1rem 0;
+    z-index: 1001; /* Above navbar */
   }
 
   .navLinks.active {
@@ -164,6 +255,7 @@
 
   .navItem {
     position: relative;
+    width: 100%;
   }
 
   .dropdownMenu {
@@ -173,6 +265,8 @@
     opacity: 1;
     visibility: visible;
     display: none;
+    width: 100%;
+    border-radius: 0;
   }
 
   .navItem:hover .dropdownMenu {
@@ -181,15 +275,21 @@
 
   .dropdownMenu a {
     color: white;
-    padding: 8px;
+    padding: 0.75rem;
+    font-size: 14px;
   }
 
   .hamburger {
     display: flex;
   }
+
+  .searchInput {
+    width: 80%;
+    margin: 0.5rem 0;
+  }
 }
 
-
+/* Cart Badge */
 .cartLink {
   position: relative;
   display: flex;
@@ -206,4 +306,10 @@
   font-weight: bold;
   padding: 4px 6px;
   border-radius: 50%;
+  transition: transform 0.3s ease;
 }
+
+.cartLink:hover .cartBadge {
+  transform: scale(1.2);
+}
+

@@ -20,6 +20,7 @@
   height: 400px;
   object-fit: cover; /* Ensures the image covers the container area */
   display: block; /* Prevents extra space below the image */
+  margin-top: 8px;
 }
 
 /* Banner Text */

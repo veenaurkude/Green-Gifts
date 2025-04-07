@@ -15,6 +15,8 @@ export const CartProvider = ({ children }) => {
     let tokenData;
     try {
       tokenData = rawTokenData && rawTokenData !== "undefined" ? JSON.parse(rawTokenData) : null;
+      console.log("Token data from localStorage:", tokenData); // <--- Add this
+
       if (tokenData?.jwtToken) {
         setIsUserLoggedIn(true);
         setToken(tokenData.jwtToken);
@@ -131,12 +133,14 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Calculate total unique products in the cart
+  const totalUniqueProducts = cart.length; // Or use reduce to count unique products
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, updateQuantity, removeFromCart }}>
+    <CartContext.Provider value={{ cart, totalUniqueProducts, addToCart, updateQuantity, removeFromCart }}>
       {children}
     </CartContext.Provider>
   );
 };
 
 export const useCart = () => useContext(CartContext);
-

@@ -505,6 +505,8 @@ const Home = () => {
                     category={plant.category}
                     price={firstVariant.price || "N/A"}
                     discount={firstVariant.discountedPrice || null}
+                    product={plant} // ✅ Pass full product object
+                selectedVariant={firstVariant} // ✅ Pass selected variant
                   />
                 );
               })

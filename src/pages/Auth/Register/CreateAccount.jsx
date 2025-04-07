@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './CreateAccount.module.css';
 import Button from '../../../components/Button/Button';
 import {Input} from '../../../components/Input/Input';
+import { LuEyeOff, LuEye } from "react-icons/lu";
+
 
 const CreateAccount = () => {
   const navigate = useNavigate();
@@ -18,12 +20,22 @@ const CreateAccount = () => {
 
   const [successMsg, setSuccessMsg] = useState('');
   const [errors, setErrors] = useState({});
+    const [showPassword, setShowPassword] = useState(false); // State for password visibility
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // State for confirm password
 
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+const toggleConfirmPasswordVisibility = () => {
+  setShowConfirmPassword((prev) => !prev);
+}
+
 
   // Form validation
   const validate = () => {
@@ -112,14 +124,34 @@ const CreateAccount = () => {
           {errors.phone && <span className={styles.errorMsg}>{errors.phone}</span>}
 
           {/* Using Input Component for Password */}
-          <Input
+          {/* <Input
             type="password"
             name="password"
             value={formData.password}
             onChange={handleChange}
             placeholder="Password"
             className={`${styles.inputField} ${errors.password && styles.errorInput}`}
-          />
+          /> */}
+
+          <div className={styles.passwordWrapper}>
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Password"
+                        className={`${styles.inputField} ${errors.password ? styles.errorBorder : ""}`}
+                      />
+                      <span
+                        className={styles.passwordToggle}
+                        onClick={togglePasswordVisibility}
+                        role="button"
+                        tabIndex={0}
+                        onKeyPress={(e) => e.key === "Enter" && togglePasswordVisibility()}
+                      >
+                        {showPassword ? <LuEye size={15} /> : <LuEyeOff size={15} />}
+                      </span>
+                    </div>
           {errors.password && <span className={styles.errorMsg}>{errors.password}</span>}
 
           <Button type="submit" className={styles.createBtn}>CREATE</Button>
