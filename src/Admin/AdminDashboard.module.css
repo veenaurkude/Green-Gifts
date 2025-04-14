@@ -4,8 +4,7 @@
     padding: 20px;
     background-color: #f4f6f8; /* Light gray background */
     min-height: 100vh;
-    font-family: 'Arial', sans-serif;
-  }
+    font-family: 'Poppins', sans-serif;  }
   
   /* Header */
   .header {
@@ -71,6 +70,7 @@
   
   .statLink:hover {
     text-decoration: underline;
+    color: #2d572c;
   }
   
   /* Quick Actions */
@@ -80,7 +80,7 @@
   
   .sectionTitle {
     font-size: 1.5rem;
-    color: #2e7d32;
+    color: #2d572c;
     margin-bottom: 15px;
   }
   
@@ -92,9 +92,9 @@
   }
   
   .actionButton {
-    background-color: #2d6a4f;
+    background-color: #5A7D5A;
     color: #fff;
-    padding: 10px 20px;
+    padding: 8px 15px;
     border-radius: 5px;
     text-decoration: none;
     font-size: 1rem;
@@ -102,7 +102,7 @@
   }
   
   .actionButton:hover {
-    background-color: #388e3c;
+    background-color: #2d572c;
   }
   
   /* Chart Section */

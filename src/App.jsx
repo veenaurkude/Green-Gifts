@@ -36,6 +36,8 @@ import OfferBanner from "./admin/Banner/OfferBanner";
 import Order from "./admin/Order/Order";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import Contact from "./pages/Contact/Contact";
+import Services from "./pages/Services/Services";
+import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -72,6 +74,8 @@ const App = () => {
               pauseOnHover
               theme="light" // You can change this to "dark" or "colored"
             />
+
+            <ScrollToTop/>  {/* Scroll to top */}
             <Routes>
               {/* Main Layout Route */}
 
@@ -94,7 +98,7 @@ const App = () => {
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/product-details" element={<ProductDetails />} />
                 <Route path="/cart" element={<Cart />} />
-
+                <Route path="/gardening-services" element={<Services/>} />
                 <Route path="/contact-us" element={<Contact/>} />
 
 
@@ -134,6 +138,7 @@ const App = () => {
                 />
                 <Route path="/admin/pot-category" element={<PotCategory />} />
                 <Route path="/admin/add-product" element={<AddProduct />} />
+                <Route path="/admin/add-product/:productId" element={<AddProduct />} />
                 <Route path="/admin/product-list" element={<ProductList />} />
                 <Route path="/admin/offer-banner" element={<OfferBanner />} />
                 <Route path="/admin/orders" element={<Order />} />

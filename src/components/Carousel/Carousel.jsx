@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Carousel.module.css";
 import { FaCaretRight, FaCaretLeft } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Carousel = ({ images, autoSlide = true, autoSlideInterval = 3000 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -26,8 +28,20 @@ const Carousel = ({ images, autoSlide = true, autoSlideInterval = 3000 }) => {
     );
   };
 
+   // AOS Init
+    useEffect(() => {
+      AOS.init({
+        duration: 500,
+        offset: 100,
+        easing: "ease-in-out",
+        delay: 0,
+        once: true,
+      });
+    }, []);
+  
+
   return (
-    <div className={styles.carousel}>
+    <div className={styles.carousel} data-aos="fade-up">
       <div className={styles.imageWrapper}>
         {images.map((src, index) => (
           <img

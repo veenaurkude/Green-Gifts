@@ -284,7 +284,9 @@ import { Link, useNavigate } from "react-router-dom";
 import config from "../../config/apiconfig";
 import Card from "../../components/Card/Card";
 import Carousel from "../../components/Carousel/Carousel";
-import { FaBox, FaSyncAlt, FaSeedling } from "react-icons/fa";
+import { FaGifts, FaTools, FaBox, FaSyncAlt, FaSeedling } from "react-icons/fa";
+import { GiGardeningShears } from "react-icons/gi";
+
 import styles from "./Home.module.css";
 import Button from "../../components/Button/Button";
 import Testimonials from "../../components/Testimonials/Testimonials";
@@ -295,6 +297,8 @@ import whiteceramic from "../../assets/images/img/whiteceramic.png";
 import pot from "../../assets/images/img/pot.jpg";
 import indoorPlants from "../../assets/images/img/indoorPlants.jpg";
 import parentPlant from "../../assets/images/img/parentPlant.jpg";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Home = () => {
   // Improved Token Handling
@@ -314,6 +318,22 @@ const Home = () => {
   const navigate = useNavigate();
   const [plants, setPlants] = useState([]); // Renamed from 'plant' to 'plants' for clarity
   const [banners, setBanners] = useState([]);
+
+  // AOS Init
+  useEffect(() => {
+    AOS.init({
+      duration: 500,
+      offset: 100,
+      easing: "ease-in-out",
+      delay: 0,
+      once: true,
+    });
+  }, []);
+
+  // Refresh AOS when data loads
+  useEffect(() => {
+    AOS.refresh();
+  }, [banners, plants]);
 
   // Fetch Banners
   useEffect(() => {
@@ -413,7 +433,7 @@ const Home = () => {
       image: indoorPlants,
       link: "/plants",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet molestie nunc.",
+        "A curated range of beautiful, low-maintenance plants—perfect for homes, offices, and gifting.",
     },
     {
       id: 2,
@@ -421,7 +441,7 @@ const Home = () => {
       image: pot,
       link: "/pots-planters",
       description:
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In sit amet molestie nunc.",
+        "Stylish ceramic, terracotta, and designer pots to complement every plant and space.",
     },
   ];
 
@@ -429,7 +449,7 @@ const Home = () => {
     <>
       <section className={styles.homeContainer}>
         {/* Carousel */}
-        <div className={styles.carouselWrapper}>
+        <div className={styles.carouselWrapper} data-aos="fade-up">
           {banners.length > 0 ? (
             <Carousel images={banners} />
           ) : (
@@ -442,9 +462,14 @@ const Home = () => {
         {/* Products Features Section */}
         <div className={styles.productFeatures}>
           <div className={styles.giftingContainer}>
-            <div className={styles.giftList}>
-              {gifts.map((gift) => (
-                <div key={gift.id} className={styles.giftCard}>
+            <div className={styles.giftList} data-aos="fade-up">
+              {gifts.map((gift, index) => (
+                <div
+                  key={gift.id}
+                  className={styles.giftCard}
+                  data-aos="zoom-in"
+                  data-aos-delay={index * 50}
+                >
                   <img
                     src={gift.image}
                     alt={gift.title}
@@ -457,15 +482,28 @@ const Home = () => {
           </div>
         </div>
 
+        <div className={styles.miniHeading}>
+          <h2 className={styles.heading} data-aos="zoom-in-up">Welcome to Green Gifts Nagpur</h2>
+          
+            <i className={styles.headPara}> Your one-stop destination for all
+            things green and beautiful! As a premier plant boutique and nursery,
+            we're passionate about helping you connect with nature and share
+            that love with others.</i>
+         
+         
+        </div>
+
         {/* Our Best Picks */}
         <section className={styles.bestSellers}>
-          <h2>Our Best Picks</h2>
-          <div className={styles.bestSellersGrid}>
-            {categories.map((category) => (
+          <h2 className={styles.heading} data-aos="zoom-in-up">Our Best Picks</h2>
+          <div className={styles.bestSellersGrid} data-aos="fade-up">
+            {categories.map((category, index) => (
               <Link
                 to={category.link}
                 key={category.id}
                 className={styles.bestSellerCard}
+                data-aos="zoom-in"
+                data-aos-delay={index * 100}
               >
                 <img
                   src={category.image}
@@ -488,12 +526,13 @@ const Home = () => {
 
         {/* Product Grid */}
         <div className={styles.bestSellers}>
-          <h2>Best Sellers</h2>
+          <h2 data-aos="zoom-in-up">Best Sellers</h2>
           <div className={styles.productGrid}>
             {displayedProducts.length > 0 ? (
               displayedProducts.map((plant) => {
                 const firstVariant = plant.variants?.[0] || {}; // Use first variant for display
                 return (
+                  // <div className={styles.cardComp} >
                   <Card
                     key={plant.id}
                     id={plant.id} // Pass parent product ID
@@ -506,8 +545,9 @@ const Home = () => {
                     price={firstVariant.price || "N/A"}
                     discount={firstVariant.discountedPrice || null}
                     product={plant} // ✅ Pass full product object
-                selectedVariant={firstVariant} // ✅ Pass selected variant
+                    selectedVariant={firstVariant} // ✅ Pass selected variant
                   />
+                  //  </div>
                 );
               })
             ) : (
@@ -516,7 +556,7 @@ const Home = () => {
           </div>
 
           {/* View All Button */}
-          <div className={styles.viewAllContainer}>
+          <div className={styles.viewAllContainer} data-aos="fade-up">
             <Link className={styles.viewAllButton} to="/plants">
               View All
             </Link>
@@ -524,20 +564,26 @@ const Home = () => {
         </div>
 
         {/* WhyGreenGifts section */}
-        <div className={styles.whySection}>
-          <h2 className={styles.heading}>Why Green Gifts?</h2>
+        <div className={styles.whySection} data-aos="fade-up">
+          <h2 className={styles.heading} data-aos="zoom-in-up">
+            Why Green Gifts?
+          </h2>
           <div className={styles.features}>
             <div className={styles.feature}>
-              <FaBox className={styles.icon} />
-              <p>Secure and Recyclable Packaging</p>
+              <FaGifts className={styles.icon} />
+              <p>Green Gifting Solutions</p>
             </div>
             <div className={styles.feature}>
-              <FaSyncAlt className={styles.icon} />
-              <p>Free Replacements if Damaged</p>
+              <FaTools className={styles.icon} />
+              <p>Garden Accessories</p>
             </div>
             <div className={styles.feature}>
               <FaSeedling className={styles.icon} />
-              <p>Self-Watering Pots with Every Plant</p>
+              <p>Plant Care</p>
+            </div>
+            <div className={styles.feature}>
+              <FaSyncAlt className={styles.icon} />
+              <p>Gardening Services</p>
             </div>
           </div>
         </div>
@@ -546,11 +592,11 @@ const Home = () => {
         <Testimonials />
 
         {/* Plant Parent Rewards Club Section */}
-        <section className={styles.rewardsClub}>
+        <section className={styles.rewardsClub} data-aos="fade-up">
           <div className={styles.rewardsClubContainer}>
             <div className={styles.rewardsClubText}>
-              <h2>Featured Pots & Planters</h2>
-              <p>
+              <h2 data-aos="zoom-in-up">Featured Pots & Planters</h2>
+              <p> 
                 Every plant purchase is a gift that keeps on giving. Earn coins
                 and redeem them for exclusive discounts.
               </p>
@@ -563,23 +609,32 @@ const Home = () => {
                 </Link>
               </div>
             </div>
-            <div className={styles.rewardsClubImage}>
+            <div className={styles.rewardsClubImage} data-aos="zoom-in">
               <img src={parentPlant} alt="Plant Parent Rewards Club" />
             </div>
           </div>
         </section>
 
         {/* About Green Gifts */}
-        <div className={styles.about}>
-          <h4>About Green Gifts</h4>
+        <div className={styles.about} data-aos="fade-up">
+          <h4 className={styles.heading} data-aos="zoom-in-up">About Green Gifts</h4>
           <p>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Aliquid
-            exercitationem hic, iusto at, veniam et rem minus, iste doloremque
-            dignissimos repellendus? Recusandae at odio amet? Odit unde quas
-            maxime quae! Lorem ipsum dolor, sit amet consectetur adipisicing
-            elit. Nisi, perferendis vero, veritatis magni eum quas eligendi odio
-            officia neque nulla tempore corrupti quis, accusamus exercitationem
-            esse itaque cupiditate quaerat in.
+            Welcome to Green Gifts Nagpur, your one-stop destination for all
+            things green and beautiful! As a premier plant boutique and nursery,
+            we're passionate about helping you connect with nature and share
+            that love with others. 
+            Explore our curated collection of exquisite
+            plants, carefully selected to bring joy, serenity, and freshness to
+            any space. From elegant green gifts to customized plant
+            arrangements, we'll help you find the perfect way to express
+            yourself. 
+            At Green Gifts Nagpur, we're dedicated to providing
+            exceptional garden services, expert advice, and personalized support
+            to help you create your own oasis. Whether you're looking for a
+            thoughtful gift, a stunning addition to your home or office, or
+            simply a way to nurture your love for plants, we're here to help.
+            Browse through our website to discover the beauty of nature, and let
+            us help you grow your love for plants!"
           </p>
         </div>
       </section>

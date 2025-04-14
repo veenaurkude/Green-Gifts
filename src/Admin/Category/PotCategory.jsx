@@ -4,7 +4,11 @@ import axios from "axios";
 import config from "../../config/apiconfig";
 import styles from "./Category.module.css";
 import Button from "../../components/Button/Button";
-import {Input} from "../../components/Input/Input";
+import { Input } from "../../components/Input/Input";
+import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineSaveAlt, MdOutlineCancel } from "react-icons/md";
+import { toast } from "react-toastify";
+import Modal from "../../components/Modal/Modal";
 
 const PotCategory = () => {
   const navigate = useNavigate();
@@ -14,13 +18,18 @@ const PotCategory = () => {
   const [potCategories, setPotCategories] = useState([]);
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [updatedCategoryName, setUpdatedCategoryName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState(null); // Track ID to delete
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Check token and fetch categories
   useEffect(() => {
     if (!token) {
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       navigate("/login");
     } else {
       getPotCategories();
@@ -31,19 +40,25 @@ const PotCategory = () => {
   const getPotCategories = async () => {
     try {
       console.log("Token being sent:", token);
-      const response = await axios.get(`${config.BASE_URL}/api/pot-categories`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.get(
+        `${config.BASE_URL}/api/pot-categories`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       console.log("Pot Categories Response:", response.data);
       setPotCategories(response.data);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching pot categories:", error.response || error);
       if (error.response?.status === 401) {
-        alert("Unauthorized access. Please log in again.");
+        toast.error("Unauthorized access. Please log in again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         navigate("/login");
       } else {
         setError("Failed to load pot categories.");
@@ -56,38 +71,64 @@ const PotCategory = () => {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!updatedCategoryName.trim()) {
-      alert("Category name cannot be empty.");
+      toast.error("Category name cannot be empty.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
     const formData = { potCategoryName: updatedCategoryName };
     try {
-      const response = await axios.post(`${config.BASE_URL}/api/pot-categories`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${config.BASE_URL}/api/pot-categories`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.status === 201) {
-        alert("Pot category added successfully!");
+        toast.success("Pot category added successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setUpdatedCategoryName("");
         getPotCategories();
       }
     } catch (error) {
       console.error("Error adding pot category:", error.response || error);
-      alert(`Failed to add pot category: ${error.response?.data?.message || error.message}`);
+      toast.error(
+        `Failed to add pot category: ${
+          error.response?.data?.message || error.message
+        }`,
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
   // Edit pot category
   const handleEditCategory = async (id) => {
     if (!updatedCategoryName.trim()) {
-      alert("Category name cannot be empty.");
+      toast.error("Category name cannot be empty.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
     try {
-      console.log("Editing category with ID:", id, "New Name:", updatedCategoryName);
+      console.log(
+        "Editing category with ID:",
+        id,
+        "New Name:",
+        updatedCategoryName
+      );
       const response = await axios.put(
         `${config.BASE_URL}/api/pot-categories/${id}`,
         { potCategoryName: updatedCategoryName },
@@ -99,7 +140,10 @@ const PotCategory = () => {
         }
       );
       if (response.status === 200) {
-        alert("Pot category updated successfully!");
+        toast.success("Pot category updated successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setEditingCategoryId(null);
         setUpdatedCategoryName("");
         getPotCategories();
@@ -107,38 +151,80 @@ const PotCategory = () => {
     } catch (error) {
       console.error("Error updating pot category:", error.response || error);
       if (error.response?.status === 401) {
-        alert("Unauthorized access. Please log in again.");
+        toast.error("Unauthorized access. Please log in again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         navigate("/login");
       } else {
-        alert(`Failed to update pot category: ${error.response?.data?.message || error.message}`);
+        toast.error(
+          `Failed to update pot category: ${
+            error.response?.data?.message || error.message
+          }`,
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
     }
   };
 
-  // Delete pot category
-  const handleDeleteCategory = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
+  // Open Modal for Delete Confirmation
+  const openDeleteModal = (id) => {
+    setProductIdToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  // Close Modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setProductIdToDelete(null);
+  };
+
+  // Handle Delete Confirmation from Modal
+  const handleDelete = async () => {
+    if (!productIdToDelete) return;
 
     try {
-      console.log("Deleting category with ID:", id);
-      const response = await axios.delete(`${config.BASE_URL}/api/pot-categories/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      console.log("Deleting category with ID:", productIdToDelete);
+      const response = await axios.delete(
+        `${config.BASE_URL}/api/pot-categories/${productIdToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.status === 200 || response.status === 204) {
-        alert("Pot category deleted successfully!");
+        toast.success("Pot category deleted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         getPotCategories();
       }
     } catch (error) {
       console.error("Delete pot category error:", error.response || error);
       if (error.response?.status === 401) {
-        alert("Unauthorized access. Please log in again.");
+        toast.error("Unauthorized access. Please log in again.", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         navigate("/login");
       } else {
-        alert(`Failed to delete pot category: ${error.response?.data?.message || error.message}`);
+        toast.error(
+          `Failed to delete pot category: ${
+            error.response?.data?.message || error.message
+          }`,
+          {
+            position: "top-right",
+            autoClose: 3000,
+          }
+        );
       }
+    } finally {
+      closeModal(); // Close modal after attempt
     }
   };
 
@@ -147,6 +233,7 @@ const PotCategory = () => {
   if (error) return <p className={styles.error}>{error}</p>;
 
   return (
+    <>
     <div className={styles.categoryContainer}>
       {/* Header */}
       <header className={styles.header}>
@@ -159,10 +246,10 @@ const PotCategory = () => {
           type="text"
           value={updatedCategoryName}
           onChange={(e) => setUpdatedCategoryName(e.target.value)}
-          placeholder="Enter pot category name"
+          placeholder="Enter Pot Category Name"
           className={styles.addInput}
         />
-        <Button type="submit" className={styles.addButton}>Add Pot Category</Button>
+        <Button type="submit">Add Pot Category</Button>
       </form>
 
       {/* Category Table */}
@@ -199,7 +286,7 @@ const PotCategory = () => {
                           onClick={() => handleEditCategory(cat.potCategoryId)}
                           className={styles.saveButton}
                         >
-                          Save
+                          <MdOutlineSaveAlt />
                         </Button>
                         <Button
                           onClick={() => {
@@ -208,7 +295,7 @@ const PotCategory = () => {
                           }}
                           className={styles.cancelButton}
                         >
-                          Cancel
+                          <MdOutlineCancel />
                         </Button>
                       </>
                     ) : (
@@ -218,15 +305,15 @@ const PotCategory = () => {
                             setEditingCategoryId(cat.potCategoryId);
                             setUpdatedCategoryName(cat.potCategoryName);
                           }}
-                          className={styles.editButton}
+                          className={styles.actionEdit}
                         >
-                          Edit
+                          <RiEditLine />
                         </Button>
                         <Button
-                          onClick={() => handleDeleteCategory(cat.potCategoryId)}
-                          className={styles.deleteButton}
+                          onClick={() => openDeleteModal(cat.potCategoryId)} // Trigger modal
+                          className={styles.actionDel}
                         >
-                          Delete
+                          <RiDeleteBin6Line />
                         </Button>
                       </>
                     )}
@@ -239,7 +326,17 @@ const PotCategory = () => {
           <p className={styles.noCategories}>No pot categories found.</p>
         )}
       </div>
+
+      {/* Modal for Delete Confirmation */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={handleDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this pot category? This action cannot be undone."
+      />
     </div>
+    </>
   );
 };
 

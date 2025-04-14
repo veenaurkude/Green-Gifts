@@ -1,13 +1,14 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import config from "../../config/apiconfig";
 import styles from "./Category.module.css";
 import Button from "../../components/Button/Button";
-import {Input} from "../../components/Input/Input";
-import { FaEdit, FaTrash } from "react-icons/fa";
-
+import { Input } from "../../components/Input/Input";
+import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
+import { MdOutlineSaveAlt, MdOutlineCancel } from "react-icons/md";
+import { toast } from "react-toastify";
+import Modal from "../../components/Modal/Modal";
 
 const PlantCategory = () => {
   const navigate = useNavigate();
@@ -18,13 +19,18 @@ const PlantCategory = () => {
   const [categories, setCategories] = useState([]);
   const [editingCategoryId, setEditingCategoryId] = useState(null);
   const [updatedCategoryName, setUpdatedCategoryName] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [categoryIdToDelete, setCategoryIdToDelete] = useState(null); // Track ID to delete
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Check token and fetch categories
   useEffect(() => {
     if (!token) {
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       navigate("/login");
     } else {
       getPlantCategories();
@@ -54,33 +60,52 @@ const PlantCategory = () => {
   const handleAddCategory = async (e) => {
     e.preventDefault();
     if (!updatedCategoryName.trim()) {
-      alert("Category name cannot be empty.");
+      toast.error("Category name cannot be empty.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
     const formData = { categoryName: updatedCategoryName };
     try {
-      const response = await axios.post(`${config.BASE_URL}/api/category`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post(
+        `${config.BASE_URL}/api/category`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.status === 201) {
-        alert("Category added successfully!");
+        toast.success("Category added successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setUpdatedCategoryName("");
         getPlantCategories();
       }
     } catch (error) {
       console.error("Error adding category:", error.response || error);
-      alert("Failed to add category.");
+      toast.error(
+        `Failed to add category: ${error.response?.data?.message || error.message}`,
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
   // Edit category
   const handleEditCategory = async (id) => {
     if (!updatedCategoryName.trim()) {
-      alert("Category name cannot be empty.");
+      toast.error("Category name cannot be empty.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
       return;
     }
 
@@ -96,35 +121,71 @@ const PlantCategory = () => {
         }
       );
       if (response.status === 200) {
-        alert("Category updated successfully!");
+        toast.success("Category updated successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         setEditingCategoryId(null);
         setUpdatedCategoryName("");
         getPlantCategories();
       }
     } catch (error) {
       console.error("Error updating category:", error.response || error);
-      alert("Failed to update category.");
+      toast.error(
+        `Failed to update category: ${error.response?.data?.message || error.message}`,
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
     }
   };
 
-  // Delete category
-  const handleDeleteCategory = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
+  // Open Modal for Delete Confirmation
+  const openDeleteModal = (id) => {
+    setCategoryIdToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  // Close Modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setCategoryIdToDelete(null);
+  };
+
+  // Handle Delete Confirmation from Modal
+  const handleDelete = async () => {
+    if (!categoryIdToDelete) return;
 
     try {
-      const response = await axios.delete(`${config.BASE_URL}/api/deleteCategory/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      console.log("Deleting category with ID:", categoryIdToDelete);
+      const response = await axios.delete(
+        `${config.BASE_URL}/api/deleteCategory/${categoryIdToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       if (response.status === 200 || response.status === 204) {
-        alert("Category deleted successfully!");
+        toast.success("Category deleted successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
         getPlantCategories();
       }
     } catch (error) {
       console.error("Delete category error:", error.response || error);
-      alert(`Failed to delete category: ${error.response?.data?.message || error.message}`);
+      toast.error(
+        `Failed to delete category: ${error.response?.data?.message || error.message}`,
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    } finally {
+      closeModal(); // Close modal after attempt
     }
   };
 
@@ -145,10 +206,10 @@ const PlantCategory = () => {
           type="text"
           value={updatedCategoryName}
           onChange={(e) => setUpdatedCategoryName(e.target.value)}
-          placeholder="Enter category name"
+          placeholder="Enter Plant Category Name"
           className={styles.addInput}
         />
-        <Button type="submit" className={styles.addButton}>Add Plant Category</Button>
+        <Button type="submit">Add Plant Category</Button>
       </form>
 
       {/* Category Table */}
@@ -182,10 +243,12 @@ const PlantCategory = () => {
                     {editingCategoryId === (cat.categoryId || cat.id) ? (
                       <>
                         <Button
-                          onClick={() => handleEditCategory(cat.categoryId || cat.id)}
+                          onClick={() =>
+                            handleEditCategory(cat.categoryId || cat.id)
+                          }
                           className={styles.saveButton}
                         >
-                          Save
+                          <MdOutlineSaveAlt />
                         </Button>
                         <Button
                           onClick={() => {
@@ -194,26 +257,25 @@ const PlantCategory = () => {
                           }}
                           className={styles.cancelButton}
                         >
-                          Cancel
+                          <MdOutlineCancel />
                         </Button>
                       </>
                     ) : (
                       <>
                         <Button
+                          className={styles.actionEdit}
                           onClick={() => {
                             setEditingCategoryId(cat.categoryId || cat.id);
                             setUpdatedCategoryName(cat.categoryName);
                           }}
-                          className={styles.editButton}
                         >
-                          <FaEdit />
+                          <RiEditLine />
                         </Button>
                         <Button
-                          onClick={() => handleDeleteCategory(cat.categoryId || cat.id)}
-                          className={styles.deleteButton}
+                          className={styles.actionDel}
+                          onClick={() => openDeleteModal(cat.categoryId || cat.id)} // Trigger modal
                         >
-                          <FaTrash />
-                          {/* <MdDelete/> */}
+                          <RiDeleteBin6Line />
                         </Button>
                       </>
                     )}
@@ -226,6 +288,15 @@ const PlantCategory = () => {
           <p className={styles.noCategories}>No categories found.</p>
         )}
       </div>
+
+      {/* Modal for Delete Confirmation */}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onConfirm={handleDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this plant category? This action cannot be undone."
+      />
     </div>
   );
 };

@@ -150,6 +150,184 @@
 
 
 
+// import React, { useState, useCallback } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import styles from "./Cart.module.css";
+// import { useCart } from "../../context/CartContext";
+// import { toast } from "react-toastify";
+// import { RiDeleteBin6Line } from "react-icons/ri";
+
+// const Cart = () => {
+//   const { cart = [], updateQuantity, removeFromCart } = useCart(); // ✅ Default to an empty array
+//   const navigate = useNavigate();
+//   const [couponCode, setCouponCode] = useState("");
+//   const [discount, setDiscount] = useState(0);
+//   const deliveryFee = 14.0;
+
+//   // ✅ Calculate total price safely
+//   const totalPrice = cart.reduce(
+//     (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
+//     0
+//   );
+//   const subtotal = totalPrice + deliveryFee - discount;
+
+//   // ✅ Quantity Update Handler
+//   const handleUpdateQuantity = useCallback(
+//     (variantId, change) => {
+//       const item = cart.find((item) => item.variantId === variantId);
+//       if (!item) return;
+
+//       const newQuantity = (item.quantity || 0) + change;
+//       if (newQuantity < 1) {
+//         handleRemoveFromCart(variantId);
+//       } else {
+//         updateQuantity(variantId, change);
+//       }
+//     },
+//     [cart, updateQuantity]
+//   );
+
+//   // ✅ Remove Item from Cart
+//   const handleRemoveFromCart = useCallback(
+//     (variantId) => {
+//       removeFromCart(variantId);
+//       toast.success("Item removed from cart!", { position: "top-right", autoClose: 3000 });
+//     },
+//     [removeFromCart]
+//   );
+
+//   // ✅ Apply Coupon Handler
+//   const handleApplyCoupon = () => {
+//     if (couponCode.trim().toLowerCase() === "save10") {
+//       setDiscount(10);
+//       toast.success("Coupon applied successfully! ₹10 discount added.", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//     } else {
+//       setDiscount(0);
+//       toast.error("Invalid coupon code.", { position: "top-right", autoClose: 3000 });
+//     }
+//   };
+
+//   // ✅ Checkout Handler
+//   const handleCheckout = () => {
+//     const tokenData = JSON.parse(localStorage.getItem("ecommerce_login") || "{}");
+//     if (!tokenData?.jwtToken) {
+//       toast.error("Please log in to proceed to checkout.", { position: "top-right", autoClose: 3000 });
+//       navigate("/login");
+//     } else {
+//       navigate("/checkout");
+//     }
+//   };
+
+//   return (
+//     <div className={styles.cartContainer}>
+//       <div className={styles.cartWrapper}>
+//         <div className={styles.cartItems}>
+//           <table className={styles.cartTable}>
+//             <thead>
+//               <tr>
+//                 <th>Product</th>
+//                 <th>Price</th>
+//                 <th>Quantity</th>
+//                 <th>Remove</th>
+//               </tr>
+//             </thead>
+//             <tbody>
+//               {cart.length === 0 ? (
+//                 <tr>
+//                   <td colSpan="4" className={styles.emptyCart}>
+//                     Your cart is empty.
+//                   </td>
+//                 </tr>
+//               ) : (
+//                 cart.map((item) => (
+//                   <tr key={item.variantId} className={styles.cartItem}>
+//                     <td className={styles.productInfo}>
+//                       <img
+//                         src={item.imageUrls?.[0] || "/placeholder.jpg"} // ✅ Fallback for missing images
+//                         alt={item.productName || "Product Image"}
+//                         className={styles.cartImage}
+//                       />
+//                       <div className={styles.productDetails}>
+//                         <span className={styles.productName}>{item.productName || "Unnamed Product"}</span>
+//                         <span className={styles.productDescription}>Color: {item.color || "N/A"}</span>
+//                       </div>
+//                     </td>
+//                     <td>₹{(item.price || 0).toFixed(2)}</td>
+//                     <td>
+//                       <div className={styles.quantityControls}>
+//                         <button onClick={() => handleUpdateQuantity(item.variantId, -1)}>-</button>
+//                         <span>{item.quantity || 1}</span>
+//                         <button onClick={() => handleUpdateQuantity(item.variantId, 1)}>+</button>
+//                       </div>
+//                     </td>
+//                     <td>
+//                       <RiDeleteBin6Line
+//                         onClick={() => handleRemoveFromCart(item.variantId)}
+//                         className={styles.removeButton}
+//                       />
+//                     </td>
+//                   </tr>
+//                 ))
+//               )}
+//             </tbody>
+//           </table>
+//         </div>
+
+//         <div className={styles.cartSummary}>
+//           {/* Coupon Section */}
+//           {/* <div className={styles.couponSection}>
+//             <h3>Apply Coupon</h3>
+//             <p>Using a promo code?</p>
+//             <div className={styles.couponInputWrapper}>
+//               <input
+//                 type="text"
+//                 placeholder="Coupon code"
+//                 value={couponCode}
+//                 onChange={(e) => setCouponCode(e.target.value)}
+//                 className={styles.couponInput}
+//               />
+//               <button onClick={handleApplyCoupon} className={styles.applyButton}>
+//                 Apply
+//               </button>
+//             </div>
+//           </div> */}
+
+//           {/* Summary Section */}
+//           <div className={styles.summarySection}>
+//             <h3>Total</h3>
+//             <div className={styles.summaryRow}>
+//               <span>Total</span>
+//               <span>₹{totalPrice.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span>Delivery</span>
+//               <span>₹{deliveryFee.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span>Discount</span>
+//               <span>-₹{discount.toFixed(2)}</span>
+//             </div>
+//             <div className={styles.summaryRow}>
+//               <span className={styles.subtotalLabel}>Subtotal</span>
+//               <span className={styles.subtotal}>₹{subtotal.toFixed(2)}</span>
+//             </div>
+
+//             <button className={styles.checkoutButton} onClick={handleCheckout}>
+//               Checkout
+//             </button>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Cart;
+
+
 import React, { useState, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Cart.module.css";
@@ -158,46 +336,50 @@ import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 
 const Cart = () => {
-  const { cart = [], updateQuantity, removeFromCart } = useCart(); // ✅ Default to an empty array
+  const { cart = [], updateQuantity, removeFromCart } = useCart(); // Default to an empty array
   const navigate = useNavigate();
   const [couponCode, setCouponCode] = useState("");
   const [discount, setDiscount] = useState(0);
-  const deliveryFee = 14.0;
+  const deliveryFee = 15.0;
 
-  // ✅ Calculate total price safely
+  // Calculate total price safely
   const totalPrice = cart.reduce(
     (acc, item) => acc + (item.price || 0) * (item.quantity || 0),
     0
   );
   const subtotal = totalPrice + deliveryFee - discount;
 
-  // ✅ Quantity Update Handler
+  // Quantity Update Handler
   const handleUpdateQuantity = useCallback(
     (variantId, change) => {
       const item = cart.find((item) => item.variantId === variantId);
       if (!item) return;
 
-      const newQuantity = (item.quantity || 0) + change;
+      const newQuantity = item.quantity + change;
       if (newQuantity < 1) {
-        handleRemoveFromCart(variantId);
+        handleRemoveFromCart(variantId); // If quantity is less than 1, remove the item
       } else {
-        updateQuantity(variantId, change);
+        updateQuantity(variantId, change); // Use the updateQuantity function from CartContext
       }
     },
-    [cart, updateQuantity]
+    [cart, updateQuantity] // Dependencies
   );
 
-  // ✅ Remove Item from Cart
+  // Remove Item from Cart
   const handleRemoveFromCart = useCallback(
     (variantId) => {
-      removeFromCart(variantId);
+      removeFromCart(variantId); // Use removeFromCart from CartContext
       toast.success("Item removed from cart!", { position: "top-right", autoClose: 3000 });
     },
     [removeFromCart]
   );
 
-  // ✅ Apply Coupon Handler
+  // Apply Coupon Handler
   const handleApplyCoupon = () => {
+    if (!couponCode.trim()) {
+      toast.error("Please enter a coupon code.", { position: "top-right", autoClose: 3000 });
+      return;
+    }
     if (couponCode.trim().toLowerCase() === "save10") {
       setDiscount(10);
       toast.success("Coupon applied successfully! ₹10 discount added.", {
@@ -210,7 +392,7 @@ const Cart = () => {
     }
   };
 
-  // ✅ Checkout Handler
+  // Checkout Handler
   const handleCheckout = () => {
     const tokenData = JSON.parse(localStorage.getItem("ecommerce_login") || "{}");
     if (!tokenData?.jwtToken) {
@@ -246,7 +428,7 @@ const Cart = () => {
                   <tr key={item.variantId} className={styles.cartItem}>
                     <td className={styles.productInfo}>
                       <img
-                        src={item.imageUrls?.[0] || "/placeholder.jpg"} // ✅ Fallback for missing images
+                        src={item.imageUrls?.[0] || "/placeholder.jpg"} // Fallback for missing images
                         alt={item.productName || "Product Image"}
                         className={styles.cartImage}
                       />
@@ -277,25 +459,6 @@ const Cart = () => {
         </div>
 
         <div className={styles.cartSummary}>
-          {/* Coupon Section */}
-          {/* <div className={styles.couponSection}>
-            <h3>Apply Coupon</h3>
-            <p>Using a promo code?</p>
-            <div className={styles.couponInputWrapper}>
-              <input
-                type="text"
-                placeholder="Coupon code"
-                value={couponCode}
-                onChange={(e) => setCouponCode(e.target.value)}
-                className={styles.couponInput}
-              />
-              <button onClick={handleApplyCoupon} className={styles.applyButton}>
-                Apply
-              </button>
-            </div>
-          </div> */}
-
-          {/* Summary Section */}
           <div className={styles.summarySection}>
             <h3>Total</h3>
             <div className={styles.summaryRow}>
@@ -315,6 +478,8 @@ const Cart = () => {
               <span className={styles.subtotal}>₹{subtotal.toFixed(2)}</span>
             </div>
 
+            
+
             <button className={styles.checkoutButton} onClick={handleCheckout}>
               Checkout
             </button>
@@ -326,4 +491,3 @@ const Cart = () => {
 };
 
 export default Cart;
-

@@ -19,6 +19,13 @@
     width: 100%;
     max-width: 400px;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth hover effect */
+
+  }
+
+  .registerBox:hover{
+    transform: translateY(-2px); 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.08);
   }
   
   .registerBox h2 {

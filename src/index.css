@@ -50,7 +50,8 @@ a {
 }
 
 a:hover {
-  color: #b7e4c7;
+  /* color: #b7e4c7; */
+  color: #004d24;
 }
 
 /* Apply Colors */
@@ -87,6 +88,10 @@ button:hover {
   padding: 5px 10px;
   font-weight: bold;
   border-radius: 5px;
+}
+
+[data-aos] {
+  transition-property: transform, opacity !important;
 }
 
 /* :root {

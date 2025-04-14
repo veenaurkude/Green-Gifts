@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { BsCart } from "react-icons/bs";
 import { VscAccount } from "react-icons/vsc";
 import styles from "./Navbar.module.css";
 // import { Input } from "../Input/Input";
 import { useCart } from "../../context/CartContext";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -30,20 +32,31 @@ const Navbar = () => {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
+  // AOS Init
+  useEffect(() => {
+    AOS.init({
+      duration: 500,
+      offset: 100,
+      easing: "ease-in-out",
+      delay: 0,
+      once: true,
+    });
+  }, []);
+
   return (
     <>
       {/* Top Navbar Section  */}
 
-      <section className={styles.topNavbar}>
+      <section className={styles.topNavbar} data-aos="fade-up">
         <div className={styles.title}>
           <span>
             Free Delivery Above ₹499 | <Link to="/plants">Shop Now</Link>
           </span>
+          <span>Free Shipping on Orders Over 500</span>
           <span>
-            <a href="/">Free Shipping on Orders Over 500</a>
-          </span>
-          <span>
-            Customer Support : <a href="tel:+1-800-555-1234">+1-800-555-1234</a>
+            Customer Support : <a href="tel:+917028917456
+">+917028917456
+</a>
           </span>
         </div>
       </section>

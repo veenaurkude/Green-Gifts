@@ -1,467 +1,19 @@
-/* Container for Home Page
-.homeContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 
-    width: 100%;
-  }
-  
 
-  .carouselWrapper {
-    width: 100%;
-    margin-bottom: 2rem;
-  }
+.cardComp{
   
-  .productGrid {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    flex-wrap: wrap;
-    width: 100%;
-    margin: 2rem auto;
-  }
-  
-  @media (max-width: 1024px) {
-    .productGrid {
-      gap: 2rem;
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .homeContainer {
-      padding: 1rem;
-    }
-    
-    .productGrid {
-      gap: 1.5rem;
-    }
-  }
-  
-  .giftingContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .giftList {
-    display: flex;
-    gap: 5rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-  
-  .giftCard {
-    text-align: center;
-    cursor: pointer;
-  }
-  
-
-  .giftImage {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #B7E4C7;
-  }
-  
-  .giftTitle {
-    margin-top: 10px;
-    font-size: 1rem;
-  }
-
-.bestSellers {
-  width: 100%;
-  margin: 40px auto;
-  text-align: center;
-}
-
-.bestSellers h2 {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1b5e20;
-  margin-bottom: 20px;
-}
-
-.bestSellersGrid {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  flex-wrap: wrap;
-}
-
-.bestSellerCard {
-  width: 100%;
-  max-width: 35%;
-  background: #f0f0f0;
-  border-radius: 10px;
+  background: #fff;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-}
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%; 
+  max-width: 280px;
+  padding: 8px;
 
-.bestSellerImage {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-}
-
-.bestSellerContent {
-  padding: 20px;
-  text-align: left;
-  background: #e0e0e0;
-  flex-grow: 1;
-}
-
-.bestSellerTitle {
-  font-size: 20px;
-  font-weight: bold;
-  color: #1b5e20;
-  margin-bottom: 10px;
-}
-
-.bestSellerDescription {
-  font-size: 14px;
-  color: #666;
-  margin-bottom: 20px;
-  line-height: 1.5;
-}
-
-  .whySection {
-  width: 100%;
-  background-color: #f1f8f4; 
-  padding: 40px 20px;
-  text-align: center;
-}
-
-.heading {
-  color: #2d6a4f; 
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.features {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-.feature {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 10px;
-  flex: 1;
-  min-width: 250px;
-}
-
-.icon {
-  font-size: 40px;
-  color: #2d6a4f;
-  margin-bottom: 10px;
-}
-
-.feature p {
-  font-size: 16px;
-  color: #333;
-  font-weight: 500;
-}
-
-.bestSellers h2, .productFeatures h2{
-  text-align: center;
-  margin: 2rem;
-}
-.viewAllContainer {
-  text-align: center;
-  margin: 20px;
-  margin-bottom: 3rem;
-}
-
-.viewAllButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #2D572C;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: 0.3s;
-  text-decoration: none;
- 
-}
-
-
-.viewAllButton:hover {
-  color: #f1f8f4;
-}
-
-@media (max-width: 1024px) {
-  .features {
-    gap: 30px;
-    padding: 0 10px;
-  }
-}
-
-@media (max-width: 768px) {
-  .features {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .feature {
-    width: 100%;
-  }
-  
-  .heading {
-    font-size: 22px;
-  }
-}
-
-@media (max-width: 480px) {
-  .heading {
-    font-size: 20px;
-  }
-
-  .icon {
-    font-size: 35px;
-  }
-
-  .feature p {
-    font-size: 14px;
-  }
-}
-
-.whySection {
-  width: 100%;
-  background-color: #f1f8f4; 
-  padding: 40px 20px;
-  text-align: center;
-  overflow-x: hidden; 
-  box-sizing: border-box;
-}
-
-.heading {
-  color: #2d6a4f;
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.features {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  gap: 50px;
-  flex-wrap: wrap;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
-.feature {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding: 10px;
-  flex: 1;
-  min-width: 250px;
-}
-
-
-
-.rewardsClub {
-  width: 100%;
-  margin: 40px auto;
-  background-color: #f1f8f4;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.rewardsClubContainer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-.rewardsClubText {
-  flex: 1;
-  padding: 40px;
-  background-color: #f1f8f4;
-}
-
-.rewardsClubText h2 {
-  font-size: 28px;
-  font-weight: bold;
-  color: #2d6a4f;
-  margin-bottom: 20px;
-}
-
-.rewardsClubText p {
-  font-size: 16px;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 20px;
-}
-
-.rewardsClubButtons {
-  display: flex;
-  gap: 15px;
-}
-
-.rewardsButton {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: 500;
-  color: white;
-  background-color: #2d6a4f;
-  border: none;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s;
-}
-
-.rewardsButton:hover {
-  background-color: #1b5e20;
-}
-
-.rewardsClubImage {
-  flex: 1;
-  min-height: 400px;
-}
-
-.rewardsClubImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.icon {
-  font-size: 40px;
-  color: #2d6a4f;
-  margin-bottom: 10px;
-}
-
-.feature p {
-  font-size: 16px;
-  color: #333;
-  font-weight: bold;
-  padding-top: 1.5rem;
-}
-@media (max-width: 1024px) {
-  .features {
-    gap: 30px;
-    padding: 0 10px;
-  }
-}
-
-@media (max-width: 768px) {
-  .features {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .feature {
-    width: 100%;
-  }
-  
-  .heading {
-    font-size: 22px;
-  }
-}
-
-@media (max-width: 480px) {
-  .heading {
-    font-size: 20px;
-  }
-
-  .icon {
-    font-size: 35px;
-  }
-
-  .feature p {
-    font-size: 14px;
-  }
-}
-
-
-.bestPicksContainer {
-  margin: 40px 0;
-  text-align: center;
-}
-
-.bestPicksTitle {
-  font-size: 24px;
-  font-weight: bold;
-  color: #1b5e20; 
-  margin-bottom: 20px;
-}
-
-.bestPicksGrid {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.bestPickCard {
   position: relative;
-  height: 320px;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
+
 }
-
-
-.bestPickImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.bestPickTitle {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: rgba(45, 106, 79, 0.7); 
-  color: white;
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  padding: 12px 0;
-}
-
-.about {
-
-  margin-top: 1rem;
-  padding: 1rem 4rem;
-  text-align: justify;
-  align-items: center;
-}
-
-.about h4 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  text-align: center;
-}
-
-.about p {
-  font-size: 16px;
-  color: #555;
-  padding: 2rem;
-} */
-
 
 /* Container for Home Page */
 .homeContainer {
@@ -479,6 +31,15 @@
   width: 100%;
   /* max-width: 1200px; */
   margin-bottom: 2rem;
+}
+
+.miniHeading{
+  padding: 3rem 18rem;
+  text-align: center;
+}
+
+.headPara{
+  font-size: 18px;
 }
 
 /* Product List Grid */
@@ -547,7 +108,8 @@
 .bestSellers h2 {
   font-size: 2rem;
   font-weight: bold;
-  color: #1b5e20;
+  color: #2d6a4f ;
+  /* color: #1b5e20; */
   margin-bottom: 20px;
   text-align: center;
 }
@@ -586,7 +148,8 @@
 .bestSellerTitle {
   font-size: 20px;
   font-weight: bold;
-  color: #1b5e20;
+  /* color: #1b5e20; */
+color: #2d6a4f ;
   margin-bottom: 10px;
 }
 
@@ -601,6 +164,7 @@
 .rewardsClub {
   width: 100%;
   /* max-width: 1200px; */
+  
   margin: 40px auto;
   background-color: #f1f8f4;
   border-radius: 10px;
@@ -615,7 +179,7 @@
 
 .rewardsClubText {
   flex: 1;
-  padding: 40px;
+  padding: 4rem;
   background-color: #f1f8f4;
 }
 
@@ -652,11 +216,13 @@
 
 .rewardsButton:hover {
   background-color: #1b5e20;
+  color: #f0f0f0;
 }
 
 .rewardsClubImage {
   flex: 1;
   min-height: 400px;
+  padding: 2rem;
 }
 
 .rewardsClubImage img {
@@ -686,9 +252,9 @@
 
 .features {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
-  gap: 50px;
+  gap: 25px;
   flex-wrap: wrap;
   max-width: 1200px;
   margin: 0 auto;
@@ -803,7 +369,7 @@
   max-width: 1200px;
   margin-top: 1rem;
   padding: 1rem 4rem;
-  text-align: justify;
+  text-align: center;
   align-items: center;
   margin: 40px auto;
 }
@@ -818,7 +384,8 @@
 .about p {
   font-size: 16px;
   color: #555;
-  padding: 2rem;
+  text-align: justify;
+  padding: 1rem 0;
 }
 
 /* Responsive Design */
@@ -850,6 +417,15 @@
 
   .giftList {
     gap: 3rem;
+  }
+
+  .miniHeading{
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .headPara{
+    font-size: 16px;
   }
 }
 
@@ -896,6 +472,15 @@
   .features {
     gap: 30px;
     padding: 0 10px;
+  }
+
+  .miniHeading{
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .headPara{
+    font-size: 16px;
   }
 }
 
@@ -990,6 +575,7 @@
 
   .heading {
     font-size: 22px;
+    color: #2d6a4f;
   }
 
   .bestPicksTitle {
@@ -1012,6 +598,14 @@
 
   .about p {
     padding: 1rem;
+  }
+  .miniHeading{
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .headPara{
+    font-size: 16px;
   }
 }
 
@@ -1105,4 +699,13 @@
     font-size: 14px;
     padding: 0.5rem;
   }
+  .miniHeading{
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .headPara{
+    font-size: 16px;
+  }
 }
+

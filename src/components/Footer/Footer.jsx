@@ -1,18 +1,32 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./Footer.module.css";
+import { Link } from "react-router-dom";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import {
   FaSquareFacebook,
   FaSquareInstagram,
+  FaSquareWhatsapp,
   FaLinkedin,
   FaSquareXTwitter,
   FaSquareYoutube,
 } from "react-icons/fa6";
 
-import { AiOutlineArrowRight } from "react-icons/ai";
-
 const Footer = () => {
+  
+// AOS Init
+useEffect(() => {
+  AOS.init({
+    duration: 500,
+    offset: 100,
+    easing: "ease-in-out",
+    delay: 0,
+    once: true,
+  });
+}, []);
+
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} data-aos="fade-up">
       {/* <div className={styles.topSection}>
         <div className={styles.cities}>
           <a href="#">Mumbai</a>
@@ -30,9 +44,13 @@ const Footer = () => {
           <h4>ABOUT US</h4>
           <ul>
             <li>Careers</li>
-            <li>Contact Us</li>
+            <li>
+              <Link to="/contact-us">Contact Us</Link>
+            </li>
             <li>Locate Stores</li>
-            <li>Garden Services & Maintenance</li>
+            <li>
+              <Link to="/gardening-services">Garden Services & Maintenance</Link>
+            </li>
           </ul>
         </div>
 
@@ -59,41 +77,40 @@ const Footer = () => {
           <h4>GET IN TOUCH</h4>
           <ul>
             <li>
-              WhatsApp us at: <a href="tel:+91-9129912991">+91-9129912991</a>
+              WhatsApp us at: <a href="tel:+91-7028917456">+91-7028917456</a>
             </li>
             <li>
-              Call: <a href="tel:+91-9129912991">+91-9129912991</a>
+              Call: <a href="tel:+91-7028917456">+91-7028917456</a>
             </li>
             <li>
               Email:{" "}
-              <a href="mailto:support@greengifts.com">support@greengifts.com</a>
+              <a href="mailto:info.greengiftsnagpur@gmail.com">info.greengiftsnagpur@gmail.com</a>
             </li>
           </ul>
         </div>
 
         <div className={styles.column}>
-        
-
           <h4>FOLLOW US</h4>
           <div className={styles.socialIcons}>
-            <a href="">
-              <FaSquareFacebook className={styles.socialIcon}/>
+            <a href="https://www.facebook.com/greengiftsnagpurbymanisha" target="_blank">
+              <FaSquareFacebook className={styles.socialIcon} />
             </a>
-            <a href="">
-              <FaSquareInstagram className={styles.socialIcon}/>
+            <a href="https://www.instagram.com/greengiftsnagpur_by_manisha/" target="_blank">
+              <FaSquareInstagram className={styles.socialIcon} />
             </a>
-            <a href="">
-              <FaLinkedin className={styles.socialIcon} />
+            <a href="https://wa.me/+917028917456" target="_blank">
+              <FaSquareWhatsapp className={styles.socialIcon} />
             </a>
-            <a href="">
-              <FaSquareXTwitter className={styles.socialIcon} />
-            </a>
-            <a href="">
+            <a href="" target="_blank">
               <FaSquareYoutube className={styles.socialIcon} />
             </a>
+            {/* <a href="">
+              <FaLinkedin className={styles.socialIcon} />
+            </a> */}
+            {/* <a href="">
+              <FaSquareXTwitter className={styles.socialIcon} />
+            </a> */}
           </div>
-
-        
         </div>
       </div>
 

@@ -17,6 +17,7 @@ const Input = ({ type, name, value, onChange, placeholder, required, className }
   );
 };
 
+
 // Textarea Component
 const Textarea = ({ name, value, onChange, placeholder, required, className }) => {
   return (

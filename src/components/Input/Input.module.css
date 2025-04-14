@@ -22,7 +22,7 @@
   font-size: 1rem;
   transition: border 0.3s ease;
   outline: none;
-  resize: none; /* Prevents unwanted resizing */
+  resize: none; 
 }
 
 .inputField:focus,
@@ -31,9 +31,9 @@
   box-shadow: 0 0 5px rgba(45, 106, 79, 0.5);
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
   .inputContainer {
-      max-width: 100%; /* Full width on smaller screens */
+      max-width: 100%;
   }
 }

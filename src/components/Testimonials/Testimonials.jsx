@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Testimonials.module.css";
 import { FaArrowLeft, FaArrowRight, FaStar } from "react-icons/fa";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 import test1 from "../../assets/images/test/test1.jpg";
 import test2 from "../../assets/images/test/test2.jpg";
@@ -50,8 +52,19 @@ const Testimonials = () => {
     return () => clearInterval(interval); // Clear interval when component unmounts
   }, []);
 
+  // AOS Init
+    useEffect(() => {
+      AOS.init({
+        duration: 500,
+        offset: 100,
+        easing: "ease-in-out",
+        delay: 0,
+        once: true,
+      });
+    }, []);
+
   return (
-    <div className={styles.testimonialContainer}>
+    <div className={styles.testimonialContainer} data-aos="fade-up">
       <h2 className={styles.title}>Our Happy Plant Parents</h2>
 
       {/* Profile Images + Arrows */}

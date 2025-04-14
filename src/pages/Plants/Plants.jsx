@@ -7,6 +7,8 @@ import config from "../../config/apiconfig";
 import Accordion from "../../components/Accordion/Accordion";
 import Pagination from "../../components/Pagination/Pagination";
 import banner1 from "../../assets/images/banner/banner1.jpg";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Plants = () => {
   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
@@ -94,10 +96,22 @@ const Plants = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
   };
 
+
+  // AOS Init
+      useEffect(() => {
+        AOS.init({
+          duration: 500,
+          offset: 100,
+          easing: "ease-in-out",
+          delay: 0,
+          once: true,
+        });
+      }, []);
+
   return (
     <>
       {/* Banner */}
-      <div className={styles.plantsBanner}>
+      <div className={styles.plantsBanner} data-aos="fade-up">
         <img
           className={styles.plantsBannerImg}
           src={banner1}
@@ -106,15 +120,15 @@ const Plants = () => {
       </div>
 
       {/* Breadcrumbs */}
-      <div className={styles.breadcrumb}>
+      <div className={styles.breadcrumb} data-aos="fade-up">
         <a href="/">Home</a> / <span>Plants</span>
       </div>
-      <h1 className={styles.heading}>
+      <h1 className={styles.heading} data-aos="zoom-in-up">
         {category ? category.replace("-", " ") : "All Plants"}
       </h1>
 
       {/* Products */}
-      <div className={styles.plantsGrid}>
+      {/* <div className={styles.plantsGrid}>
         {currentVariants.length > 0 ? (
           currentVariants.map((variant, index) => {
             const parentPlant = plants.find((p) =>
@@ -123,6 +137,7 @@ const Plants = () => {
             console.log("Parent Plant ID:", parentPlant?.id); // Debug parent ID
             console.log("Variant ID:", variant.id); // Debug variant ID
             return (
+              
               <Card
                 key={variant.id || index}
                 id={parentPlant?.id} // Pass parent product ID
@@ -143,21 +158,57 @@ const Plants = () => {
             No products found for this category.
           </p>
         )}
+      </div> */}
+
+      <div className={styles.plantsGrid}>
+        {plants.length > 0 ? (
+          plants.map((parentPlant) => {
+            const defaultVariant = parentPlant.variants?.[0] || {};
+            return (
+              <Card
+                key={parentPlant.id}
+                id={parentPlant.id}
+                title={parentPlant.name || "Unnamed Plant"}
+                category={parentPlant.category}
+                image={
+                  defaultVariant.imageUrls?.[0] ||
+                  "https://via.placeholder.com/150"
+                }
+                price={defaultVariant.price || "N/A"}
+                discount={defaultVariant.discountedPrice || null}
+                product={parentPlant}
+                selectedVariant={defaultVariant}
+                onClick={() => handleProductClick(parentPlant.id)} // Add navigation
+              />
+            );
+          })
+        ) : (
+          <p className={styles.noProducts}>
+            No products found for this category.
+          </p>
+        )}
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(filteredPlants.length / productsPerPage)}
+        onNext={() => setCurrentPage((p) => p + 1)}
+        onPrev={() => setCurrentPage((p) => p - 1)}
+      />
+      {/* {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
           onNext={handleNext}
           onPrev={handlePrev}
         />
-      )}
+      )} */}
 
       {/* Accordian */}
       <div className={styles.accordion_container}>
-        <h2 className={styles.title}>FAQ's</h2>
+        <h2 className={styles.title} data-aos="zoom-in-up">FAQ's</h2>
         <div className={styles.accordion}>
           <Accordion
             title="🌿 What are the best indoor plants?"
