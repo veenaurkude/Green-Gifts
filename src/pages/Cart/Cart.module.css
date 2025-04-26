@@ -6,6 +6,12 @@
   background-color: #f9fafb; /* Light gray background */
 }
 
+.title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
 .cartWrapper {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -37,9 +43,9 @@
   font-size: 0.9rem;
 }
 
-.cartItem {
+/* .cartItem {
   border-bottom: 1px solid #e5e7eb;
-}
+} */
 
 .cartItem:last-child {
   border-bottom: none;
@@ -206,7 +212,7 @@
   display: flex;
   justify-content: space-between;
   padding: 0.5rem 0;
-  border-bottom: 1px solid #e5e7eb;
+  /* border-bottom: 1px solid #e5e7eb; */
   font-size: 0.9rem;
   color: #1f2937;
 }

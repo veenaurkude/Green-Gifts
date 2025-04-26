@@ -449,7 +449,7 @@ const Home = () => {
     <>
       <section className={styles.homeContainer}>
         {/* Carousel */}
-        <div className={styles.carouselWrapper} data-aos="fade-up">
+        <div className={styles.carouselWrapper} data-aos="fade-up" data-aos-duration="2000">
           {banners.length > 0 ? (
             <Carousel images={banners} />
           ) : (
@@ -512,7 +512,7 @@ const Home = () => {
                 />
                 <div className={styles.bestSellerContent}>
                   <h3 className={styles.bestSellerTitle}>{category.title}</h3>
-                  <p class={styles.bestSellerDescription}>
+                  <p className={styles.bestSellerDescription}>
                     {category.description}
                   </p>
                   {/* <Link to={category.link} className={styles.viewAllButton}>

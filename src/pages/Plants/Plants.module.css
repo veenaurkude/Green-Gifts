@@ -23,6 +23,18 @@
   margin-top: 8px;
 }
 
+/* video overlay content */
+.videoOverlayContent {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  text-align: center;
+  z-index: 2;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+}
+
 
 .bannerText {
     position: absolute;

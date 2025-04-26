@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import Button from "../../../components/Button/Button";
@@ -8,6 +8,8 @@ import axios from "axios";
 import config from "../../../config/apiconfig";
 import { toast } from "react-toastify";
 import { LuEyeOff, LuEye } from "react-icons/lu";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -94,15 +96,26 @@ const Login = () => {
     }
   };
 
+  // AOS Init
+    useEffect(() => {
+      AOS.init({
+        duration: 500,
+        offset: 100,
+        easing: "ease-in-out",
+        delay: 0,
+        once: true,
+      });
+    }, []);
+
   return (
-    <div className={styles.loginContainer}>
+    <div className={styles.loginContainer} data-aos="fade-up" data-aos-duration="2000">
       <div className={styles.loginBox}>
-        <h2>Login</h2>
+        <h2 data-aos="zoom-in">Login</h2>
         <p>
           Don't have an account yet? <a href="/register">Create account</a>
         </p>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} data-aos="zoom-in-up">
           <Input
             type="email"
             name="email"
@@ -138,7 +151,7 @@ const Login = () => {
             Forgot your password?
           </a>
 
-          <Button type="submit" className={styles.signInBtn}>
+          <Button type="submit" className={styles.signInBtn} data-aos="zoom-in">
             SIGN IN
           </Button>
         </form>

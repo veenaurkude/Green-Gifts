@@ -348,6 +348,10 @@ const Cart = () => {
     0
   );
   const subtotal = totalPrice + deliveryFee - discount;
+  
+  // Calculate total number of items in the cart
+  const totalItems = cart.reduce((acc, item) => acc + (item.quantity || 0), 0);
+
 
   // Quantity Update Handler
   const handleUpdateQuantity = useCallback(
@@ -405,6 +409,7 @@ const Cart = () => {
 
   return (
     <div className={styles.cartContainer}>
+      <h2 className={styles.title}>My Shopping Cart</h2>
       <div className={styles.cartWrapper}>
         <div className={styles.cartItems}>
           <table className={styles.cartTable}>
@@ -462,11 +467,11 @@ const Cart = () => {
           <div className={styles.summarySection}>
             <h3>Total</h3>
             <div className={styles.summaryRow}>
-              <span>Total</span>
-              <span>₹{totalPrice.toFixed(2)}</span>
+              <span>Price ({totalItems} items)</span>
+              <span>₹{totalPrice.toFixed(2)} </span>
             </div>
             <div className={styles.summaryRow}>
-              <span>Delivery</span>
+              <span>Delivery Charges</span>
               <span>₹{deliveryFee.toFixed(2)}</span>
             </div>
             <div className={styles.summaryRow}>
@@ -474,11 +479,9 @@ const Cart = () => {
               <span>-₹{discount.toFixed(2)}</span>
             </div>
             <div className={styles.summaryRow}>
-              <span className={styles.subtotalLabel}>Subtotal</span>
+              <span className={styles.subtotalLabel}>Total Amount</span>
               <span className={styles.subtotal}>₹{subtotal.toFixed(2)}</span>
             </div>
-
-            
 
             <button className={styles.checkoutButton} onClick={handleCheckout}>
               Checkout

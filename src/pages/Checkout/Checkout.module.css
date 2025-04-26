@@ -95,3 +95,24 @@
 .submitButton:hover {
   background-color: #1b5e20;
 }
+
+
+.tabButtons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tabButtons button {
+  padding: 10px 20px;
+  /* background-color: #eee; */
+  border: none;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.activeTab {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}

@@ -6,9 +6,7 @@
 
 
 const config = {
-    // BASE_URL : "https://fakestoreapi.com/products",
-    BASE_URL : "http://192.168.1.10:8082",
-    // http://localhost:8081/api/auth/login
+    BASE_URL : "http://192.168.1.25:8082",
 };
 
 export default config;

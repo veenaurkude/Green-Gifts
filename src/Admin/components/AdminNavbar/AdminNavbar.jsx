@@ -1,9 +1,9 @@
-
-import React, { useState } from 'react';
-import styles from './AdminNavbar.module.css';
-import { useNavigate } from 'react-router-dom';
-import { FaBell, FaUserCircle } from 'react-icons/fa';
-import { IoMoonOutline } from 'react-icons/io5';
+import React, { useState } from "react";
+import styles from "./AdminNavbar.module.css";
+import { useNavigate, Link } from "react-router-dom";
+import { FaBell, FaUserCircle } from "react-icons/fa";
+import { FiGift } from "react-icons/fi";
+import { IoMoonOutline } from "react-icons/io5";
 
 const AdminNavbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -20,37 +20,37 @@ const AdminNavbar = () => {
   };
 
   React.useEffect(() => {
-    document.addEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
   const navigate = useNavigate(); // 👈 Use this for navigation
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken'); // Clear auth token or session
-    navigate('/login'); // Redirect to the login page
+    localStorage.removeItem("authToken"); // Clear auth token or session
+    navigate("/login"); // Redirect to the login page
   };
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.leftSection}>
+      
+      <Link to="/admin" className={styles.leftSection}>
+        <FiGift size={24} className={styles.icon} />
         <h2 className={styles.logo}>Green Gifts</h2>
-      </div>
+      </Link>
 
       <div className={styles.rightSection}>
-        {/* <IoMoonOutline className={styles.icon} />
-        <div className={styles.notification}>
-          <FaBell className={styles.icon} />
-          <span className={styles.badge}>4</span>
+        {/* <div>
+          <IoMoonOutline className={styles.icon} />
         </div> */}
 
-<div><FaBell className={styles.icon} /></div>
-        <div
-          className={styles.profileSection}
-          onClick={toggleDropdown}
-        >
+        <div>
+          <FaBell className={styles.icon} />
+        </div>
+
+        <div className={styles.profileSection} onClick={toggleDropdown}>
           <FaUserCircle className={styles.profileIcon} />
           {showDropdown && (
             <div className={styles.dropdownMenu}>

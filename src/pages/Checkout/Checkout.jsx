@@ -3,16 +3,21 @@ import { useNavigate } from "react-router-dom";
 import config from "../../config/apiconfig";
 import axios from "axios";
 import { Input } from "../../components/Input/Input";
+import Button from "../../components/Button/Button";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from "./Checkout.module.css"; // Updated CSS module
+import styles from "./Checkout.module.css";
 
 const Checkout = () => {
   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login") || "{}");
   const token = tokenData?.jwtToken;
+
+  console.log("JWT Token:", token);
+
   const navigate = useNavigate();
 
-  // Check if user is logged in
+  const [activeTab, setActiveTab] = useState("shipping");
+
   useEffect(() => {
     if (!token) {
       toast.error("Please log in to proceed to checkout.", {
@@ -23,34 +28,38 @@ const Checkout = () => {
     }
   }, [navigate, token]);
 
-  // Form state for shipping details
   const [formData, setFormData] = useState({
     fullName: "",
     street: "",
     city: "",
     state: "",
     zipCode: "",
-    country: "India",
+    country: "",
     phoneNumber: "",
   });
 
-  // Payment method state
-  const [paymentMethod, setPaymentMethod] = useState("cod"); // Default: Cash on Delivery
+  const [paymentMethod, setPaymentMethod] = useState("CASH ON DELIVERY");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handlePaymentChange = (e) => {
-    setPaymentMethod(e.target.value);
+    const selected = e.target.value;
+    setPaymentMethod(
+      selected === "cod" ? "CASH ON DELIVERY" : "ONLINE PAYMENT"
+    );
   };
 
-  const handleSubmit = async (e) => {
+  const handleShippingSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("Submitted Shipping Data:", { ...formData, paymentMethod });
+
     try {
       const response = await axios.post(
         `${config.BASE_URL}/cart/add-shipping`,
-        { ...formData, paymentMethod },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -58,107 +67,142 @@ const Checkout = () => {
           },
         }
       );
-  
+
       if (response.status === 200) {
-        toast.success("Shipping address added successfully!", {
-          position: "top-right",
-          autoClose: 2000,
-        });
-  
-        // Pass order details to OrderConfirmation page
-        const orderDetails = { ...formData, paymentMethod };
-  
-        if (paymentMethod === "cod") {
-          navigate("/order-confirm", { state: { orderDetails } });
-        } else if (paymentMethod === "online") {
-          navigate("/payment-gateway", { state: { orderDetails } });
-        }
+        toast.success("Shipping saved!", { autoClose: 2000 });
+        setActiveTab("payment");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      console.error("Error:", error.response?.data || error.message);
+      toast.error(error.response?.data?.message || "Shipping failed!");
+      console.error("Shipping Error:", error.response?.data || error.message);
+    }
+  };
+
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+
+    if (paymentMethod === "CASH ON DELIVERY") {
+      try {
+        const url = `${config.BASE_URL}/api/checkout?paymentMethod=${paymentMethod}`;
+
+        const response = await axios.post(
+          url,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        toast.success("Order placed successfully!");
+        navigate("/order-confirm", { state: { paymentMethod } });
+      } catch (error) {
+        const message = error.response?.data?.error || "Payment failed!";
+        toast.error(message);
+        console.error("Payment Error:", message);
+      }
+    } else {
+      // Redirect to payment gateway
+      navigate("/payment-gateway", { state: { paymentMethod } });
     }
   };
 
   return (
     <div className={styles.checkoutPage}>
       <h1 className={styles.pageTitle}>Checkout</h1>
-      <div className={styles.checkoutContainer}>
-        {/* Shipping Details Section */}
-        <div className={styles.shippingSection}>
-          <h2>Shipping Details</h2>
-          <form onSubmit={handleSubmit} className={styles.checkoutForm}>
-            <Input
-              type="text"
-              name="fullName"
-              placeholder="Full Name"
-              value={formData.fullName}
-              onChange={handleChange}
-              required
-              className={styles.inputField}
-            />
-            <Input
-              type="text"
-              name="street"
-              placeholder="Street Address"
-              value={formData.street}
-              onChange={handleChange}
-              required
-              className={styles.inputField}
-            />
-            <div className={styles.cityStateZip}>
-              <Input
-                type="text"
-                name="city"
-                placeholder="City"
-                value={formData.city}
-                onChange={handleChange}
-                required
-                className={styles.inputField}
-              />
-              <Input
-                type="text"
-                name="state"
-                placeholder="State"
-                value={formData.state}
-                onChange={handleChange}
-                required
-                className={styles.inputField}
-              />
-              <Input
-                type="text"
-                name="zipCode"
-                placeholder="Zip Code"
-                value={formData.zipCode}
-                onChange={handleChange}
-                required
-                className={styles.inputField}
-              />
-            </div>
-            <Input
-              type="text"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              required
-              className={styles.inputField}
-            />
-          </form>
-        </div>
 
-        {/* Payment Method Section */}
-        <div className={styles.paymentSection}>
-          <h2>Payment Method</h2>
+      <div className={styles.tabButtons}>
+        <button
+          className={activeTab === "shipping" ? styles.activeTab : ""}
+          onClick={() => setActiveTab("shipping")}
+        >
+          Shipping Details
+        </button>
+        <button
+          className={activeTab === "payment" ? styles.activeTab : ""}
+          disabled
+        >
+          Payment Method
+        </button>
+      </div>
+
+      {activeTab === "shipping" && (
+        <form onSubmit={handleShippingSubmit} className={styles.checkoutForm}>
+          <Input
+            type="text"
+            name="fullName"
+            placeholder="Full Name"
+            value={formData.fullName}
+            onChange={handleChange}
+            required
+          />
+          <Input
+            type="text"
+            name="street"
+            placeholder="Street Address"
+            value={formData.street}
+            onChange={handleChange}
+            required
+          />
+          <div className={styles.cityStateZip}>
+            <Input
+              type="text"
+              name="city"
+              placeholder="City"
+              value={formData.city}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              type="text"
+              name="state"
+              placeholder="State"
+              value={formData.state}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className={styles.cityStateZip}>
+            <Input
+              type="text"
+              name="zipCode"
+              placeholder="Zip Code"
+              value={formData.zipCode}
+              onChange={handleChange}
+              required
+            />
+            <Input
+              type="text"
+              name="country"
+              placeholder="Country"
+              value={formData.country}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <Input
+            type="text"
+            name="phoneNumber"
+            placeholder="Phone Number"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit" className={styles.submitButton}>
+            Save & Continue
+          </button>
+        </form>
+      )}
+
+      {activeTab === "payment" && (
+        <form onSubmit={handlePaymentSubmit} className={styles.checkoutForm}>
           <div className={styles.paymentOptions}>
             <label className={styles.paymentOption}>
               <input
                 type="radio"
                 value="cod"
-                checked={paymentMethod === "cod"}
+                checked={paymentMethod === "CASH ON DELIVERY"}
                 onChange={handlePaymentChange}
               />
               <span>Cash on Delivery</span>
@@ -167,31 +211,29 @@ const Checkout = () => {
               <input
                 type="radio"
                 value="online"
-                checked={paymentMethod === "online"}
+                checked={paymentMethod === "ONLINE PAYMENT"}
                 onChange={handlePaymentChange}
               />
               <span>Online Payment</span>
             </label>
           </div>
 
-          {/* Summary Section */}
           <div className={styles.summary}>
             <h3>Order Summary</h3>
-            <p>Shipping: {formData.street} {formData.city} {formData.state}</p>
+            <p>
+              Shipping: {formData.street}, {formData.city}, {formData.state}
+            </p>
             <p>Phone: {formData.phoneNumber}</p>
-            <p>Payment: {paymentMethod === "cod" ? "Cash on Delivery" : "Online"}</p>
+            <p>Payment: {paymentMethod}</p>
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            onClick={handleSubmit}
-            className={styles.submitButton}
-          >
-            {paymentMethod === "cod" ? "Place Order" : "Proceed to Payment"}
-          </button>
-        </div>
-      </div>
+          <Button type="submit" className={styles.submitButton}>
+            {paymentMethod === "CASH ON DELIVERY"
+              ? "Place Order"
+              : "Proceed to Payment"}
+          </Button>
+        </form>
+      )}
     </div>
   );
 };
