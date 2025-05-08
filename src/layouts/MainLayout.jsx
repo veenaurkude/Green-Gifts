@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import AOS from "aos";
@@ -17,13 +17,23 @@ const MainLayout = () => {
     });
   }, []);
 
+  const location = useLocation();
+  const hideLayoutRoutes = ["/login", "/register", "/forgot-password", "/reset-password"];
+  const shouldHideLayout = hideLayoutRoutes.includes(location.pathname);
+
   return (
     <section className="flex flex-col min-h-screen" data-aos="fade-up">
-      <Navbar />
-      <main className="flex-grow container mx-auto px-6 py-8">
+      {/* <Navbar /> */}
+      {!shouldHideLayout && <Navbar />}
+      <main className={
+          shouldHideLayout
+            ? "flex-grow flex items-center justify-center bg-white" // Center content like login
+            : "flex-grow container mx-auto px-6 py-8" // Default page layout
+        }>
         <Outlet />
       </main>
-      <Footer />
+      {/* <Footer /> */}
+      {!shouldHideLayout && <Footer />}
     </section>
   );
 };

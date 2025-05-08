@@ -1691,6 +1691,8 @@
 
 // export default AddProduct;
 
+// ====================================
+
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Input, Textarea } from "../../../components/Input/Input";
@@ -2051,18 +2053,181 @@ const AddProduct = () => {
     return null;
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   if (!checkTokenValidity()) return;
+
+  //   const validationError = validateForm();
+  //   if (validationError) {
+  //     toast.error(validationError, { position: "top-right", autoClose: 3000 });
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+
+  //   // Prepare product data as JSON Blob
+  //   const productData = {
+  //     name: product.name,
+  //     description: product.description,
+  //     category: product.cat === "plants" ? product.category : product.category,
+  //     pickupLocation: product.pickupLocation,
+  //     type: product.type === "Variants" ? "OTHER" : "TERRARIUM",
+  //     ...(product.type === "TERRARIUM" && {
+  //       terrarimumQty: product.terrarimumQty,
+  //       terrariumPrice: product.terrariumPrice,
+  //       terrariumStatus: product.terrariumStatus,
+  //     }),
+  //     ...(product.type === "Variants" && {
+  //       variants: product.variants.map((variant) => ({
+  //         color: variant.color,
+  //         price: variant.price,
+  //         discountedPrice: variant.discountedPrice || variant.price,
+  //         qty: variant.qty,
+  //         size: variant.size,
+  //       })),
+  //     }),
+  //   };
+
+  //   console.log("Product Data for Blob:", productData);
+  //   formData.append(
+  //     "product",
+  //     new Blob([JSON.stringify(productData)], { type: "application/json" })
+  //   );
+
+  //   // Append images
+  //   if (product.type === "TERRARIUM") {
+  //     console.log("Terrarium Image:", product.terrariumImg);
+  //     if (product.terrariumImg instanceof File) {
+  //       formData.append("terrariumImg", product.terrariumImg);
+  //       console.log(`Appended terrariumImg: ${product.terrariumImg.name}`);
+  //     } else {
+  //       console.warn("No valid terrariumImg found");
+  //       if (!isEditMode) {
+  //         toast.error("Terrarium image is required", {
+  //           position: "top-right",
+  //           autoClose: 3000,
+  //         });
+  //         return;
+  //       }
+  //     }
+  //   } else
+  //   // if (product.type === "Variants") {
+  //   //   let hasImages = false;
+  //   //   product.variants.forEach((variant, index) => {
+  //   //     console.log(`Variant ${index} Images:`, variant.images);
+  //   //     variant.images.forEach((img, i) => {
+  //   //       if (img instanceof File) {
+  //   //         formData.append(`variants[${index}][images][${i}]`, img);
+  //   //         console.log(
+  //   //           `Appended variants[${index}][images][${i}]: ${img.name}`
+  //   //         );
+  //   //         hasImages = true;
+  //   //       } else {
+  //   //         console.warn(`Variant ${index} Image ${i} is not a File:`, img);
+  //   //       }
+  //   //     });
+  //   //   });
+  //   //   if (!hasImages && !isEditMode) {
+  //   //     console.warn("No valid images found for any variants");
+  //   //     toast.error("At least one image is required for variants", {
+  //   //       position: "top-right",
+  //   //       autoClose: 3000,
+  //   //     });
+  //   //     return;
+  //   //   }
+  //   // }
+
+  //   if (product.type === "Variants") {
+  //     let hasImages = false;
+  //     product.variants.forEach((variant, index) => {
+  //       if (!Array.isArray(variant.images)) {
+  //         console.warn(`Variant ${index} images is not an array:`, variant.images);
+  //         return;
+  //       }
+  //       variant.images.forEach((img, i) => {
+  //         if (img instanceof File) {
+  //           formData.append(`images[${index}][]`, img); // Changed to images[${index}][]
+  //           console.log(
+  //             `Appended images[${index}][${i}]: ${img.name} (type: ${img.type}, size: ${img.size})`
+  //           );
+  //           hasImages = true;
+  //         } else {
+  //           console.warn(`Variant ${index} Image ${i} is not a File:`, img);
+  //         }
+  //       });
+  //     });
+  //     if (!hasImages && !isEditMode) {
+  //       console.warn("No valid images found for any variants");
+  //       toast.error("At least one image is required for variants", {
+  //         position: "top-right",
+  //         autoClose: 3000,
+  //       });
+  //       return;
+  //     }
+  //   }
+
+  //   console.log("Submitting FormData:");
+  //   for (let [key, value] of formData.entries()) {
+  //     console.log(`${key}:`, value instanceof File ? value.name : value);
+  //   }
+
+  //   try {
+  //     const url = isEditMode
+  //       ? `${config.BASE_URL}/api/updateProduct/${productId}`
+  //       : `${config.BASE_URL}/api/addProduct`;
+
+  //     const response = await axios[isEditMode ? "put" : "post"](url, formData, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
+
+  //     console.log("API Response:", response.data);
+  //     toast.success(
+  //       `Product ${isEditMode ? "updated" : "added"} successfully!`,
+  //       {
+  //         position: "top-right",
+  //         autoClose: 3000,
+  //       }
+  //     );
+  //     navigate("/admin/product-list");
+  //   } catch (error) {
+  //     console.error("Error saving product:", {
+  //       message: error.message,
+  //       response: error.response
+  //         ? {
+  //             status: error.response.status,
+  //             data: error.response.data,
+  //             headers: error.response.headers,
+  //           }
+  //         : null,
+  //     });
+  //     toast.error(
+  //       error.response?.data?.message ||
+  //         "Failed to save product. Please try again.",
+  //       {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //       }
+  //     );
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!checkTokenValidity()) return;
-
+  
     const validationError = validateForm();
     if (validationError) {
       toast.error(validationError, { position: "top-right", autoClose: 3000 });
       return;
     }
-
+  
+    console.log("Product state before FormData:", product.variants);
+  
     const formData = new FormData();
-
+  
     // Prepare product data as JSON Blob
     const productData = {
       name: product.name,
@@ -2085,13 +2250,13 @@ const AddProduct = () => {
         })),
       }),
     };
-
+  
     console.log("Product Data for Blob:", productData);
     formData.append(
       "product",
       new Blob([JSON.stringify(productData)], { type: "application/json" })
     );
-
+  
     // Append images
     if (product.type === "TERRARIUM") {
       console.log("Terrarium Image:", product.terrariumImg);
@@ -2111,12 +2276,15 @@ const AddProduct = () => {
     } else if (product.type === "Variants") {
       let hasImages = false;
       product.variants.forEach((variant, index) => {
-        console.log(`Variant ${index} Images:`, variant.images);
+        if (!Array.isArray(variant.images)) {
+          console.warn(`Variant ${index} images is not an array:`, variant.images);
+          return;
+        }
         variant.images.forEach((img, i) => {
           if (img instanceof File) {
-            formData.append(`variants[${index}][images][${i}]`, img);
+            formData.append(`images`, img);
             console.log(
-              `Appended variants[${index}][images][${i}]: ${img.name}`
+              `Appended images[${i}] for Variant ${index}: ${img.name} (type: ${img.type}, size: ${img.size})`
             );
             hasImages = true;
           } else {
@@ -2133,25 +2301,27 @@ const AddProduct = () => {
         return;
       }
     }
-
-    console.log("Submitting FormData:");
+  
+    // Log FormData contents
+    console.log("FormData contents:");
+    
     for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value instanceof File ? value.name : value);
+      console.log(`${key}: ${value instanceof File ? value.name : value}`);
     }
-
+  
     try {
       const url = isEditMode
         ? `${config.BASE_URL}/api/updateProduct/${productId}`
         : `${config.BASE_URL}/api/addProduct`;
-
+  
       const response = await axios[isEditMode ? "put" : "post"](url, formData, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       });
-
-      console.log("API Response:", response.data);
+  
+      console.log("API Response:", JSON.stringify(response.data, null, 2));
       toast.success(
         `Product ${isEditMode ? "updated" : "added"} successfully!`,
         {
@@ -2324,7 +2494,7 @@ const AddProduct = () => {
                   <div className={styles.inputGroup}>
                     {/* <label className={styles.label}>Terrarium Quantity</label> */}
                     <Input
-                      name="qtyterrarimumQty"
+                      name="terrarimumQty"
                       placeholder="Terrarium Qty"
                       onChange={handleChange}
                       value={product.terrarimumQty}
@@ -2358,10 +2528,10 @@ const AddProduct = () => {
                       <option value="SINGLE">SINGLE</option>
                     </select>
                     {isTerrariumStatusOpen ? (
-                  <FiChevronUp className={styles.selectIcon} />
-                ) : (
-                  <FiChevronDown className={styles.selectIcon} />
-                )}
+                      <FiChevronUp className={styles.selectIcon} />
+                    ) : (
+                      <FiChevronDown className={styles.selectIcon} />
+                    )}
                   </div>
                   <div
                     className={styles.imageUpload}

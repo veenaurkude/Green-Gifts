@@ -449,7 +449,11 @@ const Home = () => {
     <>
       <section className={styles.homeContainer}>
         {/* Carousel */}
-        <div className={styles.carouselWrapper} data-aos="fade-up" data-aos-duration="2000">
+        <div
+          className={styles.carouselWrapper}
+          data-aos="fade-up"
+          data-aos-duration="2000"
+        >
           {banners.length > 0 ? (
             <Carousel images={banners} />
           ) : (
@@ -483,19 +487,23 @@ const Home = () => {
         </div>
 
         <div className={styles.miniHeading}>
-          <h2 className={styles.heading} data-aos="zoom-in-up">Welcome to Green Gifts Nagpur</h2>
-          
-            <i className={styles.headPara}> Your one-stop destination for all
-            things green and beautiful! As a premier plant boutique and nursery,
-            we're passionate about helping you connect with nature and share
-            that love with others.</i>
-         
-         
+          <h2 className={styles.heading} data-aos="zoom-in-up">
+            Welcome to Green Gifts Nagpur
+          </h2>
+
+          <i className={styles.headPara}>
+            {" "}
+            Your one-stop destination for all things green and beautiful! As a
+            premier plant boutique and nursery, we're passionate about helping
+            you connect with nature and share that love with others.
+          </i>
         </div>
 
         {/* Our Best Picks */}
         <section className={styles.bestSellers}>
-          <h2 className={styles.heading} data-aos="zoom-in-up">Our Best Picks</h2>
+          <h2 className={styles.heading} data-aos="zoom-in-up">
+            Our Best Picks
+          </h2>
           <div className={styles.bestSellersGrid} data-aos="fade-up">
             {categories.map((category, index) => (
               <Link
@@ -533,20 +541,44 @@ const Home = () => {
                 const firstVariant = plant.variants?.[0] || {}; // Use first variant for display
                 return (
                   // <div className={styles.cardComp} >
+                  // <Card
+                  //   key={plant.id}
+                  //   id={plant.id} // Pass parent product ID
+                  //   image={
+                  //     firstVariant.imageUrls?.[0] ||
+                  //     "https://via.placeholder.com/150"
+                  //   }
+                  //   title={plant.name || "No Title"}
+                  //   category={plant.category}
+                  //   price={firstVariant.price || "N/A"}
+                  //   discount={firstVariant.discountedPrice || null}
+                  //   product={plant} // ✅ Pass full product object
+                  //   selectedVariant={firstVariant} // ✅ Pass selected variant
+                  // />
+
                   <Card
-                    key={plant.id}
-                    id={plant.id} // Pass parent product ID
-                    image={
-                      firstVariant.imageUrls?.[0] ||
-                      "https://via.placeholder.com/150"
-                    }
-                    title={plant.name || "No Title"}
-                    category={plant.category}
-                    price={firstVariant.price || "N/A"}
-                    discount={firstVariant.discountedPrice || null}
-                    product={plant} // ✅ Pass full product object
-                    selectedVariant={firstVariant} // ✅ Pass selected variant
-                  />
+  key={plant.id}
+  id={plant.id}
+  image={
+    plant.variants?.[0]?.imageUrls?.[0] ||
+    plant.terrariumImg ||
+    "https://via.placeholder.com/150"
+  }
+  title={plant.name || "No Title"}
+  category={plant.category}
+  price={
+    plant.variants?.[0]?.price ??
+    plant.terrariumPrice ??
+    "N/A"
+  }
+  discount={
+    plant.variants?.[0]?.discountedPrice ??
+    (plant.terrariumPrice ? plant.terrariumPrice : null)
+  }
+  product={plant}
+  selectedVariant={plant.variants?.[0]}
+/>
+
                   //  </div>
                 );
               })
@@ -596,7 +628,7 @@ const Home = () => {
           <div className={styles.rewardsClubContainer}>
             <div className={styles.rewardsClubText}>
               <h2 data-aos="zoom-in-up">Featured Pots & Planters</h2>
-              <p> 
+              <p>
                 Every plant purchase is a gift that keeps on giving. Earn coins
                 and redeem them for exclusive discounts.
               </p>
@@ -617,18 +649,18 @@ const Home = () => {
 
         {/* About Green Gifts */}
         <div className={styles.about} data-aos="fade-up">
-          <h4 className={styles.heading} data-aos="zoom-in-up">About Green Gifts</h4>
+          <h4 className={styles.heading} data-aos="zoom-in-up">
+            About Green Gifts
+          </h4>
           <p>
             Welcome to Green Gifts Nagpur, your one-stop destination for all
             things green and beautiful! As a premier plant boutique and nursery,
             we're passionate about helping you connect with nature and share
-            that love with others. 
-            Explore our curated collection of exquisite
+            that love with others. Explore our curated collection of exquisite
             plants, carefully selected to bring joy, serenity, and freshness to
             any space. From elegant green gifts to customized plant
             arrangements, we'll help you find the perfect way to express
-            yourself. 
-            At Green Gifts Nagpur, we're dedicated to providing
+            yourself. At Green Gifts Nagpur, we're dedicated to providing
             exceptional garden services, expert advice, and personalized support
             to help you create your own oasis. Whether you're looking for a
             thoughtful gift, a stunning addition to your home or office, or

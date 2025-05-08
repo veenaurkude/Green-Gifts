@@ -98,7 +98,7 @@ const CreateAccount = () => {
   }, []);
 
   return (
-    <div className={styles.registerContainer} data-aos="fade-up" data-aos-duration="2000">
+    <div className={styles.registerContainer} data-aos="fade-up" data-aos-duration="1000">
       <div className={styles.registerBox}>
         <h2>Create Account</h2>
 

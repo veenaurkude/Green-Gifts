@@ -81,9 +81,13 @@ const Card = ({
               <span className={styles.price}>
                 ₹{discount !== undefined ? discount : price || "N/A"}
               </span>
-              {discount && (
+              {discount !== undefined && discount !== null && (
+    <span className={styles.originalPrice}>₹{price}</span>
+  )}
+
+              {/* {discount && (
                 <span className={styles.originalPrice}>₹{price}</span>
-              )}
+              )} */}
             </div>
             <div className={styles.rating}>
               {[...Array(5)].map((_, i) => (

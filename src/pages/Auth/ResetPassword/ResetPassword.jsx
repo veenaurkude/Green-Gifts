@@ -103,6 +103,8 @@ import {Input} from "../../../components/Input/Input";
 import axios from "axios";
 import styles from "./ResetPassword.module.css";
 import config from "../../../config/apiconfig";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const ResetPassword = () => {
   const [searchParams] = useSearchParams();
@@ -146,8 +148,19 @@ const ResetPassword = () => {
     }
   };
 
+  // AOS Init
+    useEffect(() => {
+      AOS.init({
+        duration: 500,
+        offset: 100,
+        easing: "ease-in-out",
+        delay: 0,
+        once: true,
+      });
+    }, []);
+
   return (
-    <div className={styles.resetContainer}>
+    <div className={styles.resetContainer} data-aos="fade-up" data-aos-duration="1000">
       <div className={styles.resetBox}>
         <h2>Reset Account Password</h2>
         <p>Enter your new password below.</p>

@@ -141,7 +141,7 @@ const PotsPlanters = () => {
 
   const { category } = useParams();
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
+  const [potProduct, setPotProduct] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 8;
 
@@ -158,10 +158,10 @@ const PotsPlanters = () => {
 
         const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, { headers });
         console.log("API Response:", response.data);
-        setProducts(response.data);
+        setPotProduct(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
-        setProducts([]);
+        setPotProduct([]);
       }
     }
     fetchProducts();
@@ -174,17 +174,16 @@ const PotsPlanters = () => {
 
   // Filter products
   const filteredProducts = category
-    ? products.filter((p) =>
+    ? potProduct.filter((p) =>
         // p.category?.toLowerCase() === category.toLowerCase()
     p.category?.toLowerCase().replace(/\s+/g, "-") === category.toLowerCase()
       )
-    : products.filter((p) =>
+    : potProduct.filter((p) =>
         p.category?.toLowerCase().includes("pot") ||
         p.category?.toLowerCase().includes("planter")
       );
 
-      
-
+    
 
   // Pagination logic
   const indexOfLast = currentPage * productsPerPage;

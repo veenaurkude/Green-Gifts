@@ -212,7 +212,6 @@
 //                 })}
 //               </tbody>
 
-
 //             </table>
 //           </div>
 //         )}
@@ -233,7 +232,6 @@
 // export default ProductList;
 
 // -------------
-
 
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -264,7 +262,10 @@ const ProductList = () => {
 
   const fetchProducts = async () => {
     try {
-      console.log("Fetching products from:", `${config.BASE_URL}/api/AllProduct`);
+      console.log(
+        "Fetching products from:",
+        `${config.BASE_URL}/api/AllProduct`
+      );
       const response = await axios.get(`${config.BASE_URL}/api/AllProduct`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -277,14 +278,16 @@ const ProductList = () => {
     } catch (err) {
       console.error("Error fetching products:", {
         message: err.message,
-        response: err.response ? {
-          status: err.response.status,
-          data: err.response.data,
-        } : null,
+        response: err.response
+          ? {
+              status: err.response.status,
+              data: err.response.data,
+            }
+          : null,
       });
       setError(
         "Error fetching products: " +
-        (err.response?.data?.message || err.message)
+          (err.response?.data?.message || err.message)
       );
       setLoading(false);
     }
@@ -346,10 +349,12 @@ const ProductList = () => {
     } catch (error) {
       console.error("Error deleting product:", {
         message: error.message,
-        response: error.response ? {
-          status: error.response.status,
-          data: error.response.data,
-        } : null,
+        response: error.response
+          ? {
+              status: error.response.status,
+              data: error.response.data,
+            }
+          : null,
       });
       toast.error(
         `Failed to delete product: ${
@@ -431,10 +436,13 @@ const ProductList = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.map((product) => {
+                {currentProducts.map((product) => {
                   const isTerrarium = product.type === "TERRARIUM";
-                  const hasVariants = product.variants && product.variants.length > 0;
-                  const defaultVariant = hasVariants ? product.variants[0] : null;
+                  const hasVariants =
+                    product.variants && product.variants.length > 0;
+                  const defaultVariant = hasVariants
+                    ? product.variants[0]
+                    : null;
                   const imageSrc = isTerrarium
                     ? product.terrariumImg
                     : defaultVariant?.imageUrls?.[0];
@@ -448,27 +456,32 @@ const ProductList = () => {
                             alt={product.name}
                             className={styles.productImage}
                             onError={(e) => {
-                              console.warn(`Failed to load image for product ${product.id}: ${imageSrc}`);
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'block';
+                              console.warn(
+                                `Failed to load image for product ${product.id}: ${imageSrc}`
+                              );
+                              e.target.style.display = "none";
+                              e.target.nextSibling.style.display = "block";
                             }}
                           />
-                        ) : null}
+                        ) : (
+                          <span className={styles.noImage}>
+                            No Image Available
+                          </span>
+                        )}
                         <p
                           className={styles.productTitle}
-                          style={{ display: imageSrc ? 'inline' : 'block' }}
+                          style={{ display: imageSrc ? "inline" : "block" }}
                         >
                           {product.name}
                         </p>
-                        {!imageSrc && <span className={styles.noImage}>No Image</span>}
                       </td>
                       <td>{product.category}</td>
                       {isTerrarium ? (
                         <>
                           <td>-</td>
                           <td>-</td>
-                          <td>₹{product.terrariumPrice || '-'}</td>
-                          <td>{product.terrarimumQty || '-'}</td>
+                          <td>₹{product.terrariumPrice || "-"}</td>
+                          <td>{product.terrarimumQty || "-"}</td>
                         </>
                       ) : defaultVariant ? (
                         <>
@@ -509,17 +522,15 @@ const ProductList = () => {
           message="Are you sure you want to delete this product? This action cannot be undone."
         />
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onNext={handleNext}
-          onPrev={handlePrev}
-        />
-
-
+        {totalPages > 1 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onNext={handleNext}
+            onPrev={handlePrev}
+          />
+        )}
       </div>
-
-      
     </>
   );
 };

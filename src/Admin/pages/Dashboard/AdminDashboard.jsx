@@ -15,6 +15,8 @@ import {
   FiBarChart,
   FiPieChart,
 } from "react-icons/fi";
+import RevenueChart from "../../components/RevenueChart/RevenueChart";
+import SalesPieChart from "../../components/SalesPieChart/SalesPieChart";
 
 const AdminDashboard = () => {
 
@@ -29,26 +31,51 @@ const AdminDashboard = () => {
   const [totalUsers, setTotalUsers] = useState(85);
   const [totalRevenue, setTotalRevenue] = useState(12500);
 
-  // Fetch product variants
+  // Fetch all products including variants and terrarium
+  // useEffect(() => {
+  //   const fetchProducts = async () => {
+  //     try {
+  //       const res = await axios.get(`${config.BASE_URL}/api/AllProduct`);
+  //       const allProducts = res.data;
+
+  //       // Count total number of variant IDs
+  //       const variantCount = allProducts.reduce((total, product) => {
+  //         return total + (product.variants?.length || 0);
+  //       }, 0);
+
+  //       setTotalVariants(variantCount);
+  //     } catch (error) {
+  //       console.error("Error fetching product variants:", error);
+  //     }
+  //   };
+
+  //   fetchProducts();
+  // }, []);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${config.BASE_URL}/api/AllProduct`);
         const allProducts = res.data;
-
-        // Count total number of variant IDs
-        const variantCount = allProducts.reduce((total, product) => {
-          return total + (product.variants?.length || 0);
+  
+        const totalCount = allProducts.reduce((total, product) => {
+          // If product has variants, count each variant
+          if (product.variants && product.variants.length > 0) {
+            return total + product.variants.length;
+          }
+          // If no variants, treat it as a single item (likely a terrarium)
+          return total + 1;
         }, 0);
-
-        setTotalVariants(variantCount);
+  
+        setTotalVariants(totalCount);
       } catch (error) {
         console.error("Error fetching product variants:", error);
       }
     };
-
+  
     fetchProducts();
   }, []);
+  
 
   // Fetch Total No. of Orders and Pending Orders 
 
@@ -112,7 +139,7 @@ useEffect(() => {
             </div>
           </div>
           <div className={styles.statValue}>{totalVariants}</div>
-          <p className={styles.statDescription}>Including all variants</p>
+          <p className={styles.statDescription}>Including variants & terrarium</p>
           <Link to="/admin/product-list" className={styles.statLink}>
             View Products
           </Link>
@@ -242,15 +269,17 @@ useEffect(() => {
               <div className={styles.chartCard}>
                 <h3 className={styles.chartTitle}>Revenue Over Time</h3>
                 <div className={styles.chartPlaceholder}>
-                  <FiBarChart size={24} className={styles.chartIcon} />
-                  <span>Chart coming soon! (e.g., Sales over time)</span>
+                  {/* <FiBarChart size={24} className={styles.chartIcon} />
+                  <span>Chart coming soon! (e.g., Sales over time)</span> */}
+                  <RevenueChart/>
                 </div>
               </div>
               <div className={styles.chartCard}>
                 <h3 className={styles.chartTitle}>Sales by Category</h3>
                 <div className={styles.chartPlaceholder}>
-                  <FiPieChart size={24} className={styles.chartIcon} />
-                  <span>Category distribution chart</span>
+                  {/* <FiPieChart size={24} className={styles.chartIcon} />
+                  <span>Category distribution chart</span> */}
+                  <SalesPieChart />
                 </div>
               </div>
             </div>

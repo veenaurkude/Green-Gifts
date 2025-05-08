@@ -1,10 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import styles from "./OrderConfirm.module.css"; // CSS module for styling
+import { useCart } from "../../context/CartContext";
 
 const OrderConfirm = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { clearCart } = useCart();
+
 
   // Get order details from the location state (passed from Checkout)
   const orderDetails = location.state?.orderDetails || {};
@@ -14,7 +17,7 @@ const OrderConfirm = () => {
     if (!orderDetails || Object.keys(orderDetails).length === 0) {
       navigate("/");
     }
-  }, [orderDetails, navigate]);
+  }, [orderDetails, clearCart, navigate]);
 
   // Sample order data (replace with actual API response if needed)
   const {

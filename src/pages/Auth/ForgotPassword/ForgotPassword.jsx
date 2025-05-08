@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "../../../components/Button/Button";
 import {Input} from "../../../components/Input/Input";
 import axios from "axios";
 import styles from "./ForgotPassword.module.css";
 import config from "../../../config/apiconfig";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const ForgotPassword = () => {
   const token = JSON.parse(localStorage.getItem("ecommerce_login"))?.jwtToken;
@@ -49,9 +51,20 @@ const handleSubmit = async (e) => {
   }
 };
 
+
+ // AOS Init
+  useEffect(() => {
+    AOS.init({
+      duration: 500,
+      offset: 100,
+      easing: "ease-in-out",
+      delay: 0,
+      once: true,
+    });
+  }, []);
   
   return (
-    <div className={styles.forgotContainer}>
+    <div className={styles.forgotContainer} data-aos="fade-up" data-aos-duration="1000">
       <div className={styles.forgotBox}>
         <h2>Reset your password</h2>
         <p>We will send you an email to reset your password</p>

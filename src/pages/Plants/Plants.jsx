@@ -287,9 +287,23 @@ const Plants = () => {
               id={parentPlant.id}
               title={parentPlant.name}
               category={parentPlant.category}
-              image={parentPlant.variants?.[0]?.imageUrls?.[0] || ""}
-              price={parentPlant.variants?.[0]?.price}
-              discount={parentPlant.variants?.[0]?.discountedPrice}
+              // image={parentPlant.variants?.[0]?.imageUrls?.[0] || ""}
+              image={
+                parentPlant.variants?.[0]?.imageUrls?.[0] ||
+                parentPlant.terrariumImg ||
+                "https://via.placeholder.com/150"
+              }
+              // price={parentPlant.variants?.[0]?.price}
+              price={
+                parentPlant.variants?.[0]?.price ??
+                parentPlant.terrariumPrice ??
+                "N/A"
+              }
+              // discount={parentPlant.variants?.[0]?.discountedPrice}
+              discount={
+                parentPlant.variants?.[0]?.discountedPrice ??
+                (parentPlant.terrariumPrice ? parentPlant.terrariumPrice : null)
+              }
               onClick={() => navigate(`/product/${parentPlant.id}`)}
             />
           ))
