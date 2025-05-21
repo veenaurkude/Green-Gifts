@@ -205,7 +205,7 @@ import OrderConfirm from "./pages/OrderConfirm/OrderConfirm";
 import Contact from "./pages/Contact/Contact";
 import Services from "./pages/Services/Services";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import OrderHistory from "./pages/OrderHistory/OrderHistory";
+import MyOrders from "./pages/MyOrders/MyOrders";
 import WhatsAppBtn from "./components/WhatsAppBtn/WhatsAppBtn";
 
 // Admin Panel Import files
@@ -218,6 +218,7 @@ import ProductList from "./admin/pages/Product/ProductList";
 import OfferBanner from "./admin/pages/Banner/OfferBanner";
 import Order from "./admin/pages/Orders/Orders";
 import AddWorkshop from "./admin/pages/AddWorkshop/AddWorkshop";
+import Users from "./admin/pages/Users/Users";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
 
@@ -310,10 +311,10 @@ const App = () => {
                 }
               />
               <Route
-                path="/order-history"
+                path="/my-orders"
                 element={
                   <ProtectedRoute>
-                    <OrderHistory />
+                    <MyOrders />
                   </ProtectedRoute>
                 }
               />
@@ -329,6 +330,7 @@ const App = () => {
               <Route path="/admin/offer-banner" element={<OfferBanner />} />
               <Route path="/admin/orders" element={<Order />} />
               <Route path="/admin/add-workshop" element={<AddWorkshop />} />
+              <Route path="/admin/users" element={<Users />} />
             </Route>
           </Routes>
           <WhatsAppBtn />

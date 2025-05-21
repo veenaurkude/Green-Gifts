@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import config from "../../config/apiconfig";
-import styles from "./OrderHistory.module.css";
+import styles from "./MyOrders.module.css";
 import Modal from "../../components/Modal/Modal";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const OrderHistory = () => {
+const MyOrders = () => {
   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
   const token = tokenData?.jwtToken;
 
@@ -90,9 +90,9 @@ const OrderHistory = () => {
                       />
                       <div>
                         <p className={styles.productName}>{item.productName}</p>
-                        <p className={styles.productColor}>
+                        {/* <p className={styles.productColor}>
                           Color: {item.color || "N/A"}
-                        </p>
+                        </p> */}
                       </div>
                     </td>
                     <td>₹{item.price}</td>
@@ -180,4 +180,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory;
+export default MyOrders;

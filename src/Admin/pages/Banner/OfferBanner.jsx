@@ -8,12 +8,14 @@ import { Input } from "../../../components/Input/Input";
 import { FiUpload } from "react-icons/fi";
 import { RiEditLine, RiDeleteBin6Line } from "react-icons/ri";
 import { toast } from "react-toastify";
+import Modal from "../../../components/Modal/Modal";
 
 const OfferBanner = () => {
   const navigate = useNavigate();
   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
   const token = tokenData?.jwtToken;
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bannerToDelete, setBannerToDelete] = useState(null);
   const [banners, setBanners] = useState([]);
   const [bannerData, setBannerData] = useState({
     name: "",
@@ -146,12 +148,19 @@ const OfferBanner = () => {
     }
   };
 
-  const handleDeleteBanner = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this banner?")) return;
+  const handleDeleteBanner = (id) => {
+    setBannerToDelete(id);
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmDelete = async () => {
     try {
-      await axios.delete(`${config.BASE_URL}/api/deleteBanner/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await axios.delete(
+        `${config.BASE_URL}/api/deleteBanner/${bannerToDelete}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       toast.success("Banner deleted successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -159,14 +168,48 @@ const OfferBanner = () => {
       await getAllBanners();
     } catch (error) {
       toast.error(
-        `Failed to delete banner: ${error.response?.data?.message || error.message}`,
+        `Failed to delete banner: ${
+          error.response?.data?.message || error.message
+        }`,
         {
           position: "top-right",
           autoClose: 3000,
         }
       );
+    } finally {
+      setIsModalOpen(false);
+      setBannerToDelete(null);
     }
   };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setBannerToDelete(null);
+  };
+
+  // const handleDeleteBanner = async (id) => {
+  //   if (!window.confirm("Are you sure you want to delete this banner?")) return;
+  //   try {
+  //     await axios.delete(`${config.BASE_URL}/api/deleteBanner/${id}`, {
+  //       headers: { Authorization: `Bearer ${token}` },
+  //     });
+  //     toast.success("Banner deleted successfully!", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //     await getAllBanners();
+  //   } catch (error) {
+  //     toast.error(
+  //       `Failed to delete banner: ${
+  //         error.response?.data?.message || error.message
+  //       }`,
+  //       {
+  //         position: "top-right",
+  //         autoClose: 3000,
+  //       }
+  //     );
+  //   }
+  // };
 
   const handleEditBanner = (banner) => {
     setEditingBannerId(banner.id);
@@ -184,129 +227,144 @@ const OfferBanner = () => {
   if (error) return <p className={styles.error}>{error}</p>;
 
   return (
-    <div className={styles.bannerContainer}>
-      <h1 className={styles.title}>Manage Offer Banners</h1>
+    <>
+      <div className={styles.bannerContainer}>
+        <h1 className={styles.title}>Manage Offer Banners</h1>
 
-      <form onSubmit={handleFormSubmit} className={styles.addForm}>
-        <h2>{editingBannerId ? "Edit Banner" : "Add New Banner"}</h2>
-        <div className={styles.bannerForm}>
-          <div className={styles.formGroup}>
-            <Input
-              type="text"
-              name="name"
-              value={bannerData.name}
-              onChange={handleInputChange}
-              placeholder="Banner Name"
-              required
-            />
-            <Input
-              type="text"
-              name="category"
-              value={bannerData.category}
-              onChange={handleInputChange}
-              placeholder="Category"
-              required
-            />
-            <Input
-              type="text"
-              name="discount"
-              value={bannerData.discount}
-              onChange={handleInputChange}
-              placeholder="Discount (%)"
-              min="0"
-              required
-            />
-          </div>
+        <form onSubmit={handleFormSubmit} className={styles.addForm}>
+          <h2>{editingBannerId ? "Edit Banner" : "Add New Banner"}</h2>
+          <div className={styles.bannerForm}>
+            <div className={styles.formGroup}>
+              <Input
+                type="text"
+                name="name"
+                value={bannerData.name}
+                onChange={handleInputChange}
+                placeholder="Banner Name"
+                required
+              />
+              <Input
+                type="text"
+                name="category"
+                value={bannerData.category}
+                onChange={handleInputChange}
+                placeholder="Category"
+                required
+              />
+              <Input
+                type="text"
+                name="discount"
+                value={bannerData.discount}
+                onChange={handleInputChange}
+                placeholder="Discount (%)"
+                min="0"
+                required
+              />
+            </div>
 
-          <div className={styles.imageInputWrapper}>
-            <label htmlFor="image-upload" className={styles.customFileInput}>
-              <FiUpload className={styles.icon}/> Upload Image
-            </label>
-            <input
-              id="image-upload"
-              type="file"
-              onChange={handleImageChange}
-              accept="image/*"
-              required={!editingBannerId}
-              className={styles.fileInput}
-            />
-            {imagePreview ? (
-              <div className={styles.previewContainer}>
-                <img
-                  src={imagePreview}
-                  alt="Preview"
-                  className={styles.imagePreview}
-                />
-                <p>
-                  {editingBannerId ? "Current/Preview Image" : "Image Preview"}
-                </p>
-              </div>
-            ) : 
-            (
-              <div className={styles.noImageMessage}>
-                No images uploaded yet.
-              </div>
-            )
-            }
-          </div>
-        </div>
-
-        <div className={styles.buttonGroup}>
-          <Button type="submit">
-            {editingBannerId ? "Update Banner" : "Add Banner"}
-          </Button>
-          {editingBannerId && (
-            <Button type="button" onClick={resetForm} className={styles.cancelButton}>
-              Cancel
-            </Button>
-          )}
-        </div>
-      </form>
-
-      <div className={styles.tableWrapper}>
-        <table className={styles.bannerTable}>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Category</th>
-              <th>Discount</th>
-              <th>Image</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {banners.map((banner) => (
-              <tr key={banner.id}>
-                <td>{banner.name}</td>
-                <td>{banner.category}</td>
-                <td>{banner.discount}%</td>
-                <td>
+            <div className={styles.imageInputWrapper}>
+              <label htmlFor="image-upload" className={styles.customFileInput}>
+                <FiUpload className={styles.icon} /> Upload Image
+              </label>
+              <input
+                id="image-upload"
+                type="file"
+                onChange={handleImageChange}
+                accept="image/*"
+                required={!editingBannerId}
+                className={styles.fileInput}
+              />
+              {imagePreview ? (
+                <div className={styles.previewContainer}>
                   <img
-                    src={banner.image}
-                    alt={banner.name}
+                    src={imagePreview}
+                    alt="Preview"
                     className={styles.imagePreview}
                   />
-                </td>
-                <td className={styles.actions}>
-                  <Button
-                    onClick={() => handleEditBanner(banner)}
-                    className={styles.actionEdit}
-                  >
-                    <RiEditLine />
-                  </Button>
-                  <Button
-                    onClick={() => handleDeleteBanner(banner.id)}
-                    className={styles.actionDel}
-                  >
-                    <RiDeleteBin6Line />
-                  </Button>
-                </td>
+                  <p>
+                    {editingBannerId
+                      ? "Current/Preview Image"
+                      : "Image Preview"}
+                  </p>
+                </div>
+              ) : (
+                <div className={styles.noImageMessage}>
+                  No images uploaded yet.
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.buttonGroup}>
+            <Button type="submit">
+              {editingBannerId ? "Update Banner" : "Add Banner"}
+            </Button>
+            {editingBannerId && (
+              <Button
+                type="button"
+                onClick={resetForm}
+                className={styles.cancelButton}
+              >
+                Cancel
+              </Button>
+            )}
+          </div>
+        </form>
+
+        <div className={styles.tableWrapper}>
+          <table className={styles.bannerTable}>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Discount</th>
+                <th>Image</th>
+                <th>Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {banners.map((banner) => (
+                <tr key={banner.id}>
+                  <td>{banner.name}</td>
+                  <td>{banner.category}</td>
+                  <td>{banner.discount}%</td>
+                  <td>
+                    <img
+                      src={banner.image}
+                      alt={banner.name}
+                      className={styles.imagePreview}
+                    />
+                  </td>
+                  <td className={styles.actions}>
+                    <Button
+                      onClick={() => handleEditBanner(banner)}
+                      className={styles.actionEdit}
+                    >
+                      <RiEditLine />
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteBanner(banner.id)}
+                      className={styles.actionDel}
+                    >
+                      <RiDeleteBin6Line />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/*Banner Delete Confirmation Modal */}
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onConfirm={handleConfirmDelete}
+          title="Confirm Deletion"
+          message="Are you sure you want to delete this banner? This action cannot be undone."
+        />
       </div>
-    </div>
+    </>
   );
 };
 

@@ -124,7 +124,7 @@ const AccountPage = () => {
             <li>
               <div className={styles.sideNav}>
                 <CiShoppingCart />
-                <a href="/orders">My Orders</a>
+                <a href="/my-orders">My Orders</a>
               </div>
             </li>
             {/* <li>

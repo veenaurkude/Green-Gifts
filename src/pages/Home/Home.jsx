@@ -336,42 +336,70 @@ const Home = () => {
   }, [banners, plants]);
 
   // Fetch Banners
+  // useEffect(() => {
+  //   async function getAllBanners() {
+  //     try {
+  //       const response = await axios.get(`${config.BASE_URL}/api/allBanner`, {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+  //       console.log("Banners API Response:", response.data);
+  //       if (Array.isArray(response.data) && response.data.length > 0) {
+  //         const bannerUrls = response.data
+  //           .map((banner) => {
+  //             if (!banner.image) {
+  //               // Use banner.image
+  //               console.warn("Banner missing image:", banner);
+  //               return null;
+  //             }
+  //             return banner.image; // Return banner.image
+  //           })
+  //           .filter(Boolean);
+  //         setBanners(bannerUrls.length > 0 ? bannerUrls : []);
+  //       } else {
+  //         console.warn("No banners found.");
+  //         setBanners([]);
+  //       }
+  //     } catch (error) {
+  //       console.error(
+  //         "Error fetching banners:",
+  //         error.response?.data || error.message
+  //       );
+  //       setBanners([]);
+  //     }
+  //   }
+
+  //   getAllBanners();
+  // }, []);
+
   useEffect(() => {
-    async function getAllBanners() {
-      try {
-        const response = await axios.get(`${config.BASE_URL}/api/allBanner`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        console.log("Banners API Response:", response.data);
-        if (Array.isArray(response.data) && response.data.length > 0) {
-          const bannerUrls = response.data
-            .map((banner) => {
-              if (!banner.image) {
-                // Use banner.image
-                console.warn("Banner missing image:", banner);
-                return null;
-              }
-              return banner.image; // Return banner.image
-            })
-            .filter(Boolean);
-          setBanners(bannerUrls.length > 0 ? bannerUrls : []);
-        } else {
-          console.warn("No banners found.");
-          setBanners([]);
-        }
-      } catch (error) {
-        console.error(
-          "Error fetching banners:",
-          error.response?.data || error.message
-        );
+  async function getAllBanners() {
+    try {
+      const response = await axios.get(`${config.BASE_URL}/api/allBanner`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (Array.isArray(response.data) && response.data.length > 0) {
+        const bannerUrls = response.data
+          .map((banner) => banner.image)
+          .filter(Boolean); // Ensure no null values
+        console.log("Fetched banners:", bannerUrls); // Debug here
+        setBanners(bannerUrls);
+      } else {
+        console.warn("No banners found.");
         setBanners([]);
       }
+    } catch (error) {
+      console.error("Error fetching banners:", error);
+      setBanners([]);
     }
+  }
+  getAllBanners();
+}, []);
 
-    getAllBanners();
-  }, []);
 
   // Fetch Products
   useEffect(() => {
@@ -455,7 +483,9 @@ const Home = () => {
           data-aos-duration="2000"
         >
           {banners.length > 0 ? (
-            <Carousel images={banners} />
+            // <Carousel images={banners} />
+          <Carousel banners={banners} />
+            
           ) : (
             <div className={styles.noBanners}>
               <p>No banners available at the moment.</p>

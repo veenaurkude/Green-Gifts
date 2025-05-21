@@ -19,7 +19,6 @@ import RevenueChart from "../../components/RevenueChart/RevenueChart";
 import SalesPieChart from "../../components/SalesPieChart/SalesPieChart";
 
 const AdminDashboard = () => {
-
   const tokenData = JSON.parse(localStorage.getItem("ecommerce_login"));
   const token = tokenData?.jwtToken;
 
@@ -28,36 +27,17 @@ const AdminDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [totalOrders, setTotalOrders] = useState(0);
   const [pendingOrders, setPendingOrders] = useState(0);
-  const [totalUsers, setTotalUsers] = useState(85);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [totalRevenue, setTotalRevenue] = useState(12500);
 
   // Fetch all products including variants and terrarium
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const res = await axios.get(`${config.BASE_URL}/api/AllProduct`);
-  //       const allProducts = res.data;
-
-  //       // Count total number of variant IDs
-  //       const variantCount = allProducts.reduce((total, product) => {
-  //         return total + (product.variants?.length || 0);
-  //       }, 0);
-
-  //       setTotalVariants(variantCount);
-  //     } catch (error) {
-  //       console.error("Error fetching product variants:", error);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, []);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get(`${config.BASE_URL}/api/AllProduct`);
         const allProducts = res.data;
-  
+
         const totalCount = allProducts.reduce((total, product) => {
           // If product has variants, count each variant
           if (product.variants && product.variants.length > 0) {
@@ -66,67 +46,93 @@ const AdminDashboard = () => {
           // If no variants, treat it as a single item (likely a terrarium)
           return total + 1;
         }, 0);
-  
+
         setTotalVariants(totalCount);
       } catch (error) {
         console.error("Error fetching product variants:", error);
       }
     };
-  
+
     fetchProducts();
   }, []);
-  
 
-  // Fetch Total No. of Orders and Pending Orders 
+  // Fetch Total No. of Orders and Pending Orders
 
+  useEffect(() => {
+    const showOrders = async () => {
+      try {
+        const response = await axios.get(`${config.BASE_URL}/api/show-orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log("Orders:", response.data);
+        setOrders(response.data);
+        setTotalOrders(response.data.length); // <-- FIXED: count correctly
+      } catch (error) {
+        console.error("Error fetching orders", error);
+      }
+    };
+
+    showOrders();
+  }, []);
+
+  useEffect(() => {
+    const showOrders = async () => {
+      try {
+        const response = await axios.get(`${config.BASE_URL}/api/show-orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const allOrders = response.data;
+        const pending = allOrders.filter(
+          (order) => order.status === "PENDING" || order.status === "PROCESSING"
+        );
+
+        setTotalOrders(allOrders.length);
+        setPendingOrders(pending.length);
+        setOrders(allOrders); // Also make sure you're storing orders for the recent orders table
+      } catch (error) {
+        console.error("Error fetching orders", error);
+      }
+    };
+
+    showOrders();
+  }, []);
+
+  // fetch total no. of users api
 
 useEffect(() => {
-  const showOrders = async () => {
+  const fetchTotalUsers = async () => {
     try {
-      const response = await axios.get(`${config.BASE_URL}/api/show-orders`, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await axios.get(`${config.BASE_URL}/api/count-allUser`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
-      console.log("Orders:", response.data);
-      setOrders(response.data);
-      setTotalOrders(response.data.length); // <-- FIXED: count correctly
+
+      console.log("User count response:", response.data); // 👈 Check what’s actually returned
+
+      // setTotalUsers(response.data.totalUsers || 0);
+      // setTotalUsers(response.data.count || 0);
+      setTotalUsers(response.data || 0);
+
     } catch (error) {
-      console.error("Error fetching orders", error);
+      console.error("Failed to fetch total users:", error);
+      setTotalUsers(0);
     }
   };
 
-  showOrders();
+  fetchTotalUsers();
 }, []);
 
-useEffect(() => {
-  const showOrders = async () => {
-    try {
-      const response = await axios.get(`${config.BASE_URL}/api/show-orders`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
 
-      const allOrders = response.data;
-      const pending = allOrders.filter(
-        (order) => order.status === "PENDING" || order.status === "PROCESSING"
-      );
-
-      setTotalOrders(allOrders.length);
-      setPendingOrders(pending.length);
-      setOrders(allOrders); // Also make sure you're storing orders for the recent orders table
-    } catch (error) {
-      console.error("Error fetching orders", error);
-    }
-  };
-
-  showOrders();
-}, []);
-
- 
 
   return (
     <div className={styles.dashboardContainer}>
       <div className={styles.welcomeSection}>
         <h2 className={styles.welcomeTitle}>Welcome to Green Gifts Admin</h2>
-        <p className={styles.welcomeSubtitle}>Here's an overview of your eco-friendly store</p>
+        <p className={styles.welcomeSubtitle}>
+          Here's an overview of your eco-friendly store
+        </p>
       </div>
 
       {/* Stats Overview */}
@@ -139,7 +145,9 @@ useEffect(() => {
             </div>
           </div>
           <div className={styles.statValue}>{totalVariants}</div>
-          <p className={styles.statDescription}>Including variants & terrarium</p>
+          <p className={styles.statDescription}>
+            Including variants & terrarium
+          </p>
           <Link to="/admin/product-list" className={styles.statLink}>
             View Products
           </Link>
@@ -152,7 +160,9 @@ useEffect(() => {
               <FiDollarSign size={24} />
             </div>
           </div>
-          <div className={styles.statValue}>₹{totalRevenue.toLocaleString()}</div>
+          <div className={styles.statValue}>
+            ₹{totalRevenue.toLocaleString()}
+          </div>
           <p className={styles.statDescription}>+20.1% from last month</p>
           <Link to="/admin/reports" className={styles.statLink}>
             View Reports
@@ -167,7 +177,9 @@ useEffect(() => {
             </div>
           </div>
           <div className={styles.statValue}>{totalOrders}</div>
-          <p className={styles.statDescription}>{pendingOrders} orders pending</p>
+          <p className={styles.statDescription}>
+            {pendingOrders} orders pending
+          </p>
           <Link to="/admin/orders" className={styles.statLink}>
             Manage Orders
           </Link>
@@ -180,9 +192,11 @@ useEffect(() => {
               <FiUsers size={24} />
             </div>
           </div>
-          <div className={styles.statValue}>{totalUsers}</div>
-          <p className={styles.statDescription}>+10 new customers this week</p>
-          <Link to="/admin/customers" className={styles.statLink}>
+          {/* <div className={styles.statValue}>{totalUsers}</div> */}
+          <div className={styles.statValue}>{totalUsers.toLocaleString()}</div>
+
+          <p className={styles.statDescription}>+5 new customers this week</p>
+          <Link to="/admin/users" className={styles.statLink}>
             View Customers
           </Link>
         </div>
@@ -197,7 +211,9 @@ useEffect(() => {
               <FiPlus size={24} />
             </div>
             <h3 className={styles.actionTitle}>Add New Product</h3>
-            <p className={styles.actionDescription}>Create a new eco-friendly product listing</p>
+            <p className={styles.actionDescription}>
+              Create a new eco-friendly product listing
+            </p>
             <Link to="/admin/add-product" className={styles.actionButton}>
               Add Product
             </Link>
@@ -208,7 +224,9 @@ useEffect(() => {
               <FiTag size={24} />
             </div>
             <h3 className={styles.actionTitle}>Manage Categories</h3>
-            <p className={styles.actionDescription}>Organize your product categories</p>
+            <p className={styles.actionDescription}>
+              Organize your product categories
+            </p>
             <Link to="/admin/plant-category" className={styles.actionButton}>
               Manage Categories
             </Link>
@@ -219,7 +237,9 @@ useEffect(() => {
               <FiCalendar size={24} />
             </div>
             <h3 className={styles.actionTitle}>Create Workshop</h3>
-            <p className={styles.actionDescription}>Schedule a new eco-friendly workshop</p>
+            <p className={styles.actionDescription}>
+              Schedule a new eco-friendly workshop
+            </p>
             <Link to="/admin/create-workshop" className={styles.actionButton}>
               Create Workshop
             </Link>
@@ -236,7 +256,9 @@ useEffect(() => {
               <FiPlus size={24} />
             </div>
             <h3 className={styles.actionTitle}>Create Workshop</h3>
-            <p className={styles.actionDescription}>Schedule a new eco-friendly workshop</p>
+            <p className={styles.actionDescription}>
+              Schedule a new eco-friendly workshop
+            </p>
             <Link to="/admin/create-workshop" className={styles.actionButton}>
               Create Workshop
             </Link>
@@ -247,7 +269,9 @@ useEffect(() => {
               <FiCalendar size={24} />
             </div>
             <h3 className={styles.actionTitle}>View All Workshops</h3>
-            <p className={styles.actionDescription}>Manage your existing workshops</p>
+            <p className={styles.actionDescription}>
+              Manage your existing workshops
+            </p>
             <Link to="/admin/workshop-list" className={styles.actionButton}>
               View Workshops
             </Link>
@@ -260,7 +284,9 @@ useEffect(() => {
         <h2 className={styles.sectionTitle}>Sales Overview</h2>
         <div className={styles.salesTabs}>
           <div className={styles.tabsList}>
-            <button className={`${styles.tabButton} ${styles.activeTab}`}>Overview</button>
+            <button className={`${styles.tabButton} ${styles.activeTab}`}>
+              Overview
+            </button>
             <button className={styles.tabButton}>Analytics</button>
             <button className={styles.tabButton}>Reports</button>
           </div>
@@ -271,7 +297,7 @@ useEffect(() => {
                 <div className={styles.chartPlaceholder}>
                   {/* <FiBarChart size={24} className={styles.chartIcon} />
                   <span>Chart coming soon! (e.g., Sales over time)</span> */}
-                  <RevenueChart/>
+                  <RevenueChart />
                 </div>
               </div>
               <div className={styles.chartCard}>
@@ -303,40 +329,39 @@ useEffect(() => {
               </tr>
             </thead>
             <tbody>
-  {orders.slice(0, 5).map((order) => (
-    <tr key={order.orderId}>
-      <td>#{order.orderId.toString().padStart(3, "0")}</td>
-      <td>{order.shippingAddress?.fullName || "Unknown"}</td>
-      <td>
-        <span
-          className={`${styles.statusBadge} ${
-            order.status === "DELIVERED"
-              ? styles.statusDelivered
-              : order.status === "PROCESSING"
-              ? styles.statusProcessing
-              : order.status === "PENDING"
-              ? styles.statusPending
-              : order.status === "SHIPPED"
-              ? styles.statusShipped
-              : styles.statusCancelled
-          }`}
-        >
-          {order.status}
-        </span>
-      </td>
-      <td>
-        {order.createdAt
-          ? new Date(order.createdAt).toLocaleDateString()
-          : "N/A"}
-      </td>
-      <td>₹{order.totalAmount}</td>
-      <td>
-        <button className={styles.viewButton}>View</button>
-      </td>
-    </tr>
-  ))}
-</tbody>
-
+              {orders.slice(0, 5).map((order) => (
+                <tr key={order.orderId}>
+                  <td>#{order.orderId.toString().padStart(3, "0")}</td>
+                  <td>{order.shippingAddress?.fullName || "Unknown"}</td>
+                  <td>
+                    <span
+                      className={`${styles.statusBadge} ${
+                        order.status === "DELIVERED"
+                          ? styles.statusDelivered
+                          : order.status === "PROCESSING"
+                          ? styles.statusProcessing
+                          : order.status === "PENDING"
+                          ? styles.statusPending
+                          : order.status === "SHIPPED"
+                          ? styles.statusShipped
+                          : styles.statusCancelled
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </td>
+                  <td>
+                    {order.createdAt
+                      ? new Date(order.createdAt).toLocaleDateString()
+                      : "N/A"}
+                  </td>
+                  <td>₹{order.totalAmount}</td>
+                  <td>
+                    <button className={styles.viewButton}>View</button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       </div>
@@ -764,8 +789,6 @@ export default AdminDashboard;
 // }
 
 // export default AdminDashboard
-
-
 
 // import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";

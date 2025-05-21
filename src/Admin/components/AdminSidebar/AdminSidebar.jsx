@@ -216,6 +216,17 @@ const AdminSidebar = () => {
                 Workshop
               </Link>
             </li>
+
+            <li
+              className={`${styles.navItem} ${
+                location.pathname === '/admin/add-workshop' ? styles.active : ''
+              }`}
+            >
+              <Link to="/admin/users" className={styles.navLink} onClick={handleLinkClick}>
+                <FiCalendar size={20} className={styles.icon} />
+                Users
+              </Link>
+            </li>
           </ul>
         </nav>
 

@@ -266,7 +266,7 @@ const Navbar = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <Link to="/account">My Profile</Link>
-                <Link to="/order-history">My Orders</Link>
+                <Link to="/my-orders">My Orders</Link>
                 <Link to="/wishlist">Wishlist</Link>
                 <Link to="/login">Logout</Link>
               </div>
