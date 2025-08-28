@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
-import { useAuth } from "../../../context/AuthContext";  // Import the useAuth hook
+import { useAuth } from "../../../context/AuthContext"; // Import the useAuth hook
 import Button from "../../../components/Button/Button";
 import { Input } from "../../../components/Input/Input";
 import axios from "axios";
@@ -59,10 +59,18 @@ const Login = () => {
     e.preventDefault();
     if (!validate()) return; // Stop if validation fails
 
-    try {
-      const response = await axios.post(`${config.BASE_URL}/api/auth/login`, formData);
+    console.log("Submitting login to:", `${config.BASE_URL}/api/auth/login`);
 
-      console.log(response.data);
+    try {
+      // const response = await axios.post(`${config.BASE_URL}/api/auth/login`, formData);
+
+      const response = await axios.post(
+        `${config.BASE_URL}/api/auth/login`,
+        formData,
+        { headers: { "Content-Type": "application/json" } }
+      );
+
+      console.log("Login success:", response.data);
 
       if (response.status === 200) {
         const { admin, user, jwtToken } = response.data;
@@ -80,7 +88,10 @@ const Login = () => {
             autoClose: 3000,
           });
           navigate("/admin");
-        } else if (user && user.role?.some((role) => role.roleName === "User")) {
+        } else if (
+          user &&
+          user.role?.some((role) => role.roleName === "User")
+        ) {
           toast.success("User Login Successfully", {
             position: "top-right",
             autoClose: 3000,
@@ -93,15 +104,30 @@ const Login = () => {
           });
         }
       }
-    } catch (error) {
-      console.error("Login Error:", error);
-      const errorMessage = error.response?.data?.message || "Failed to log in. Try again.";
-      toast.error(errorMessage, {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    }
-  };
+    } 
+    // catch (error) {
+    //   console.error("Login Error:", error);
+    //   const errorMessage =
+    //     error.response?.data?.message || "Failed to log in. Try again.";
+    //   toast.error(errorMessage, {
+    //     position: "top-right",
+    //     autoClose: 3000,
+    //   });
+    // }
+
+    catch (error) {
+  if (error.response) {
+    console.error("Login failed with response:", error.response.data);
+  } else if (error.request) {
+    console.error("No response received:", error.request);
+  } else {
+    console.error("Login setup error:", error.message);
+  }
+
+  const errorMessage = error.response?.data?.message || "Failed to log in. Try again.";
+  toast.error(errorMessage, { position: "top-right", autoClose: 3000 });
+}
+  }
 
   // AOS Init
   useEffect(() => {
@@ -115,7 +141,11 @@ const Login = () => {
   }, []);
 
   return (
-    <div className={styles.loginContainer} data-aos="fade-up" data-aos-duration="1000">
+    <div
+      className={styles.loginContainer}
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <div className={styles.loginBox}>
         <h2 data-aos="zoom-in">Login</h2>
         <p>
@@ -129,7 +159,9 @@ const Login = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email"
-            className={`${styles.inputField} ${errors.email ? styles.errorBorder : ""}`}
+            className={`${styles.inputField} ${
+              errors.email ? styles.errorBorder : ""
+            }`}
           />
           {errors.email && <p className={styles.errorText}>{errors.email}</p>}
 
@@ -140,19 +172,25 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Password"
-              className={`${styles.inputField} ${errors.password ? styles.errorBorder : ""}`}
+              className={`${styles.inputField} ${
+                errors.password ? styles.errorBorder : ""
+              }`}
             />
             <span
               className={styles.passwordToggle}
               onClick={togglePasswordVisibility}
               role="button"
               tabIndex={0}
-              onKeyPress={(e) => e.key === "Enter" && togglePasswordVisibility()}
+              onKeyPress={(e) =>
+                e.key === "Enter" && togglePasswordVisibility()
+              }
             >
               {showPassword ? <LuEye size={15} /> : <LuEyeOff size={15} />}
             </span>
           </div>
-          {errors.password && <p className={styles.errorText}>{errors.password}</p>}
+          {errors.password && (
+            <p className={styles.errorText}>{errors.password}</p>
+          )}
 
           <a href="/forgot-password" className={styles.forgotPassword}>
             Forgot your password?
@@ -172,7 +210,6 @@ const Login = () => {
 };
 
 export default Login;
-
 
 // import React, { useState, useEffect} from "react";
 // import { useNavigate } from "react-router-dom";
@@ -353,7 +390,6 @@ export default Login;
 // import { toast } from "react-toastify"; // Import toast
 // import { LuEyeOff , LuEye} from "react-icons/lu";
 
-
 // const Login = () => {
 //   const navigate = useNavigate();
 
@@ -487,7 +523,6 @@ export default Login;
 // };
 
 // export default Login;
-
 
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
