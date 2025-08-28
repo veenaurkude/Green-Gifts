@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import styles from './AdminSidebar.module.css';
 import {
-  FiGift,
+  // FiGift,
   FiHome,
   FiList,
-  FiArchive,
+  // FiArchive,
   FiBox,
   FiPlus,
   FiImage,
@@ -16,7 +16,7 @@ import {
   FiX,
   FiChevronDown,
 } from 'react-icons/fi';
-import { FaLeaf } from 'react-icons/fa'; 
+// import { FaLeaf } from 'react-icons/fa'; 
 import { GiPorcelainVase } from 'react-icons/gi';
 import { PiPlantFill } from 'react-icons/pi';
 

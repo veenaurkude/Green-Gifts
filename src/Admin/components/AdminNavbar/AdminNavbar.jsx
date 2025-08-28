@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "./AdminNavbar.module.css";
+import logo from "../../../assets/logo2.png"
 import { useNavigate, Link } from "react-router-dom";
 import { FaBell, FaUserCircle } from "react-icons/fa";
 import { FiGift } from "react-icons/fi";
@@ -37,8 +38,10 @@ const AdminNavbar = () => {
     <nav className={styles.navbar}>
       
       <Link to="/admin" className={styles.leftSection}>
-        <FiGift size={24} className={styles.icon} />
-        <h2 className={styles.logo}>Green Gifts</h2>
+        {/* <FiGift size={24} className={styles.icon} /> */}
+        <h2 className={styles.logo}>
+          <img src={logo} alt="Green Gifts Logo" />
+        </h2>
       </Link>
 
       <div className={styles.rightSection}>

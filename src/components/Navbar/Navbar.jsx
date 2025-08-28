@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { BsCart } from "react-icons/bs";
 import { VscAccount } from "react-icons/vsc";
 import styles from "./Navbar.module.css";
+import logo from "../../assets/logo2.png";
 // import { Input } from "../Input/Input";
 import config from "../../config/apiconfig";
 import axios from "axios";
@@ -54,24 +55,20 @@ const Navbar = () => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
-  
         const plantRes = await axios.get(`${config.BASE_URL}/api/Allcategory`);
         setPlantSubCategories(plantRes.data);
         console.log(plantRes.data);
-  
+
         const potRes = await axios.get(`${config.BASE_URL}/api/pot-categories`);
         setPotSubCategories(potRes.data);
         console.log(potRes.data);
-  
       } catch (error) {
         console.error("Failed to fetch subcategories:", error);
       }
     };
-  
+
     fetchSubCategories();
   }, []);
-  
-  
 
   // AOS Init
   useEffect(() => {
@@ -109,7 +106,9 @@ const Navbar = () => {
       {/* Main Navbar */}
       <header className={styles.navbar}>
         <div className={styles.logo}>
-          <Link to="/">Green Gifts</Link>
+          <Link to="/">
+            <img src={logo} alt="Green Gifts Logo" />
+          </Link>
         </div>
 
         <nav
@@ -159,13 +158,15 @@ const Navbar = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 {plantSubCategories.map((sub, i) => (
-  <Link
-    key={i}
-    to={`/plants/${sub.categoryName.toLowerCase().replace(/\s+/g, "-")}`}
-  >
-    {sub.categoryName}
-  </Link>
-))}
+                  <Link
+                    key={i}
+                    to={`/plants/${sub.categoryName
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                  >
+                    {sub.categoryName}
+                  </Link>
+                ))}
               </div>
             )}
           </nav>
@@ -209,13 +210,15 @@ const Navbar = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 {potSubCategories.map((sub, i) => (
-  <Link
-    key={i}
-    to={`/pots-planters/${sub.potCategoryName.toLowerCase().replace(/\s+/g, "-")}`}
-  >
-    {sub.potCategoryName}
-  </Link>
-))}
+                  <Link
+                    key={i}
+                    to={`/pots-planters/${sub.potCategoryName
+                      .toLowerCase()
+                      .replace(/\s+/g, "-")}`}
+                  >
+                    {sub.potCategoryName}
+                  </Link>
+                ))}
               </div>
             )}
           </nav>

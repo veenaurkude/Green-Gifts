@@ -29,6 +29,10 @@
   margin: 0;
 }
 
+.logo img{
+  width: 6rem;
+}
+
 .rightSection {
   display: flex;
   align-items: center;

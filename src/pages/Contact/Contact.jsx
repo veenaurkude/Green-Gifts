@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import styles from "./Contact.module.css";
 import { Input, Textarea } from "../../components/Input/Input";
 import Button from "../../components/Button/Button";
@@ -9,8 +9,8 @@ import {
   FaSquareInstagram,
   FaSquareWhatsapp,
   FaSquareYoutube,
-  FaLinkedin,
-  FaSquareXTwitter,
+  // FaLinkedin,
+  // FaSquareXTwitter,
 } from "react-icons/fa6";
 
 import AOS from "aos";
@@ -146,7 +146,7 @@ const Contact = () => {
           style={{ border: 0 }}
           allowfullscreen=""
           loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
+          referrerPolicy="no-referrer-when-downgrade"
         ></iframe>
       </div>
     </>

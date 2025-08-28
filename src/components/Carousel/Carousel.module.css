@@ -93,7 +93,7 @@
 /* Banner Content */
 .bannerContent {
   position: absolute;
-  top: 50%; /* Vertically center */
+  top: 85%; /* Vertically center */
   left: 50%; /* Horizontally center */
   transform: translate(-50%, -50%); /* Offset to truly center */
   color: #fff;
@@ -119,17 +119,19 @@
 .shopNowButton {
   background-color: #2d6a4f; /* Green background */
   color: #fff;
-  padding: 12px 25px;
-  font-size: 1.2rem;
+  padding: 8px 15px;
+  font-size: 1rem;
   text-decoration: none;
-  border-radius: 30px; /* Rounded corners */
+  border-radius: 15px; /* Rounded corners */
   transition: background-color 0.3s ease, transform 0.3s ease;
   display: inline-block; /* Ensures the button is inline */
 }
 
 .shopNowButton:hover {
-  background-color: #1f4a38; /* Darker green on hover */
-  transform: translateY(-3px); /* Slight lift effect on hover */
+  background-color: #1b5e20; /* Darker green on hover */
+  color: #f0f0f0;
+  /* transform: translateY(-3px);  */
+  /* Slight lift effect on hover */
 }
 
 /* Responsive Design */

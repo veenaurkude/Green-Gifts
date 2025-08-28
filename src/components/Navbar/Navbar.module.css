@@ -68,9 +68,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
-  background-color: #2d6a4f;
-  color: #F8F9FA;
+  padding: 0 2rem;
+  background-color: #f1f8f4;
+  /* background-color: #2d6a4f; */
+  /* color: #F8F9FA; */
+  color: #2d6a4f;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   position: fixed; /* Changed to fixed */
   top: 0; /* Overridden by .topNavbar, so adjust below */
@@ -91,7 +93,8 @@
   position: absolute;
   width: 100%;
   height: 0.5px;
-  background-color: #b7e4c7;
+  /* background-color: #b7e4c7; */
+  background-color: #2d6a4f;
   bottom: 5px;
   left: 0;
   transform: scaleX(0);
@@ -107,11 +110,17 @@
 
 /* Logo */
 .logo a {
-  color: #F8F9FA;
+  /* color: #F8F9FA; */
   text-decoration: none;
   font-size: 1.5rem;
   font-weight: bold;
   transition: color 0.3s ease;
+ 
+}
+
+.logo img{
+   width: 12rem;
+  height: 5rem;
 }
 
 .logo a:hover {
@@ -141,7 +150,10 @@
 /* Main Nav Links */
 .navItem > a,
 .navIcon > a {
-  color: #F8F9FA;
+  /* color: #F8F9FA; */
+  /* color: #2d6a4f; */
+  color: #157147;
+  font-weight: bold;
   font-family: sans-serif;
   text-transform: uppercase;
   text-decoration: none;
@@ -153,7 +165,8 @@
 
 .navItem > a:hover,
 .navIcon > a:hover {
-  color: #b7e4c7;
+  /* color: #b7e4c7; */
+  color: #2d6a4f;
 }
 
 /* Dropdown Menu */
@@ -239,7 +252,7 @@
 .bar {
   width: 25px;
   height: 3px;
-  background-color: white;
+  background-color: #0e9057;
   transition: all 0.3s ease;
 }
 

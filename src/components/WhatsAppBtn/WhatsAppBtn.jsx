@@ -1,4 +1,4 @@
-import React from "react";
+// import React from "react";
 import { FaWhatsapp } from "react-icons/fa";
 
 const WhatsAppBtn = () => {
@@ -9,10 +9,10 @@ const WhatsAppBtn = () => {
       rel="noopener noreferrer"
       style={{
         position: "fixed",
-        bottom: "20px",
+        bottom: "12px",
         right: "20px",
         zIndex: 1000,
-        backgroundColor: "#25D366",
+        backgroundColor: "#418c6b",
         borderRadius: "25%",
         padding: "10px",
         boxShadow: "0 4px 8px rgba(0, 0, 0, 0.3)",

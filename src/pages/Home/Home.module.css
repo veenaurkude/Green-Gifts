@@ -361,6 +361,7 @@ color: #2d6a4f ;
 
 .viewAllButton:hover {
   background-color: #1b5e20;
+  color: #f0f0f0;
 }
 
 /* About Section */
